@@ -1,1108 +1,479 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skolinspektionen – Ärendelista</title>
   <style>
+    :root {
+      --si-blue:   #004b62;
+      --si-yellow: #fbba30;
+      --si-blue-mid: #006080;
+      --si-blue-light: #e6f0f3;
+      --bg:        #f7f7f7;
+      --white:     #ffffff;
+      --text:      #1a1a1a;
+      --text-soft: #555555;
+      --border:    #d8dee3;
+      --row-hover: #eef5f8;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #333; }
-    header { background: #1a3a5c; color: #fff; padding: 24px 32px; }
-    header h1 { font-size: 1.6rem; font-weight: 600; }
-    header p { font-size: 0.9rem; opacity: 0.75; margin-top: 4px; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
-    .toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-    .toolbar input { flex: 1; min-width: 220px; padding: 9px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; }
-    .toolbar select { padding: 9px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; background: #fff; }
-    .stats { font-size: 0.85rem; color: #666; margin-left: auto; white-space: nowrap; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
-    thead tr { background: #1a3a5c; color: #fff; }
-    th { padding: 12px 14px; text-align: left; font-size: 0.85rem; font-weight: 600; cursor: pointer; user-select: none; }
-    th:hover { background: #254d73; }
-    th .arrow { margin-left: 4px; opacity: 0.6; }
-    td { padding: 10px 14px; font-size: 0.88rem; border-bottom: 1px solid #eef0f3; }
-    tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: #f0f5ff; }
-    .dno { font-family: monospace; font-weight: 600; color: #1a3a5c; white-space: nowrap; }
-    .date { white-space: nowrap; color: #555; }
-    .subject { line-height: 1.4; }
-    .no-results { text-align: center; padding: 40px; color: #888; }
-    footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #999; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--si-blue);
+      padding: 0 32px;
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 0;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--si-yellow);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; color: var(--si-blue);
+      letter-spacing: -1px; flex-shrink: 0;
+    }
+    .logo-text { color: var(--white); }
+    .logo-text strong { display: block; font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; }
+    .logo-text span   { font-size: 0.78rem; opacity: .7; letter-spacing: .03em; text-transform: uppercase; }
+
+    /* ── Yellow accent bar ── */
+    .accent-bar { height: 4px; background: var(--si-yellow); }
+
+    /* ── Page title band ── */
+    .page-band {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 32px 20px;
+    }
+    .page-band h1 { font-size: 1.6rem; color: var(--si-blue); font-weight: 700; }
+    .page-band p  { color: var(--text-soft); font-size: 0.88rem; margin-top: 4px; }
+
+    /* ── Main layout ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; }
+    .filter-group label { font-size: 0.78rem; font-weight: 600; color: var(--si-blue); text-transform: uppercase; letter-spacing: .04em; }
+    .filter-group input,
+    .filter-group select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      background: var(--white);
+      color: var(--text);
+      width: 100%;
+      transition: border-color .15s;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--si-blue);
+      box-shadow: 0 0 0 2px rgba(0,75,98,.12);
+    }
+    .btn-reset {
+      padding: 8px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      color: var(--text-soft);
+      white-space: nowrap;
+      transition: background .15s, color .15s;
+    }
+    .btn-reset:hover { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+    .stats-row .count { font-size: 0.88rem; color: var(--text-soft); }
+    .stats-row .count strong { color: var(--si-blue); }
+    .loading-msg { font-size: 0.88rem; color: var(--si-blue); display: flex; align-items: center; gap: 6px; }
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid var(--si-blue-light);
+      border-top-color: var(--si-blue);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--si-blue); }
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    th:hover { background: var(--si-blue-mid); }
+    th .sort-icon { margin-left: 5px; opacity: .6; font-size: .75rem; }
+    th.sorted .sort-icon { opacity: 1; color: var(--si-yellow); }
+
+    td {
+      padding: 10px 16px;
+      font-size: 0.87rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--row-hover); }
+
+    .td-dno {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--si-blue);
+      white-space: nowrap;
+      width: 130px;
+    }
+    .td-date { white-space: nowrap; color: var(--text-soft); width: 110px; }
+    .td-typ  { width: 200px; }
+    .td-kom  { width: 150px; color: var(--text-soft); }
+    .td-subj { line-height: 1.45; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--si-blue-light);
+      color: var(--si-blue);
+      white-space: nowrap;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-soft);
+    }
+    .no-results svg { opacity: .3; margin-bottom: 12px; }
+
+    /* ── Pagination ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--white);
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--text);
+      transition: all .15s;
+    }
+    .page-btn:hover:not(:disabled) { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); }
+    .page-btn.active { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); font-weight: 700; }
+    .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--si-blue);
+      color: rgba(255,255,255,.65);
+      text-align: center;
+      padding: 20px;
+      font-size: 0.82rem;
+      margin-top: 40px;
+    }
+    footer a { color: var(--si-yellow); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .filter-bar { grid-template-columns: 1fr 1fr; }
+      .site-header { padding: 0 16px; }
+      .page-band   { padding: 16px; }
+      .container   { padding: 16px; }
+    }
+    @media (max-width: 600px) {
+      .filter-bar { grid-template-columns: 1fr; }
+      .td-typ, .td-kom { display: none; }
+    }
   </style>
 </head>
 <body>
-<header>
-  <h1>Skolinspektionen – Ärendelista</h1>
-  <p>Hämtad från Skolinspektionens externa sökport · <span id="fetchDate"></span></p>
-</header>
-<div class="container">
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="Sök på ärendenummer, datum eller ärendemening…" oninput="filterTable()">
-    <select id="yearFilter" onchange="filterTable()">
-      <option value="">Alla år</option>
-    </select>
-    <span class="stats" id="stats"></span>
+
+<header class="site-header">
+  <div class="logo-area">
+    <div class="logo-icon">SI</div>
+    <div class="logo-text">
+      <strong>Skolinspektionen</strong>
+      <span>Statens skolinspektion</span>
+    </div>
   </div>
-  <table id="caseTable">
-    <thead>
-      <tr>
-        <th onclick="sortTable(0)">Ärendenummer <span class="arrow" id="arr0">↕</span></th>
-        <th onclick="sortTable(1)">Datum <span class="arrow" id="arr1">↕</span></th>
-        <th onclick="sortTable(2)">Ärendemening <span class="arrow" id="arr2">↕</span></th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
-  <p class="no-results" id="noResults" style="display:none">Inga ärenden matchar sökningen.</p>
+</header>
+<div class="accent-bar"></div>
+
+<div class="page-band">
+  <h1>Ärendelista</h1>
+  <p>Ärenden hämtade från Skolinspektionens externa sökport · Uppdaterad <span id="fetchDate"></span></p>
 </div>
-<footer>Data hämtad från <a href="https://externsearchport.skolinspektionen.se/search.aspx?view=ac" target="_blank">externsearchport.skolinspektionen.se</a> · Visar max 1000 ärenden per sökning</footer>
+
+<div class="container">
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label for="f-search">Fritextsök</label>
+      <input id="f-search" type="text" placeholder="Ärendenummer, skola, ort…" oninput="onFilter()">
+    </div>
+    <div class="filter-group">
+      <label for="f-typ">Ärendetyp</label>
+      <select id="f-typ" onchange="onFilter()">
+        <option value="">Alla typer</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="f-kom">Kommun</label>
+      <select id="f-kom" onchange="onFilter()">
+        <option value="">Alla kommuner</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="f-year">År</label>
+      <select id="f-year" onchange="onFilter()">
+        <option value="">Alla år</option>
+      </select>
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">Rensa filter</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="count" id="statsCount"></div>
+    <div class="loading-msg" id="loadingMsg"><div class="spinner"></div> Laddar ärenden…</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="doSort('dno')"   id="th-dno">Ärendenummer <span class="sort-icon">↕</span></th>
+          <th onclick="doSort('date')"  id="th-date" class="sorted">Datum <span class="sort-icon">↓</span></th>
+          <th onclick="doSort('typ')"   id="th-typ">Ärendetyp <span class="sort-icon">↕</span></th>
+          <th onclick="doSort('kommun')"id="th-kom">Kommun <span class="sort-icon">↕</span></th>
+          <th onclick="doSort('subject')"id="th-sub">Ärendemening <span class="sort-icon">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="no-results" id="noResults" style="display:none">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <div>Inga ärenden matchar sökningen.</div>
+    </div>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<footer>
+  Data hämtad från <a href="https://externsearchport.skolinspektionen.se/search.aspx?view=ac" target="_blank">externsearchport.skolinspektionen.se</a>
+</footer>
 
 <script>
-const DATA = [\n  {"dno":"SI 2026:7398","date":"2026-06-25","subject":"Uppgift i Stockholms kommun"},
-  {"dno":"SI 2026:7397","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från AXONA DENDRON AB i Ej relevant"},
-  {"dno":"SI 2026:7396","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Väsby Yrkesgymnasium AB i Ej relevant"},
-  {"dno":"SI 2026:7395","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Täby Yrkesgymnasium AB i Ej relevant"},
-  {"dno":"SI 2026:7394","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från IEAB International Education AB i Ej relevant"},
-  {"dno":"SI 2026:7393","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Lärlingsgymnasiet i Sverige AB i Ej relevant"},
-  {"dno":"SI 2026:7392","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Tekniska Gymnasiet i Sverige AB i Ej relevant"},
-  {"dno":"SI 2026:7391","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Skolalliansen i Sverige AB i Ej relevant"},
-  {"dno":"SI 2026:7390","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Tunaskolan 4-6 för Offentlig huvudman LULEÅ KOMMUN i Luleå kommun"},
-  {"dno":"SI 2026:7389","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Söderköpings Waldorfskola för Enskild huvudman STIFTELSEN SÖDERKÖPINGS WALDORFSKOLA i Söderköpings kommun"},
-  {"dno":"SI 2026:7388","date":"2026-06-25","subject":"Uppgift om Höglandskolan med huvudmannen ÖRNSKÖLDSVIKS KOMMUN i Örnsköldsviks kommun"},
-  {"dno":"SI 2026:7387","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Våxtorpsskolan F-6 för Offentlig huvudman LAHOLMS KOMMUN i Laholms kommun"},
-  {"dno":"SI 2026:7386","date":"2026-06-25","subject":"Uppgift med huvudmannen ÖSTERÅKERS KOMMUN i Ej relevant"},
-  {"dno":"SI 2026:7385","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Lillhagaskolan för Offentlig huvudman NYKVARNS KOMMUN i Nykvarns kommun"},
-  {"dno":"SI 2026:7384","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av FÖRSKOLAN SVEA, DÖBELNSGATAN 38 för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7383","date":"2026-06-25","subject":"Uppgift med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7382","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Galaxskolan för Offentlig huvudman SIGTUNA KOMMUN i Sigtuna kommun"},
-  {"dno":"SI 2026:7381","date":"2026-06-25","subject":"Uppgift om Våxtorpsskolan F-6 med huvudmannen LAHOLMS KOMMUN i Laholms kommun"},
-  {"dno":"SI 2026:7380","date":"2026-06-25","subject":"Anmälan om att använda fjärrundervisning från NACKA KOMMUN för Eklidens skola"},
-  {"dno":"SI 2026:7379","date":"2026-06-25","subject":"Hantera överklaganden av tillståndbeslut från RUDOLF STEINER STIFTELSEN FÖR LÄKEPEDAGOGIK för Vårdinge anpassade gymnasieskola i Södertälje kommun"},
-  {"dno":"SI 2026:7378","date":"2026-06-25","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Ranagårdsskolan F-9 för Offentlig huvudman HALMSTADS KOMMUN i Halmstads kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7377","date":"2026-06-25","subject":"Uppgift om Blackebergsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7376","date":"2026-06-25","subject":"Uppgift om Anna Whitlocks gymnasium 54040574 med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7375","date":"2026-06-25","subject":"Uppgift med huvudmannen KALIX KOMMUN i Kalix kommun"},
-  {"dno":"SI 2026:7374","date":"2026-06-25","subject":"Annons. HR partner till Skolinspektionen – en nyckelroll i vår HR enhet"},
-  {"dno":"SI 2026:7373","date":"2026-06-25","subject":"Uppgift om Vidhögeskolan 4-9 med huvudmannen VARBERGS KOMMUN i Varbergs kommun"},
-  {"dno":"SI 2026:7372","date":"2026-06-25","subject":"Uppgift om Akademi Båstad Gymnasium med huvudmannen BÅSTADS KOMMUN i Båstads kommun"},
-  {"dno":"SI 2026:7371","date":"2026-06-25","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Botkyrka kommun"},
-  {"dno":"SI 2026:7370","date":"2026-06-25","subject":"Uppgift om Ölmestadskolan med huvudmannen GISLAVEDS KOMMUN i Gislaveds kommun"},
-  {"dno":"SI 2026:7369","date":"2026-06-25","subject":"Riktad tillsyn, Individs situation av Lyrfågelskolan F-3 för Offentlig huvudman TROLLHÄTTANS KOMMUN i Trollhättans kommun"},
-  {"dno":"SI 2026:7368","date":"2026-06-25","subject":"Uppgift om Lyrfågelskolan F-3 med huvudmannen TROLLHÄTTANS KOMMUN i Trollhättans kommun"},
-  {"dno":"SI 2026:7367","date":"2026-06-25","subject":"Anmälan om förändring inom ägar- och ledningskretsen från British Schools AB i Ej relevant"},
-  {"dno":"SI 2026:7366","date":"2026-06-25","subject":"Begäran om ändring av Barn- och elevombudets beslut med dnr 2025:11128, angående Riktad tillsyn, Individs situation av Smygeskolan för Offentlig huvudman TRELLEBORGS KOMMUN i Trelleborgs kommun"},
-  {"dno":"SI 2026:7365","date":"2026-06-25","subject":"Uppgift om Hagaskolan med huvudmannen ALVESTA KOMMUN i Alvesta kommun"},
-  {"dno":"SI 2026:7364","date":"2026-06-25","subject":"Uppgift om Noblaskolan Nya Hovås F-5 med huvudmannen AcadeMedia Grundskolor AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7363","date":"2026-06-25","subject":"Uppgift om Västsvenska Gymnasiet med huvudmannen Idrottens Skola i Göteborg AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7362","date":"2026-06-25","subject":"Uppgift med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:7361","date":"2026-06-25","subject":"Uppgift om Engelbrektsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7360","date":"2026-06-24","subject":"Uppgift om Förskolan Äventyret med huvudmannen GRÄSTORPS KOMMUN i Grästorps kommun"},
-  {"dno":"SI 2026:7359","date":"2026-06-24","subject":"Uppgift om Gråboskolan med huvudmannen REGION GOTLAND i Gotlands kommun"},
-  {"dno":"SI 2026:7358","date":"2026-06-24","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7357","date":"2026-06-24","subject":"Uppgift om Furulundsskolan med huvudmannen EKSJÖ KOMMUN i Eksjö kommun"},
-  {"dno":"SI 2026:7356","date":"2026-06-24","subject":"Uppgift om KUNSKAPSGATAN 3 FÖRSKOLA med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7355","date":"2026-06-24","subject":"Uppgift om Billeshögsskolan med huvudmannen SVALÖVS KOMMUN i Svalövs kommun"},
-  {"dno":"SI 2026:7354","date":"2026-06-24","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Edukatus Alliance AB i Ej relevant"},
-  {"dno":"SI 2026:7353","date":"2026-06-24","subject":"Uppgift i Halmstads kommun"},
-  {"dno":"SI 2026:7352","date":"2026-06-24","subject":"Uppgift om STIFTELSEN LITORINA med huvudmannen KARLSKRONA KOMMUN i Karlskrona kommun"},
-  {"dno":"SI 2026:7351","date":"2026-06-24","subject":"Uppgift om SOLVÄGENS FÖRSKOLA med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7350","date":"2026-06-24","subject":"Uppgift om BYARUM med huvudmannen VAGGERYDS KOMMUN i Vaggeryds kommun"},
-  {"dno":"SI 2026:7349","date":"2026-06-24","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7348","date":"2026-06-24","subject":"Uppgift om FÖRÄLDRAKOOPERATIVET STJÄRNAN EKONOMISK FÖRENING med huvudmannen FÖRÄLDRAKOOPERATIVET STJÄRNAN EKONOMISK FÖRENING i Södertälje kommun"},
-  {"dno":"SI 2026:7347","date":"2026-06-24","subject":"Överklagande av myndighetsbeslut SI 2026:7234, angående begäran om myndighetsbeslut av utlämnande av allmän handling"},
-  {"dno":"SI 2026:7346","date":"2026-06-24","subject":"Uppgift om Pajala Centralskola med huvudmannen PAJALA KOMMUN i Pajala kommun"},
-  {"dno":"SI 2026:7345","date":"2026-06-24","subject":"Hantera begäran om ändring av beslut avseende tillstånd från RUDOLF STEINER STIFTELSEN FÖR LÄKEPEDAGOGIK för Ekgårdens anpassade gymnasieskola i Trosa kommun"},
-  {"dno":"SI 2026:7344","date":"2026-06-24","subject":"Utredning av lärare eller förskollärare i Ale kommun"},
-  {"dno":"SI 2026:7343","date":"2026-06-24","subject":"Uppgift om VFG Jönköping med huvudmannen VFG Utbildning AB i Jönköpings kommun"},
-  {"dno":"SI 2026:7342","date":"2026-06-24","subject":"Uppgift om Västerholms friskola med huvudmannen VÄSTERHOLMS FRISKOLA AB i Stockholms kommun"},
-  {"dno":"SI 2026:7341","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman PILKROGS FRISKOLA EK. FÖR. , läsåret 2026/2027"},
-  {"dno":"SI 2026:7340","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman LEMSHAGASTIFTELSEN , läsåret 2026/2027"},
-  {"dno":"SI 2026:7339","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN LILLGÅRDSSKOLAN I LINKÖPING , läsåret 2026/2027"},
-  {"dno":"SI 2026:7338","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STOCKHOLMS ESTETISKA GYMNASIUM EK. FÖR. , läsåret 2026/2027"},
-  {"dno":"SI 2026:7337","date":"2026-06-24","subject":"Uppgift om Jättestensskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7336","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Potentia education AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:7335","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN ELLEN KEY SKOLAN , läsåret 2026/2027"},
-  {"dno":"SI 2026:7334","date":"2026-06-24","subject":"Uppgift om Kvarnbyskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7333","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Friskolan PANEA AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7332","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman HANINGE MONTESSORISKOLA AKTIEBOLAG , läsåret 2026/2027"},
-  {"dno":"SI 2026:7331","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN CARPE DIEM , läsåret 2026/2027"},
-  {"dno":"SI 2026:7330","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN LITEN LÄR, läsåret 2026/2027"},
-  {"dno":"SI 2026:7329","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman PERSONALKOOPERATIVET I UR OCH SKUR MULLEKOJANS E , läsåret 2026/2027"},
-  {"dno":"SI 2026:7328","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Rodret Förskola & Skola Ekonomisk förening , läsåret 2026/2027"},
-  {"dno":"SI 2026:7327","date":"2026-06-24","subject":"Uppgift om Västerholms friskola med huvudmannen VÄSTERHOLMS FRISKOLA AB i Stockholms kommun"},
-  {"dno":"SI 2026:7326","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Sveaskolan AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7325","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Kronobergsheds Skola Ek. för. , läsåret 2026/2027"},
-  {"dno":"SI 2026:7324","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Victum Gymnasium Aktiebolag, läsåret 2026/2027"},
-  {"dno":"SI 2026:7323","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman IDEELLA FÖRENINGEN EKETÅNGA MONTESSORISKOLA , läsåret 2026/2027"},
-  {"dno":"SI 2026:7322","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Ellithan AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7321","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman TRYDE FRISKOLA EKONOMISK FÖRENING , läsåret 2026/2027"},
-  {"dno":"SI 2026:7320","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFT SOPHIASKOLAN, ÖSTERLENS WALDORFSKOLA, läsåret 2026/2027"},
-  {"dno":"SI 2026:7319","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Nytorps Hästgymnasium AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:7318","date":"2026-06-24","subject":"Uppgift om Jättestensskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7317","date":"2026-06-24","subject":"Uppgift om LERBERGSSKOLAN med huvudmannen HÖGANÄS KOMMUN i Höganäs kommun"},
-  {"dno":"SI 2026:7316","date":"2026-06-24","subject":"Uppgift om Kungshamns skola med huvudmannen SOTENÄS KOMMUN i Sotenäs kommun"},
-  {"dno":"SI 2026:7315","date":"2026-06-24","subject":"Uppgift om Fågelgränds förskola med huvudmannen SUNDSVALLS KOMMUN i Sundsvalls kommun"},
-  {"dno":"SI 2026:7314","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman ÖSTERÅKERSBYGDENS FRISKOLEFÖRENING , läsåret 2026/2027"},
-  {"dno":"SI 2026:7313","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Torsö Skärgårdsskola Ekonomisk förening  läsåret 2026/2027"},
-  {"dno":"SI 2026:7312","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN JOHANNASKOLAN"},
-  {"dno":"SI 2026:7311","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman GNESTA WALDORFSKOLEFÖRENING , läsåret 2026/2027"},
-  {"dno":"SI 2026:7310","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Ängsdals skolor AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7309","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Selja-Långlets friskola ekonomiska förening , läsåret 2026/2027"},
-  {"dno":"SI 2026:7308","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Mälardalens Ridgymnasium AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7307","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman DOCKSTA FRISKOLA Ekonomisk förening, läsåret 2026/2027"},
-  {"dno":"SI 2026:7306","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman DALBY OCH SÖDRA SANDBY MONTESSORIFÖRENING EK FÖR läsåret 2026/2027"},
-  {"dno":"SI 2026:7305","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Vesterhavet AB , läsåret 2026/2027"},
-  {"dno":"SI 2026:7304","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman STIFTELSEN MONTESSORISKOLAN CENTRUM , läsåret 2026/2027"},
-  {"dno":"SI 2026:7303","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman MEDBORGARSKOLAN REGION VÄST  läsåret 2026/2027"},
-  {"dno":"SI 2026:7302","date":"2026-06-24","subject":"Uppgift om Varmsätra skola med huvudmannen SALA KOMMUN i Sala kommun"},
-  {"dno":"SI 2026:7301","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman FÖRENINGEN MONTESSORISKOLAN DAGGDROPPEN, läsåret 2026/2027"},
-  {"dno":"SI 2026:7300","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman FOLKUNIVERSITETET STIFTELSEN KURSVERKSAMHETEN VID GÖTEBORGS UNIVERSITET , läsåret 2026/2027"},
-  {"dno":"SI 2026:7299","date":"2026-06-24","subject":"Riktad tillsyn, Huvudmannanivå (enskild) för Enskild huvudman Båtbackens Friskola ekonomisk förening , läsåret 2026/2027"},
-  {"dno":"SI 2026:7298","date":"2026-06-24","subject":"Uppgift om Gualövs skola med huvudmannen BROMÖLLA KOMMUN i Bromölla kommun"},
-  {"dno":"SI 2026:7297","date":"2026-06-24","subject":"Uppgift om Serresjöskolan med huvudmannen TRELLEBORGS KOMMUN i Trelleborgs kommun"},
-  {"dno":"SI 2026:7296","date":"2026-06-24","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Elin Wägnerskolan 2 för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7295","date":"2026-06-23","subject":"Uppgift om Affärsgymnasiet Stockholm med huvudmannen Edukatus Alliance AB i Stockholms kommun"},
-  {"dno":"SI 2026:7294","date":"2026-06-23","subject":"Anmälan om att använda fjärrundervisning från STAFFANSTORPS KOMMUN för Mellanvångsskolan"},
-  {"dno":"SI 2026:7293","date":"2026-06-23","subject":"Uppgift om Norlandia Förskolor Arkeologen med huvudmannen Norlandia Förskolor AB i Karlskoga kommun"},
-  {"dno":"SI 2026:7292","date":"2026-06-23","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Myrsjöskolan för Offentlig huvudman NACKA KOMMUN i Nacka kommun, läsåret 2023/2024"},
-  {"dno":"SI 2026:7291","date":"2026-06-23","subject":"Uppgift om Vifolkaskolan 7-9 med huvudmannen MJÖLBY KOMMUN i Mjölby kommun"},
-  {"dno":"SI 2026:7290","date":"2026-06-23","subject":"Uppgift om Hultsbergsskolan med huvudmannen KARLSTADS KOMMUN i Karlstads kommun"},
-  {"dno":"SI 2026:7289","date":"2026-06-23","subject":"Uppgift om Santosskolan 7-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7288","date":"2026-06-23","subject":"Uppgift om Midskogsskolan 7-9 med huvudmannen LULEÅ KOMMUN i Luleå kommun"},
-  {"dno":"SI 2026:7287","date":"2026-06-23","subject":"Uppgift om Norlandia Förskolor Arkeologen med huvudmannen Norlandia Förskolor AB i Karlskoga kommun"},
-  {"dno":"SI 2026:7286","date":"2026-06-23","subject":"Uppgift om Västerskolan med huvudmannen ÖSTRA GÖINGE KOMMUN i Östra Göinge kommun"},
-  {"dno":"SI 2026:7285","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från KNIVSTA PASTORAT i Ej relevant"},
-  {"dno":"SI 2026:7284","date":"2026-06-23","subject":"Uppgift om SANDSBRO FÖRSKOLA med huvudmannen VÄXJÖ KOMMUN i Växjö kommun"},
-  {"dno":"SI 2026:7283","date":"2026-06-23","subject":"Återkallande av godkännanden som inte nyttjas för Bergstrands Gymnasium AB vid Bergstrands Gymnasium Stockholm i Stockholms kommun"},
-  {"dno":"SI 2026:7282","date":"2026-06-23","subject":"Uppgift om Orsaskolan med huvudmannen ORSA KOMMUN i Orsa kommun"},
-  {"dno":"SI 2026:7281","date":"2026-06-23","subject":"Uppgift om JENSEN grundskola Helsingborg med huvudmannen JENSEN EDUCATION COLLEGE AB i Helsingborgs kommun"},
-  {"dno":"SI 2026:7280","date":"2026-06-23","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7279","date":"2026-06-23","subject":"Uppgift om Christinaskolan med huvudmannen Lidingö Skola AB i Lidingö kommun"},
-  {"dno":"SI 2026:7278","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från PILKROGS FRISKOLA EK. FÖR."},
-  {"dno":"SI 2026:7277","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från LEMSHAGASTIFTELSEN"},
-  {"dno":"SI 2026:7276","date":"2026-06-23","subject":"Uppgift om DUVUNGENS FÖRSKOLA med huvudmannen FÖRENINGEN KRISTEN BARNOMSORG I LUND i Lunds kommun"},
-  {"dno":"SI 2026:7275","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN LILLGÅRDSSKOLAN I LINKÖPING"},
-  {"dno":"SI 2026:7274","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STOCKHOLMS ESTETISKA GYMNASIUM EK. FÖR."},
-  {"dno":"SI 2026:7273","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Potentia education AB"},
-  {"dno":"SI 2026:7272","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN ELLEN KEY SKOLAN"},
-  {"dno":"SI 2026:7271","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Friskolan PANEA AB"},
-  {"dno":"SI 2026:7270","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från HANINGE MONTESSORISKOLA AKTIEBOLAG"},
-  {"dno":"SI 2026:7269","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN CARPE DIEM"},
-  {"dno":"SI 2026:7268","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN LITEN LÄR"},
-  {"dno":"SI 2026:7267","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från PERSONALKOOPERATIVET I UR OCH SKUR MULLEKOJANS E"},
-  {"dno":"SI 2026:7266","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Rodret Förskola & Skola Ekonomisk förening"},
-  {"dno":"SI 2026:7265","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Sveaskolan AB"},
-  {"dno":"SI 2026:7264","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Kronobergsheds Skola Ek. för."},
-  {"dno":"SI 2026:7263","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från IDEELLA FÖRENINGEN EKETÅNGA MONTESSORISKOLA i Ej relevant"},
-  {"dno":"SI 2026:7262","date":"2026-06-23","subject":"Uppgift med huvudmannen American Schools of Sweden AB i Mölndals kommun"},
-  {"dno":"SI 2026:7261","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Victum Gymnasium Aktiebolag"},
-  {"dno":"SI 2026:7260","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Ellithan AB"},
-  {"dno":"SI 2026:7259","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från TRYDE FRISKOLA EKONOMISK FÖRENING"},
-  {"dno":"SI 2026:7258","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFT SOPHIASKOLAN, ÖSTERLENS WALDORFSKOLA"},
-  {"dno":"SI 2026:7257","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Nytorps Hästgymnasium AB"},
-  {"dno":"SI 2026:7256","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från ÖSTERÅKERSBYGDENS FRISKOLEFÖRENING"},
-  {"dno":"SI 2026:7255","date":"2026-06-23","subject":"Uppgift om Pauliskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:7254","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Torsö Skärgårdsskola Ekonomisk förening"},
-  {"dno":"SI 2026:7253","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN JOHANNASKOLAN"},
-  {"dno":"SI 2026:7252","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från GNESTA WALDORFSKOLEFÖRENING"},
-  {"dno":"SI 2026:7251","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Ängsdals skolor AB"},
-  {"dno":"SI 2026:7250","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Selja-Långlets friskola ekonomiska förening"},
-  {"dno":"SI 2026:7249","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Mälardalens Ridgymnasium AB"},
-  {"dno":"SI 2026:7248","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från DOCKSTA FRISKOLA Ekonomisk förening"},
-  {"dno":"SI 2026:7247","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från DALBY OCH SÖDRA SANDBY MONTESSORIFÖRENING EK FÖR"},
-  {"dno":"SI 2026:7246","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Vesterhavet AB"},
-  {"dno":"SI 2026:7245","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN MONTESSORISKOLAN CENTRUM"},
-  {"dno":"SI 2026:7244","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från MEDBORGARSKOLAN REGION VÄST"},
-  {"dno":"SI 2026:7243","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från FÖRENINGEN MONTESSORISKOLAN DAGGDROPPEN"},
-  {"dno":"SI 2026:7242","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från FOLKUNIVERSITETET STIFTELSEN KURSVERKSAMHETEN VID GÖTEBORGS UNIVERSITET"},
-  {"dno":"SI 2026:7241","date":"2026-06-23","subject":"Uppgift om Vätö skola med huvudmannen NORRTÄLJE KOMMUN i Norrtälje kommun"},
-  {"dno":"SI 2026:7240","date":"2026-06-23","subject":"Uppgift med huvudmannen KARLSTADS KOMMUN i Karlstads kommun"},
-  {"dno":"SI 2026:7239","date":"2026-06-23","subject":"Uppgift om Brodalens förskola med huvudmannen JÖNKÖPINGS KOMMUN i Jönköpings kommun"},
-  {"dno":"SI 2026:7238","date":"2026-06-23","subject":"Uppgift om Munksundsskolan med huvudmannen ENKÖPINGS KOMMUN i Enköpings kommun"},
-  {"dno":"SI 2026:7237","date":"2026-06-23","subject":"Överklagande av Skolinspektionens beslut med dnr 2023:6491 avseende Utöva Riktad tillsyn Mariaskolan inom enskild huvudman UMEÅ KRISTNA FRISKOLEFÖRENING i Umeå kommun"},
-  {"dno":"SI 2026:7236","date":"2026-06-23","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Båtbackens Friskola ekonomisk förening"},
-  {"dno":"SI 2026:7235","date":"2026-06-23","subject":"Regeringsbeslut Entledigande och förordnanden i insynsrådet vid Statens skolinspektion"},
-  {"dno":"SI 2026:7234","date":"2026-06-23","subject":"Begäran om myndighetsbeslut av utlämnande av allmän handling"},
-  {"dno":"SI 2026:7233","date":"2026-06-23","subject":"Uppgift om Nyvångs skola med huvudmannen ÅSTORPS KOMMUN i Åstorps kommun"},
-  {"dno":"SI 2026:7232","date":"2026-06-22","subject":"Uppgift om Vittra Halmstad med huvudmannen Vittraskolorna AB i Halmstads kommun"},
-  {"dno":"SI 2026:7231","date":"2026-06-22","subject":"Uppgift med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7230","date":"2026-06-22","subject":"Uppgift om MERKURIUSGATAN 75 FÖRSKOLA med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7229","date":"2026-06-22","subject":"Uppgift om Lundbyskolan 7-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7228","date":"2026-06-22","subject":"Uppgift i Uppsala kommun"},
-  {"dno":"SI 2026:7227","date":"2026-06-22","subject":"Begäran om ändring av Barn- och elevombudets beslut med dnr 2026:5173, angående Riktad tillsyn, Individs situation av Häggvik- Skälbyskolan för Offentlig huvudman SOLLENTUNA KOMMUN i Sollentuna kommun"},
-  {"dno":"SI 2026:7226","date":"2026-06-22","subject":"Uppgift om Gantofta skola med huvudmannen HELSINGBORGS KOMMUN i Helsingborgs kommun"},
-  {"dno":"SI 2026:7225","date":"2026-06-22","subject":"Juridisk vägledning – Allmänna handlingar, offentlighet och sekretess 2026"},
-  {"dno":"SI 2026:7224","date":"2026-06-22","subject":"Uppgift om Holsby skola med huvudmannen VETLANDA KOMMUN i Vetlanda kommun"},
-  {"dno":"SI 2026:7223","date":"2026-06-22","subject":"Uppgift om Lilla Adolf Fredriks skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7222","date":"2026-06-22","subject":"Riktad tillsyn, Individs situation av Bringstaskolan för Offentlig huvudman NORDANSTIGS KOMMUN i Nordanstigs kommun"},
-  {"dno":"SI 2026:7221","date":"2026-06-22","subject":"Uppgift om SiS ungdomshem Bärby med huvudmannen Statens institutionsstyrelse i Uppsala kommun"},
-  {"dno":"SI 2026:7220","date":"2026-06-22","subject":"Uppgift om Alnöitskolan med huvudmannen Skolalliansen i Sverige AB i Sundsvalls kommun"},
-  {"dno":"SI 2026:7219","date":"2026-06-22","subject":"Återkallande av godkännanden som inte nyttjas för STIFTELSEN NYA ÄNGKÄRRSSKOLAN vid Ängkärrskolan i Solna i Solna kommun"},
-  {"dno":"SI 2026:7218","date":"2026-06-22","subject":"Uppgift om Kärraskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7217","date":"2026-06-22","subject":"Uppgift om Byängsskolan med huvudmannen Byängsskolan AB i Täby kommun"},
-  {"dno":"SI 2026:7216","date":"2026-06-22","subject":"Uppgift om FUTURASKOLAN INTERNATIONAL PRE-SCHOOL DANDERYD med huvudmannen FUTURASKOLAN AB i Danderyds kommun"},
-  {"dno":"SI 2026:7215","date":"2026-06-22","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BRICKEBERGSKYRKANS SKOLSTIFTELSE i Ej relevant"},
-  {"dno":"SI 2026:7214","date":"2026-06-22","subject":"Uppgift om Tingdalsskolan med huvudmannen ÅSTORPS KOMMUN i Åstorps kommun"},
-  {"dno":"SI 2026:7213","date":"2026-06-22","subject":"Uppgift om Kungsgårdsskolan SO 1 med huvudmannen ÄNGELHOLMS KOMMUN i Ängelholms kommun"},
-  {"dno":"SI 2026:7212","date":"2026-06-22","subject":"Uppgift om Hierneskolan F-9 med huvudmannen EDA KOMMUN i Eda kommun"},
-  {"dno":"SI 2026:7211","date":"2026-06-22","subject":"Återkallande av godkännanden som inte nyttjas för OLYMPICA AB vid Olympicaskolan Fäggeby i Säters kommun"},
-  {"dno":"SI 2026:7210","date":"2026-06-22","subject":"Återkallande av godkännanden som inte nyttjas för OLYMPICA AB vid Olympicaskolan Haraker i Västerås kommun"},
-  {"dno":"SI 2026:7209","date":"2026-06-22","subject":"Återkallande av godkännanden som inte nyttjas för OLYMPICA AB vid Olympicaskolan Håksberg i Ludvika kommun"},
-  {"dno":"SI 2026:7208","date":"2026-06-22","subject":"Återkallande av godkännanden som inte nyttjas för OLYMPICA AB vid Olympicaskolan Hedemora i Hedemora kommun"},
-  {"dno":"SI 2026:7207","date":"2026-06-22","subject":"Uppgift om Norregårdskolan med huvudmannen VÄXJÖ KOMMUN i Växjö kommun"},
-  {"dno":"SI 2026:7206","date":"2026-06-22","subject":"Uppgift om Vaksalaskolan med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:7205","date":"2026-06-22","subject":"Uppgift om Bergstrands vuxenutbildning med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:7204","date":"2026-06-21","subject":"Uppgift om Hanahöjskolan med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:7203","date":"2026-06-21","subject":"Uppgift om Vuxenutbildningscentrum Stockholm med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7202","date":"2026-06-21","subject":"Uppgift om Olandsskolan med huvudmannen ÖSTHAMMARS KOMMUN i Östhammars kommun"},
-  {"dno":"SI 2026:7201","date":"2026-06-21","subject":"Uppgift i Lunds kommun"},
-  {"dno":"SI 2026:7200","date":"2026-06-20","subject":"Uppgift om Vega skola med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:7199","date":"2026-06-20","subject":"Uppgift om Birgittaskolan med huvudmannen SPECIALPEDAGOGISKA SKOLMYNDIGHETEN i Örebro kommun"},
-  {"dno":"SI 2026:7198","date":"2026-06-19","subject":"Uppgift i Malmö kommun"},
-  {"dno":"SI 2026:7197","date":"2026-06-19","subject":"Uppgift om Jernvallskolan med huvudmannen SANDVIKENS KOMMUN i Sandvikens kommun"},
-  {"dno":"SI 2026:7196","date":"2026-06-19","subject":"Uppgift om Solna vuxenutbildning med huvudmannen SOLNA KOMMUN i Solna kommun"},
-  {"dno":"SI 2026:7195","date":"2026-06-19","subject":"Uppgift om Brunnsängskolan med huvudmannen SÖDERTÄLJE KOMMUN i Södertälje kommun"},
-  {"dno":"SI 2026:7194","date":"2026-06-19","subject":"Uppgift om Internationella Engelska Skolan Linköping med huvudmannen Internationella Engelska Skolan i Sverige AB i Linköpings kommun"},
-  {"dno":"SI 2026:7193","date":"2026-06-18","subject":"Uppgift om Vittra Halmstad med huvudmannen Vittraskolorna AB i Halmstads kommun"},
-  {"dno":"SI 2026:7192","date":"2026-06-18","subject":"Uppgift om Vällingbyskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7191","date":"2026-06-18","subject":"Uppgift om Slestadsskolan med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:7190","date":"2026-06-18","subject":"Uppgift om Karlsängskolan med huvudmannen NORA KOMMUN i Nora kommun"},
-  {"dno":"SI 2026:7189","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från ULNO AB i Ej relevant"},
-  {"dno":"SI 2026:7188","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Prolympia Virserum AB i Ej relevant"},
-  {"dno":"SI 2026:7187","date":"2026-06-18","subject":"Uppgift om Vallastadens skola med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:7186","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Prolympia Helsingborg AB i Ej relevant"},
-  {"dno":"SI 2026:7185","date":"2026-06-18","subject":"Riktad tillsyn, Individs situation av SKÅNEGATAN 18 FÖRSKOLA för Offentlig huvudman GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7184","date":"2026-06-18","subject":"Riktad tillsyn, Individs situation av Önneredsskolan F-9 för Offentlig huvudman GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7183","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Prolympia AB i Ej relevant"},
-  {"dno":"SI 2026:7182","date":"2026-06-18","subject":"Uppgift om Resursskolan vid Martinskolan med huvudmannen STIFTELSEN MARTINSKOLAN SÖDERS WALDORFSKOLA i Stockholms kommun"},
-  {"dno":"SI 2026:7181","date":"2026-06-18","subject":"Riktad tillsyn, Individs situation av Lyrfågelskolan 4-6 för Offentlig huvudman TROLLHÄTTANS KOMMUN i Trollhättans kommun"},
-  {"dno":"SI 2026:7180","date":"2026-06-18","subject":"Riktad tillsyn, Individs situation av Vrigstad skola för Offentlig huvudman SÄVSJÖ KOMMUN i Sävsjö kommun"},
-  {"dno":"SI 2026:7179","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Gothenburg Association AB i Ej relevant"},
-  {"dno":"SI 2026:7178","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BANÉRPORTEN AKTIEBOLAG i Ej relevant"},
-  {"dno":"SI 2026:7177","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från AcadeMedia Grundskolor AB i Ej relevant"},
-  {"dno":"SI 2026:7176","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Kringlaskolan AB i Ej relevant"},
-  {"dno":"SI 2026:7175","date":"2026-06-18","subject":"Uppgift om Asmundtorps skola med huvudmannen LANDSKRONA KOMMUN i Landskrona kommun"},
-  {"dno":"SI 2026:7174","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BANÉRPORTSSKOLAN AB i Ej relevant"},
-  {"dno":"SI 2026:7173","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BANÉRPORTSSKOLAN AB i Ej relevant"},
-  {"dno":"SI 2026:7172","date":"2026-06-18","subject":"Uppgift om Affärsgymnasiet Stockholm med huvudmannen Edukatus Alliance AB i Stockholms kommun"},
-  {"dno":"SI 2026:7171","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Vindseglet AB i Ej relevant"},
-  {"dno":"SI 2026:7170","date":"2026-06-18","subject":"Anmälan om att använda fjärrundervisning från KUNGSBACKA KOMMUN"},
-  {"dno":"SI 2026:7169","date":"2026-06-18","subject":"Uppgift om International School of Kungsholmen med huvudmannen AB Parts & Paomees i Stockholms kommun"},
-  {"dno":"SI 2026:7168","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Vittraskolorna AB i Ej relevant"},
-  {"dno":"SI 2026:7167","date":"2026-06-18","subject":"Utredning av lärare eller förskollärare i Piteå kommun"},
-  {"dno":"SI 2026:7166","date":"2026-06-18","subject":"Utredning av lärare eller förskollärare i Uppsala kommun"},
-  {"dno":"SI 2026:7165","date":"2026-06-18","subject":"Beslut om riktlinje för att förebygga och hantera hot och våld m.m."},
-  {"dno":"SI 2026:7164","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från FRISKOLAN LYFTET AB i Ej relevant"},
-  {"dno":"SI 2026:7163","date":"2026-06-18","subject":"Uppgift om Vidhögeskolan 4-9 med huvudmannen VARBERGS KOMMUN i Varbergs kommun"},
-  {"dno":"SI 2026:7162","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Pops Academy AB i Ej relevant"},
-  {"dno":"SI 2026:7161","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från AcadeMedia fria grundskolor AB i Ej relevant"},
-  {"dno":"SI 2026:7160","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Swedish Education Group AB i Ej relevant"},
-  {"dno":"SI 2026:7159","date":"2026-06-18","subject":"Uppgift om Lärande Grundskola Skapa med huvudmannen The Learning Lab i Stockholm AB i Huddinge kommun"},
-  {"dno":"SI 2026:7158","date":"2026-06-18","subject":"Uppgift om Hånger skola med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:7157","date":"2026-06-18","subject":"Uppgift om Fridaskolan Helsingborg med huvudmannen Fridaskolorna AB i Helsingborgs kommun"},
-  {"dno":"SI 2026:7156","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från International Montessori School Sweden AB i Ej relevant"},
-  {"dno":"SI 2026:7155","date":"2026-06-18","subject":"Uppgift om Fäladsgården med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:7154","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från MontessoriGrundskolan Maria AB i Ej relevant"},
-  {"dno":"SI 2026:7153","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från FRAMTIDSKOMPASSEN AB i Ej relevant"},
-  {"dno":"SI 2026:7152","date":"2026-06-18","subject":"Hantera överklaganden av tillståndsbeslut för ansökan om betygsrätt från Distansspecialisten i Sverige AB"},
-  {"dno":"SI 2026:7151","date":"2026-06-18","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Monteprenör AB i Ej relevant"},
-  {"dno":"SI 2026:7150","date":"2026-06-18","subject":"Remiss. Statsbidrag till svenska utlandsskolor – ett föråldrat och ineffektivt system"},
-  {"dno":"SI 2026:7149","date":"2026-06-18","subject":"Uppgift med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7148","date":"2026-06-18","subject":"Uppgift om Söderbymalmsskolan med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:7147","date":"2026-06-18","subject":"Uppgift om Långareds skola med huvudmannen ALINGSÅS KOMMUN i Alingsås kommun"},
-  {"dno":"SI 2026:7146","date":"2026-06-18","subject":"Uppgift om Movant med huvudmannen HELSINGBORGS KOMMUN i Helsingborgs kommun"},
-  {"dno":"SI 2026:7145","date":"2026-06-17","subject":"Uppgift om Friskolan Mosaik med huvudmannen Friskolan Mosaik i Falun ekonomisk förening i Falu kommun"},
-  {"dno":"SI 2026:7144","date":"2026-06-17","subject":"Uppgift om Brunnbyskolan med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:7143","date":"2026-06-17","subject":"Uppgift om Töcksfors skola LM med huvudmannen ÅRJÄNGS KOMMUN i Årjängs kommun"},
-  {"dno":"SI 2026:7142","date":"2026-06-17","subject":"Uppgift om Altorpskolan Anpassad Grundskola med huvudmannen HERRLJUNGA KOMMUN i Herrljunga kommun"},
-  {"dno":"SI 2026:7141","date":"2026-06-17","subject":"Uppgift om Romfartunaskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7140","date":"2026-06-17","subject":"Uppgift om Vuxenutbildningen Åmål med huvudmannen ÅMÅLS KOMMUN i Åmåls kommun"},
-  {"dno":"SI 2026:7139","date":"2026-06-17","subject":"Uppgift om Noblaskolan Nya Hovås F-5 med huvudmannen AcadeMedia Grundskolor AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7138","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Timmele skola för Offentlig huvudman ULRICEHAMNS KOMMUN i Ulricehamns kommun"},
-  {"dno":"SI 2026:7137","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Innovitaskolan S:t Jörgen för Enskild huvudman AcadeMedia Grundskolor AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7136","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Bråviksskolan 1 för Offentlig huvudman NORRKÖPINGS KOMMUN i Norrköpings kommun"},
-  {"dno":"SI 2026:7135","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Tallbohovskolan för Offentlig huvudman JÄRFÄLLA KOMMUN i Järfälla kommun"},
-  {"dno":"SI 2026:7134","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Floraskolan för Offentlig huvudman SKELLEFTEÅ KOMMUN i Skellefteå kommun"},
-  {"dno":"SI 2026:7133","date":"2026-06-17","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Dibber International School Sollentuna för Enskild huvudman Dibber Norrviken Skola AB i Sollentuna kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7132","date":"2026-06-17","subject":"Beslut om att inleda granskning av statsbidrag för svenska utlandsskolor"},
-  {"dno":"SI 2026:7131","date":"2026-06-17","subject":"Uppgift om Noblaskolan Nya Hovås F-5 med huvudmannen AcadeMedia Grundskolor AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7130","date":"2026-06-17","subject":"Uppgift om Praktiska Gymnasiet Linköping med huvudmannen Praktiska Sverige AB i Linköpings kommun"},
-  {"dno":"SI 2026:7129","date":"2026-06-17","subject":"Uppgift om ÅRBYGATANS FÖRSKOLA med huvudmannen ESKILSTUNA KOMMUN i Eskilstuna kommun"},
-  {"dno":"SI 2026:7128","date":"2026-06-17","subject":"Uppgift om Vuxenutbildning enhet 1 med huvudmannen SKÖVDE KOMMUN i Skövde kommun"},
-  {"dno":"SI 2026:7127","date":"2026-06-17","subject":"Anmälan om att använda fjärrundervisning från MÖLNDALS KOMMUN för Sörgårdsskolan"},
-  {"dno":"SI 2026:7126","date":"2026-06-17","subject":"Anmälan om att använda fjärrundervisning från MÖLNDALS KOMMUN för Bosgårdsskolan"},
-  {"dno":"SI 2026:7125","date":"2026-06-17","subject":"Anmälan om att använda fjärrundervisning från MÖLNDALS KOMMUN för Krokslättsskolan"},
-  {"dno":"SI 2026:7124","date":"2026-06-17","subject":"Anmälan om att använda fjärrundervisning från MÖLNDALS KOMMUN för Rävekärrsskolan"},
-  {"dno":"SI 2026:7123","date":"2026-06-17","subject":"Uppgift om Västsvenska Gymnasiet med huvudmannen Idrottens Skola i Göteborg AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7122","date":"2026-06-17","subject":"Uppgift med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7121","date":"2026-06-17","subject":"Uppgift om Gymnasieskolan Vipan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:7120","date":"2026-06-17","subject":"Framställning om ändring i skolförordningen och gymnasieförordningen"},
-  {"dno":"SI 2026:7119","date":"2026-06-17","subject":"Uppgift om Sandarnaskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7118","date":"2026-06-17","subject":"Uppgift om LBS Kreativa Gymnasiet Göteborg med huvudmannen LBS Kreativa Gymnasiet AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7117","date":"2026-06-17","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Hermodsdalsskolan för Offentlig huvudman MALMÖ KOMMUN i Malmö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7116","date":"2026-06-17","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Örtagårdsskolan 7-9 för Offentlig huvudman MALMÖ KOMMUN i Malmö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7115","date":"2026-06-17","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Lindängeskolan för Offentlig huvudman MALMÖ KOMMUN i Malmö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7114","date":"2026-06-17","subject":"Uppgift om Solberga by anpassad grundsskola med huvudmannen FÖRENINGEN SOLBERGA BY i Södertälje kommun"},
-  {"dno":"SI 2026:7113","date":"2026-06-17","subject":"Uppgift om Move & Walk anpassad grundskola Göteborg med huvudmannen MOVE & WALK SVERIGE AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7112","date":"2026-06-17","subject":"Uppgift om Östra skolan, Mörbylånga med huvudmannen CIS KALMAR AB i Mörbylånga kommun"},
-  {"dno":"SI 2026:7111","date":"2026-06-17","subject":"Uppgift om Linåkerskolan med huvudmannen SVALÖVS KOMMUN i Svalövs kommun"},
-  {"dno":"SI 2026:7110","date":"2026-06-17","subject":"Uppgift om Cuben Fridhemsplan med huvudmannen Cuben Utbildning AB i Stockholms kommun"},
-  {"dno":"SI 2026:7109","date":"2026-06-17","subject":"Uppgift om Kung Karls skola med huvudmannen KUNGSÖRS KOMMUN i Kungsörs kommun"},
-  {"dno":"SI 2026:7108","date":"2026-06-17","subject":"Uppgift om Nya Varvetskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7107","date":"2026-06-17","subject":"Uppgift om Blombackaskolan med huvudmannen SÖDERTÄLJE KOMMUN i Södertälje kommun"},
-  {"dno":"SI 2026:7106","date":"2026-06-17","subject":"Uppgift om Bjurhovdaskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7105","date":"2026-06-17","subject":"Uppgift om Älvstrandsgymn. komvux med huvudmannen HAGFORS KOMMUN i Hagfors kommun"},
-  {"dno":"SI 2026:7104","date":"2026-06-17","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Valdemarsviks kommun"},
-  {"dno":"SI 2026:7103","date":"2026-06-17","subject":"Uppgift om Linnéskolan 1 med huvudmannen ÄLMHULTS KOMMUN i Älmhults kommun"},
-  {"dno":"SI 2026:7102","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Svaleboskolan för Offentlig huvudman LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:7101","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av Kallingeskolan 4-6 för Offentlig huvudman RONNEBY KOMMUN i Ronneby kommun"},
-  {"dno":"SI 2026:7100","date":"2026-06-17","subject":"Riktad tillsyn, Individs situation av AG Stommenskolan för Offentlig huvudman MARKS KOMMUN i Marks kommun"},
-  {"dno":"SI 2026:7099","date":"2026-06-17","subject":"Uppgift om Kunskapsgymnasiet Göteborg med huvudmannen Kunskapsskolan i Sverige Aktiebolag i Göteborgs kommun"},
-  {"dno":"SI 2026:7098","date":"2026-06-16","subject":"Uppgift om Trälleborg med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:7097","date":"2026-06-16","subject":"Uppgift om Åsaskolan 4-6 med huvudmannen KUNGSBACKA KOMMUN i Kungsbacka kommun"},
-  {"dno":"SI 2026:7096","date":"2026-06-16","subject":"Uppgift om Thorildsplans gymnasium 32116280 med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7095","date":"2026-06-16","subject":"Uppgift om Trollbodaskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7094","date":"2026-06-16","subject":"Uppgift om Ramkvilla skola med huvudmannen VETLANDA KOMMUN i Vetlanda kommun"},
-  {"dno":"SI 2026:7093","date":"2026-06-16","subject":"Uppgift om Fjällskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7092","date":"2026-06-16","subject":"Uppgift om Kvarnbergsskolan med huvudmannen HUDDINGE KOMMUN i Huddinge kommun"},
-  {"dno":"SI 2026:7091","date":"2026-06-16","subject":"Uppgift om Klaragymnasiet med internat med huvudmannen KOMMUNSAMVERKAN CURA INDIVIDUTVECKLING i Olofströms kommun"},
-  {"dno":"SI 2026:7090","date":"2026-06-16","subject":"Uppgift om Västerhöjd 1 med huvudmannen SKÖVDE KOMMUN i Skövde kommun"},
-  {"dno":"SI 2026:7089","date":"2026-06-16","subject":"Uppgift om Arkipelagens förskola med huvudmannen AcadeMedia Grundskolor AB i Värmdö kommun"},
-  {"dno":"SI 2026:7088","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Fjällenskolan för Offentlig huvudman JÄRFÄLLA KOMMUN i Järfälla kommun"},
-  {"dno":"SI 2026:7087","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Vikingstads skolor för Offentlig huvudman LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:7086","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Mariaskolan F-6 för Offentlig huvudman GÄLLIVARE KOMMUN i Gällivare kommun"},
-  {"dno":"SI 2026:7085","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Valstads grundskola för Offentlig huvudman TIDAHOLMS KOMMUN i Tidaholms kommun"},
-  {"dno":"SI 2026:7084","date":"2026-06-16","subject":"Uppgift om BÅTSMANS FÖRSKOLA med huvudmannen ALE KOMMUN i Ale kommun"},
-  {"dno":"SI 2026:7083","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Forshedaskolan för Offentlig huvudman VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:7082","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Högalidsskolan för Offentlig huvudman FINSPÅNGS KOMMUN i Finspångs kommun"},
-  {"dno":"SI 2026:7081","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Håslövs byaskola för Enskild huvudman Pimapos skola och fritids AB i Vellinge kommun"},
-  {"dno":"SI 2026:7080","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Vrigstad skola för Offentlig huvudman SÄVSJÖ KOMMUN i Sävsjö kommun"},
-  {"dno":"SI 2026:7079","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Svärtingehus 1 för Offentlig huvudman NORRKÖPINGS KOMMUN i Norrköpings kommun"},
-  {"dno":"SI 2026:7078","date":"2026-06-16","subject":"Uppgift om Praktiska Gymnasiet Gävle med huvudmannen Praktiska Sverige AB i Gävle kommun"},
-  {"dno":"SI 2026:7077","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Järvenskolan för Offentlig huvudman ARVIKA KOMMUN i Arvika kommun"},
-  {"dno":"SI 2026:7076","date":"2026-06-16","subject":"Uppgift om Minervaskolan med huvudmannen MINERVASKOLAN I UMEÅ AB i Umeå kommun"},
-  {"dno":"SI 2026:7075","date":"2026-06-16","subject":"Uppgift om Ljungenskolan med huvudmannen VELLINGE KOMMUN i Vellinge kommun"},
-  {"dno":"SI 2026:7074","date":"2026-06-16","subject":"Beslut gällande Uppdrag – följa upp genomförandet av DOS-lagens bestämmelser i Skolinspektionen"},
-  {"dno":"SI 2026:7073","date":"2026-06-16","subject":"Återkallande av godkännanden som inte nyttjas för STIFTELSEN NOVALIS vid Novalisgymnasiet i Södertälje kommun"},
-  {"dno":"SI 2026:7072","date":"2026-06-16","subject":"Uppgift om KLOCKARSKOGSGÅRDENS FÖRSKOLA med huvudmannen OSBY KOMMUN i Osby kommun"},
-  {"dno":"SI 2026:7071","date":"2026-06-16","subject":"Återkallande av godkännanden som inte nyttjas för Mohammed Aabi vid Framtidsskolan Borås i Borås kommun"},
-  {"dno":"SI 2026:7070","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Apalbyskolan för Offentlig huvudman VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7069","date":"2026-06-16","subject":"Uppgift om KLOCKARSKOGSGÅRDENS FÖRSKOLA med huvudmannen OSBY KOMMUN i Osby kommun"},
-  {"dno":"SI 2026:7068","date":"2026-06-16","subject":"Riktlinje för Skolinspektionens representation och gåvor"},
-  {"dno":"SI 2026:7067","date":"2026-06-16","subject":"Uppgift om Forshedaskolan med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:7066","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Baldersskolan 7-9 för Offentlig huvudman STAFFANSTORPS KOMMUN i Staffanstorps kommun"},
-  {"dno":"SI 2026:7065","date":"2026-06-16","subject":"Uppdragsavtal vetenskaplig expert - TKG Undervisningen i historia"},
-  {"dno":"SI 2026:7064","date":"2026-06-16","subject":"Uppgift om Katrinelundsgymnasiet 5 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7063","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Bladins grundskola för Enskild huvudman BLADINS SKOLA, STIFTELSEN i Malmö kommun"},
-  {"dno":"SI 2026:7062","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Tycho Braheskolan för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun"},
-  {"dno":"SI 2026:7061","date":"2026-06-16","subject":"Ansökan om betygsrätt för vuxenutbildning från Arcus Utbildning & Jobbförmedling AB i Ej relevant"},
-  {"dno":"SI 2026:7060","date":"2026-06-16","subject":"Uppgift om Skogsängsskolan F-6 med huvudmannen ESKILSTUNA KOMMUN i Eskilstuna kommun"},
-  {"dno":"SI 2026:7059","date":"2026-06-16","subject":"Riktad tillsyn, Individs situation av Fröslundaskolan F-6 för Offentlig huvudman ESKILSTUNA KOMMUN i Eskilstuna kommun"},
-  {"dno":"SI 2026:7058","date":"2026-06-16","subject":"Uppgift om Hudikskolan 7-9 med huvudmannen Hudikskolan AB i Hudiksvalls kommun"},
-  {"dno":"SI 2026:7057","date":"2026-06-16","subject":"Uppgift om Svedenskolan Bergshamra med huvudmannen Utvecklingspedagogik Sverige Aktiebolag i Solna kommun"},
-  {"dno":"SI 2026:7056","date":"2026-06-16","subject":"Uppgift om Söderköpings Waldorfskola med huvudmannen STIFTELSEN SÖDERKÖPINGS WALDORFSKOLA i Söderköpings kommun"},
-  {"dno":"SI 2026:7055","date":"2026-06-16","subject":"Uppgift om Svenska skolan i Fuengirola med huvudmannen STATENS SKOLVERK i Örebro kommun"},
-  {"dno":"SI 2026:7054","date":"2026-06-16","subject":"Uppgift om Anpassad grundskola inriktning ämne med huvudmannen SANDVIKENS KOMMUN i Sandvikens kommun"},
-  {"dno":"SI 2026:7053","date":"2026-06-16","subject":"Uppgift om Kubikskolan Dibber med huvudmannen Dibber Kubikskolan AB i Helsingborgs kommun"},
-  {"dno":"SI 2026:7052","date":"2026-06-16","subject":"Uppgift om Piltorpsskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7051","date":"2026-06-16","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) för Enskild huvudman Kunskapsskolan i Sverige Aktiebolag i Nyköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7050","date":"2026-06-16","subject":"Uppgift om Kullstaskolan med huvudmannen RAGUNDA KOMMUN i Ragunda kommun"},
-  {"dno":"SI 2026:7049","date":"2026-06-16","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Banérskolan för Enskild huvudman Banérskolan AB i Leksands kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7048","date":"2026-06-16","subject":"Uppgift om Skogsängsskolan F-6 med huvudmannen ESKILSTUNA KOMMUN i Eskilstuna kommun"},
-  {"dno":"SI 2026:7047","date":"2026-06-16","subject":"Riktad tillsyn, Skolenhetsnivå, anpassad gymnasieskola (inkl HM) av Filbornaskolans anpassade gymnasieskola för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7046","date":"2026-06-16","subject":"Uppgift om Pilbäckskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:7045","date":"2026-06-16","subject":"Riktad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Påarp skolas anpassade grundskola för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7044","date":"2026-06-16","subject":"Uppgift om Ranagårdsskolan F-9 med huvudmannen HALMSTADS KOMMUN i Halmstads kommun"},
-  {"dno":"SI 2026:7043","date":"2026-06-16","subject":"Anmälan om förändring inom ägar- och ledningskretsen från FÖRENINGEN VÄSTRA EKOSKOLAN i Ej relevant"},
-  {"dno":"SI 2026:7042","date":"2026-06-16","subject":"Uppgift med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:7041","date":"2026-06-16","subject":"Uppgift om Brunnbyskolan med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:7040","date":"2026-06-16","subject":"Uppgift med huvudmannen KRAMFORS KOMMUN i Kramfors kommun"},
-  {"dno":"SI 2026:7039","date":"2026-06-16","subject":"Uppgift med huvudmannen Kristianstads kommun i Kristianstads kommun"},
-  {"dno":"SI 2026:7038","date":"2026-06-16","subject":"Uppgift om Stiftelsen The English School Gothenburg med huvudmannen STIFTELSEN ENGLISH SCHOOL IN GOTHENBURG i Göteborgs kommun"},
-  {"dno":"SI 2026:7037","date":"2026-06-16","subject":"Uppgift om Fruängens skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7036","date":"2026-06-16","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7035","date":"2026-06-16","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:7034","date":"2026-06-15","subject":"Uppgift om Vallonskolan med huvudmannen ÖSTHAMMARS KOMMUN i Östhammars kommun"},
-  {"dno":"SI 2026:7033","date":"2026-06-15","subject":"Uppgift om Hammarlundens skola 7-9 Syd med huvudmannen HAMMARÖ KOMMUN i Hammarö kommun"},
-  {"dno":"SI 2026:7032","date":"2026-06-15","subject":"Uppgift om Morgongåva skola F-6 med huvudmannen HEBY KOMMUN i Heby kommun"},
-  {"dno":"SI 2026:7031","date":"2026-06-15","subject":"Anmälan om förändring inom ägar- och ledningskretsen från SIGTUNA SKOLSTIFTELSE i Ej relevant"},
-  {"dno":"SI 2026:7030","date":"2026-06-15","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Bäckaforsskolan i Ljungskile AB i Ej relevant"},
-  {"dno":"SI 2026:7029","date":"2026-06-15","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Lessebo kommun"},
-  {"dno":"SI 2026:7028","date":"2026-06-15","subject":"Uppgift om Vittra Gerdsken med huvudmannen Vittraskolorna AB i Alingsås kommun"},
-  {"dno":"SI 2026:7027","date":"2026-06-15","subject":"Uppgift om FÖRSKOLAN SVEA, DÖBELNSGATAN 38 med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:7026","date":"2026-06-15","subject":"Uppgift om Karolinaskolan med huvudmannen Föreningen Fogdaröd omsorg, vård & skola upa ek. för. i Höörs kommun"},
-  {"dno":"SI 2026:7025","date":"2026-06-15","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Malmö kommun"},
-  {"dno":"SI 2026:7024","date":"2026-06-15","subject":"Uppgift om FÖRSKOLAN LYCKAN med huvudmannen LYCKANS FÖRSKOLA EKONOMISK FÖRENING i Malmö kommun"},
-  {"dno":"SI 2026:7023","date":"2026-06-15","subject":"PM om hur ändrad lagstiftning ska hanteras i pågående tillsynsärenden"},
-  {"dno":"SI 2026:7022","date":"2026-06-15","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Sthlm hotell & restaurangsk 30677562 för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7021","date":"2026-06-15","subject":"Uppgift om Internationella Engelska Skolan Sundbyberg med huvudmannen Internationella Engelska Skolan i Sverige AB i Sundbybergs kommun"},
-  {"dno":"SI 2026:7020","date":"2026-06-15","subject":"Utredning av lärare eller förskollärare i Göteborgs kommun"},
-  {"dno":"SI 2026:7019","date":"2026-06-15","subject":"Uppgift med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7018","date":"2026-06-15","subject":"Uppgift om Wisbygymnasiet 1 med huvudmannen REGION GOTLAND i Gotlands kommun"},
-  {"dno":"SI 2026:7017","date":"2026-06-15","subject":"Skolinspektionens årsredovisning 2026"},
-  {"dno":"SI 2026:7016","date":"2026-06-15","subject":"Promemoria om ett utökat tjänstemannaansvar."},
-  {"dno":"SI 2026:7015","date":"2026-06-15","subject":"Uppgift om Vällsjöskolan F-6 med huvudmannen HÄRRYDA KOMMUN i Härryda kommun"},
-  {"dno":"SI 2026:7014","date":"2026-06-15","subject":"Uppgift om Slottsskolan F-6 med huvudmannen VINGÅKERS KOMMUN i Vingåkers kommun"},
-  {"dno":"SI 2026:7013","date":"2026-06-15","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Centrumskolan för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7012","date":"2026-06-15","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Pär Lagerkvistskolan 7-9 för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7011","date":"2026-06-15","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Söraby skola för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7010","date":"2026-06-15","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Tolg skola för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:7009","date":"2026-06-15","subject":"Uppgift om Smygeskolan med huvudmannen TRELLEBORGS KOMMUN i Trelleborgs kommun"},
-  {"dno":"SI 2026:7008","date":"2026-06-15","subject":"Uppgift om HagaLyckebyskolan med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:7007","date":"2026-06-15","subject":"Uppgift om Gärdsmosseskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:7006","date":"2026-06-15","subject":"Uppgift med huvudmannen ALINGSÅS KOMMUN i Alingsås kommun"},
-  {"dno":"SI 2026:7005","date":"2026-06-15","subject":"Utredning av lärare eller förskollärare i Värnamo kommun"},
-  {"dno":"SI 2026:7004","date":"2026-06-15","subject":"Uppgift om Piltorpsskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:7003","date":"2026-06-15","subject":"Uppgift om Vallhovskolan med huvudmannen SANDVIKENS KOMMUN i Sandvikens kommun"},
-  {"dno":"SI 2026:7002","date":"2026-06-15","subject":"Uppgift om Tuböleskolan med huvudmannen SKELLEFTEÅ KOMMUN i Skellefteå kommun"},
-  {"dno":"SI 2026:7001","date":"2026-06-14","subject":"Uppgift om Morkarlbyhöjdens skola 7-9 med huvudmannen MORA KOMMUN i Mora kommun"},
-  {"dno":"SI 2026:7000","date":"2026-06-14","subject":"Uppgift om Distra Gymnasium med huvudmannen DISTRA UTBILDNINGS CENTER AB i Stockholms kommun"},
-  {"dno":"SI 2026:6999","date":"2026-06-14","subject":"Uppgift om Parkdalaskolan 4-6 med huvudmannen RONNEBY KOMMUN i Ronneby kommun"},
-  {"dno":"SI 2026:6998","date":"2026-06-14","subject":"Uppgift om Kunskapsskolan Landskrona med huvudmannen Kunskapsskolan i Sverige Aktiebolag i Landskrona kommun"},
-  {"dno":"SI 2026:6997","date":"2026-06-14","subject":"Uppgift om Lillhagaskolan med huvudmannen NYKVARNS KOMMUN i Nykvarns kommun"},
-  {"dno":"SI 2026:6996","date":"2026-06-14","subject":"Uppgift om Lillhagaskolan med huvudmannen NYKVARNS KOMMUN i Nykvarns kommun"},
-  {"dno":"SI 2026:6995","date":"2026-06-14","subject":"Uppgift om Im-enheten med huvudmannen SURAHAMMARS KOMMUN i Surahammars kommun"},
-  {"dno":"SI 2026:6994","date":"2026-06-14","subject":"Uppgift om Herrestorpskolan med huvudmannen VELLINGE KOMMUN i Vellinge kommun"},
-  {"dno":"SI 2026:6993","date":"2026-06-14","subject":"Uppgift om Realgymnasiet Borås med huvudmannen Lärande i Sverige AB i Borås kommun"},
-  {"dno":"SI 2026:6992","date":"2026-06-14","subject":"Uppgift om Banslättsskolan med huvudmannen BOTKYRKA KOMMUN i Botkyrka kommun"},
-  {"dno":"SI 2026:6991","date":"2026-06-14","subject":"Uppgift om VFG Jönköping med huvudmannen VFG Utbildning AB i Jönköpings kommun"},
-  {"dno":"SI 2026:6990","date":"2026-06-14","subject":"Uppgift om Gärdesskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6989","date":"2026-06-14","subject":"Uppgift om Entréskolan Västerås med huvudmannen AmiSgo AB i Västerås kommun"},
-  {"dno":"SI 2026:6988","date":"2026-06-14","subject":"Uppgift i Sandvikens kommun"},
-  {"dno":"SI 2026:6987","date":"2026-06-14","subject":"Uppgift om Ydreskolan 1 med huvudmannen YDRE KOMMUN i Ydre kommun"},
-  {"dno":"SI 2026:6986","date":"2026-06-13","subject":"Uppgift om Källby gård med huvudmannen GÖTENE KOMMUN i Götene kommun"},
-  {"dno":"SI 2026:6985","date":"2026-06-13","subject":"Uppgift om Gnesta Waldorfskola med huvudmannen GNESTA WALDORFSKOLEFÖRENING i Gnesta kommun"},
-  {"dno":"SI 2026:6984","date":"2026-06-13","subject":"Uppgift om Alneskolan 5-9 med huvudmannen ÖRNSKÖLDSVIKS KOMMUN i Örnsköldsviks kommun"},
-  {"dno":"SI 2026:6983","date":"2026-06-13","subject":"Uppgift om Nacka Strands Gymnasium med huvudmannen Nacka Strands Gymnasium AB i Nacka kommun"},
-  {"dno":"SI 2026:6982","date":"2026-06-12","subject":"Uppgift om Affärsgymnasiet Stockholm med huvudmannen Edukatus Alliance AB i Stockholms kommun"},
-  {"dno":"SI 2026:6981","date":"2026-06-12","subject":"Uppgift om Kristdalaskolan med huvudmannen OSKARSHAMNS KOMMUN i Oskarshamns kommun"},
-  {"dno":"SI 2026:6980","date":"2026-06-12","subject":"Uppgift om Ekhamraskolan med huvudmannen Friskolan i Mariestad AB i Mariestads kommun"},
-  {"dno":"SI 2026:6979","date":"2026-06-12","subject":"Uppgift om Rosenbergs grundskola 4-6 med huvudmannen TIDAHOLMS KOMMUN i Tidaholms kommun"},
-  {"dno":"SI 2026:6978","date":"2026-06-12","subject":"Uppgift om Påvelundsskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6977","date":"2026-06-12","subject":"Uppgift om Skogomeskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6976","date":"2026-06-12","subject":"Remiss. Behovsanalys av personsäkerhetsutbildningar för statlig personal som arbetar i eller besöker högriskmiljöer"},
-  {"dno":"SI 2026:6975","date":"2026-06-12","subject":"Uppgift om Tegs centralskola med huvudmannen UMEÅ KOMMUN i Umeå kommun"},
-  {"dno":"SI 2026:6974","date":"2026-06-12","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BÅSTAD MONTESSORI EKONOMISK FÖRENING i Ej relevant"},
-  {"dno":"SI 2026:6973","date":"2026-06-12","subject":"Uppgift om Hermodsdalsskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6972","date":"2026-06-12","subject":"Uppgift om Grenadjärskolan med huvudmannen STIFTELSEN GRENADJÄRSKOLAN i Örebro kommun"},
-  {"dno":"SI 2026:6971","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Hagsätraskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6970","date":"2026-06-12","subject":"Uppgift om Österledskolan 7-9 med huvudmannen HALMSTADS KOMMUN i Halmstads kommun"},
-  {"dno":"SI 2026:6969","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Baldersskolan 7-9 för Offentlig huvudman STAFFANSTORPS KOMMUN i Staffanstorps kommun, läsåret 2025/2026"},
-  {"dno":"SI 2026:6968","date":"2026-06-12","subject":"Återkallande av godkännanden som inte nyttjas för BARNENS MONTESSORIAKADEMI ÖSTERMALM AB vid Solna Enskilda skola i Solna kommun"},
-  {"dno":"SI 2026:6967","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Snyggatorpsskolan för Offentlig huvudman KLIPPANS KOMMUN i Klippans kommun, läsåret 2025/2026"},
-  {"dno":"SI 2026:6966","date":"2026-06-12","subject":"Uppgift om Morkarlbyhöjdens skola 7-9 med huvudmannen MORA KOMMUN i Mora kommun"},
-  {"dno":"SI 2026:6965","date":"2026-06-12","subject":"Uppgift om Ramnerödsskolan med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6964","date":"2026-06-12","subject":"Uppgift om Västerskolan 7-9 med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6963","date":"2026-06-12","subject":"Uppgift om Norgårdenskolan 7-9 med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6962","date":"2026-06-12","subject":"Uppgift om Sommarhemsskolan 7-9 med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6961","date":"2026-06-12","subject":"Uppgift om Vittra Landborgen med huvudmannen Vittraskolorna AB i Helsingborgs kommun"},
-  {"dno":"SI 2026:6960","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Rekarnegymnasiet 2 för Offentlig huvudman ESKILSTUNA KOMMUN i Eskilstuna kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6959","date":"2026-06-12","subject":"Avtal mellan skolinspektionen och xxxx gällande blommor i Göteborg"},
-  {"dno":"SI 2026:6958","date":"2026-06-12","subject":"Upphandling gällande blommor i Göteborg"},
-  {"dno":"SI 2026:6957","date":"2026-06-12","subject":"Avtal mellan skolinspektionen och xxx gällande blommor i Lund"},
-  {"dno":"SI 2026:6956","date":"2026-06-12","subject":"Upphandling gällande blommor i Lund"},
-  {"dno":"SI 2026:6955","date":"2026-06-12","subject":"Avtal från Skolinspektionen och xxx gällande cateringtjänster"},
-  {"dno":"SI 2026:6954","date":"2026-06-12","subject":"Uppgift om Klågerupskolan F-9 med huvudmannen SVEDALA KOMMUN i Svedala kommun"},
-  {"dno":"SI 2026:6953","date":"2026-06-12","subject":"Upphandling för Cateringstjänster"},
-  {"dno":"SI 2026:6952","date":"2026-06-12","subject":"Uppgift om Skolan LÄR med huvudmannen LÄR I VÄRMDÖ AB i Värmdö kommun"},
-  {"dno":"SI 2026:6951","date":"2026-06-12","subject":"Uppgift om Domarhagsskolan med huvudmannen AVESTA KOMMUN i Avesta kommun"},
-  {"dno":"SI 2026:6950","date":"2026-06-12","subject":"Uppgift om Gymnasieakademin Göteborg med huvudmannen IEAB International Education AB i Göteborgs kommun"},
-  {"dno":"SI 2026:6949","date":"2026-06-12","subject":"Utredning av lärare eller förskollärare i Norrtälje kommun"},
-  {"dno":"SI 2026:6948","date":"2026-06-12","subject":"Uppgift om TEDDYBJÖRNEN FÖRSKOLA med huvudmannen TYRESÖ KOMMUN i Tyresö kommun"},
-  {"dno":"SI 2026:6947","date":"2026-06-12","subject":"Uppgift om Linnéaskolan med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6946","date":"2026-06-12","subject":"Uppgift om Angeredsgymnasiet 2 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6945","date":"2026-06-12","subject":"Fördelning av arbetsuppgifter inom region söder utifrån regionens samlade uppdrag i Läsårsplan 2026-2027"},
-  {"dno":"SI 2026:6944","date":"2026-06-12","subject":"Riktad tillsyn, Individs situation av Stadsöskolan 7-9 för Offentlig huvudman LULEÅ KOMMUN i Luleå kommun"},
-  {"dno":"SI 2026:6943","date":"2026-06-12","subject":"Riktad tillsyn, Individs situation av Montessoriförskolan Alma för Offentlig huvudman HÄSSLEHOLMS KOMMUN i Hässleholms kommun"},
-  {"dno":"SI 2026:6942","date":"2026-06-12","subject":"Uppgift om Alneskolan 5-9 med huvudmannen ÖRNSKÖLDSVIKS KOMMUN i Örnsköldsviks kommun"},
-  {"dno":"SI 2026:6941","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Junedalsskolan för Offentlig huvudman JÖNKÖPINGS KOMMUN i Jönköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6940","date":"2026-06-12","subject":"Uppgift med huvudmannen VAGGERYDS KOMMUN i Vaggeryds kommun"},
-  {"dno":"SI 2026:6939","date":"2026-06-12","subject":"Riktad tillsyn, Individs situation av Silverdalens skola för Offentlig huvudman HULTSFREDS KOMMUN i Hultsfreds kommun"},
-  {"dno":"SI 2026:6938","date":"2026-06-12","subject":"Uppgift om Holmängenskolan F-3 med huvudmannen VÄNERSBORGS KOMMUN i Vänersborgs kommun"},
-  {"dno":"SI 2026:6937","date":"2026-06-12","subject":"Utredning av lärare eller förskollärare i Örebro kommun"},
-  {"dno":"SI 2026:6936","date":"2026-06-12","subject":"Uppgift om Alnöitskolan med huvudmannen Skolalliansen i Sverige AB i Sundsvalls kommun"},
-  {"dno":"SI 2026:6935","date":"2026-06-12","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Teknikum 1 för Offentlig huvudman VÄXJÖ KOMMUN i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6934","date":"2026-06-12","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Lustigkulla skola för Offentlig huvudman LESSEBO KOMMUN i Lessebo kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6933","date":"2026-06-12","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Nyängskolan, anpassad grundskola för Offentlig huvudman LESSEBO KOMMUN i Lessebo kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6932","date":"2026-06-12","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Holmsjöskolan F-6 för Offentlig huvudman KARLSKRONA KOMMUN i Karlskrona kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6931","date":"2026-06-12","subject":"Uppgift om Folkuniversitetet/SFI med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6930","date":"2026-06-12","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Karlskrona Resursskola Aklejaskolan för Offentlig huvudman KARLSKRONA KOMMUN i Karlskrona kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6929","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Rosenfeldtskolan F-6 för Offentlig huvudman KARLSKRONA KOMMUN i Karlskrona kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6928","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Tvingskola F-3 för Offentlig huvudman KARLSKRONA KOMMUN i Karlskrona kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6927","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Glömstaskolan för Offentlig huvudman HUDDINGE KOMMUN i Huddinge kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6926","date":"2026-06-12","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Killhult skola för Offentlig huvudman HÖRBY KOMMUN i Hörby kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6925","date":"2026-06-12","subject":"Utredning av lärare eller förskollärare i Ljusdals kommun"},
-  {"dno":"SI 2026:6924","date":"2026-06-12","subject":"Uppgift om Kulturskolan Raketen med huvudmannen KULTURSKOLAN RAKETEN AB i Stockholms kommun"},
-  {"dno":"SI 2026:6923","date":"2026-06-12","subject":"”Ansökan om utdömande av vite i grundärende SI 2024:9061, Riktad tillsyn, Skolenhetsnivå, förskoleklass och grundskola av Friggesundsskolan för offentlig huvudman HUDIKSVALLS KOMMUN i Hudiksvalls kommun, läsåret 2024/2025”"},
-  {"dno":"SI 2026:6922","date":"2026-06-12","subject":"Uppgift om Angeredsgymnasiet 2 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6921","date":"2026-06-12","subject":"Uppgift om Högalidsskolan med huvudmannen FINSPÅNGS KOMMUN i Finspångs kommun"},
-  {"dno":"SI 2026:6920","date":"2026-06-12","subject":"Uppgift om SKÅNEGATAN 18 FÖRSKOLA med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6919","date":"2026-06-12","subject":"Uppgift om MALMBRYGGSHAGENS FÖRSKOLA med huvudmannen NYKÖPINGS KOMMUN i Nyköpings kommun"},
-  {"dno":"SI 2026:6918","date":"2026-06-11","subject":"Uppgift om KLARA Teoretiska Gymnasium Linköping med huvudmannen KLARA Gymnasium Kunskap AB i Linköpings kommun"},
-  {"dno":"SI 2026:6917","date":"2026-06-11","subject":"Uppgift om Internationella Engelska Skolan Enskede med huvudmannen Internationella Engelska Skolan i Sverige AB i Stockholms kommun"},
-  {"dno":"SI 2026:6916","date":"2026-06-11","subject":"Uppgift om JENSEN grundskola Linköping med huvudmannen JENSEN EDUCATION COLLEGE AB i Linköpings kommun"},
-  {"dno":"SI 2026:6915","date":"2026-06-11","subject":"Uppgift om Bjurslättsskolan F-6 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6914","date":"2026-06-11","subject":"Uppgift om Hansåkerskolan med huvudmannen RAGUNDA KOMMUN i Ragunda kommun"},
-  {"dno":"SI 2026:6913","date":"2026-06-11","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Europaskolan Vårfruberga för Enskild huvudman Europaskolan Vårfruberga AB i Strängnäs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6912","date":"2026-06-11","subject":"Uppgift om Varagårdsskolans anpassade grundskola med huvudmannen BJUVS KOMMUN i Bjuvs kommun"},
-  {"dno":"SI 2026:6911","date":"2026-06-11","subject":"Utredning av lärare eller förskollärare i Stockholms kommun"},
-  {"dno":"SI 2026:6910","date":"2026-06-11","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Fridtjuv Bergskolan för Offentlig huvudman ÖDESHÖGS KOMMUN i Ödeshögs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6909","date":"2026-06-11","subject":"Uppgift om Hestraskolan med huvudmannen YDRE KOMMUN i Ydre kommun"},
-  {"dno":"SI 2026:6908","date":"2026-06-11","subject":"Uppgift om Banslättsskolan med huvudmannen BOTKYRKA KOMMUN i Botkyrka kommun"},
-  {"dno":"SI 2026:6907","date":"2026-06-11","subject":"Uppgift om Söraskolan med huvudmannen ÖSTERÅKERS KOMMUN i Österåkers kommun"},
-  {"dno":"SI 2026:6906","date":"2026-06-11","subject":"Återkallande av godkännanden som inte nyttjas för Mistelskolan Ekonomisk förening vid Mistelskolan i Västerås kommun"},
-  {"dno":"SI 2026:6905","date":"2026-06-11","subject":"Uppgift om Munkhätteskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6904","date":"2026-06-11","subject":"Uppgift om Glasbruksskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6903","date":"2026-06-11","subject":"Uppgift om Tallbohovskolan med huvudmannen JÄRFÄLLA KOMMUN i Järfälla kommun"},
-  {"dno":"SI 2026:6902","date":"2026-06-11","subject":"Framställning om sekretess i personaladministrativ verksamhet"},
-  {"dno":"SI 2026:6901","date":"2026-06-11","subject":"Uppgift om Vikingaskolan med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:6900","date":"2026-06-11","subject":"Uppgift om Lärjeskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6899","date":"2026-06-11","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Bromma Enskilda Skola ekonomisk förening i Ej relevant"},
-  {"dno":"SI 2026:6898","date":"2026-06-11","subject":"Uppgift med huvudmannen OXELÖSUNDS KOMMUN i Oxelösunds kommun"},
-  {"dno":"SI 2026:6897","date":"2026-06-11","subject":"Utredning av lärare eller förskollärare i Strängnäs kommun"},
-  {"dno":"SI 2026:6896","date":"2026-06-11","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Realgymnasiet Norrköping för Enskild huvudman Lärande i Sverige AB i Norrköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6895","date":"2026-06-11","subject":"Uppgift om HALLEBERGS FÖRSKOLA med huvudmannen VÄNERSBORGS KOMMUN i Vänersborgs kommun"},
-  {"dno":"SI 2026:6894","date":"2026-06-11","subject":"Uppgift med huvudmannen STOCKHOLMS KOMMUN i Ej relevant"},
-  {"dno":"SI 2026:6893","date":"2026-06-11","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad gymnasieskola (inkl HM) av Sågbäcksgymnasiet för Offentlig huvudman HUDDINGE KOMMUN i Huddinge kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6892","date":"2026-06-11","subject":"Uppgift om Duveds skola F-9 med huvudmannen ÅRE KOMMUN i Åre kommun"},
-  {"dno":"SI 2026:6891","date":"2026-06-11","subject":"Uppgift om Högsäter skola med huvudmannen FÄRGELANDA KOMMUN i Färgelanda kommun"},
-  {"dno":"SI 2026:6890","date":"2026-06-11","subject":"Återkallande av godkännanden som inte nyttjas för Ansgarskolorna AB vid Ansgarskolorna Källskolan F-6 i Uppsala kommun"},
-  {"dno":"SI 2026:6889","date":"2026-06-11","subject":"Återkallande av godkännanden som inte nyttjas för Ansgarskolorna AB vid Ansgarskolorna Trädgårdsskolan F-6 i Uppsala kommun"},
-  {"dno":"SI 2026:6888","date":"2026-06-11","subject":"Begäran om ändring av Barn- och elevombudets beslut med dnr 2024:7605, angående Riktad tillsyn, Individs situation av Mellanhedsskolan för offentlig huvudman MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6887","date":"2026-06-11","subject":"Hantera begäran om ändring av beslut avseende tillstånd från Sveriges Naturbruksgymnasium AB för Segragymnasiet Klippan i Klippans kommun"},
-  {"dno":"SI 2026:6886","date":"2026-06-11","subject":"Förhandlingsprotokoll mellan skolinspektionen och Saco-S enligt MBL."},
-  {"dno":"SI 2026:6885","date":"2026-06-11","subject":"Uppgift om Gustav Vasa skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6884","date":"2026-06-11","subject":"Anmälan om att använda fjärrundervisning från SVALÖVS KOMMUN för Linåkerskolan"},
-  {"dno":"SI 2026:6883","date":"2026-06-11","subject":"Anmälan om att använda fjärrundervisning från SVALÖVS KOMMUN för Parkskolan"},
-  {"dno":"SI 2026:6882","date":"2026-06-11","subject":"Anmälan om att använda fjärrundervisning från SVALÖVS KOMMUN för Lunnaskolan"},
-  {"dno":"SI 2026:6881","date":"2026-06-11","subject":"Anmälan om att använda fjärrundervisning från SVALÖVS KOMMUN för Heleneborgsskolan"},
-  {"dno":"SI 2026:6880","date":"2026-06-11","subject":"Uppgift med huvudmannen STRÄNGNÄS KOMMUN i Strängnäs kommun"},
-  {"dno":"SI 2026:6879","date":"2026-06-11","subject":"Anmälan om att använda fjärrundervisning från SVALÖVS KOMMUN för Billeshögsskolan"},
-  {"dno":"SI 2026:6878","date":"2026-06-11","subject":"Uppgift om Alviksskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6877","date":"2026-06-11","subject":"Uppgift med huvudmannen LIDINGÖ KOMMUN i Lidingö kommun"},
-  {"dno":"SI 2026:6876","date":"2026-06-11","subject":"Uppgift om Internationella Engelska Skolan Halmstad med huvudmannen Internationella Engelska Skolan i Sverige AB i Halmstads kommun"},
-  {"dno":"SI 2026:6875","date":"2026-06-11","subject":"Uppgift om Katolska skolan av Notre Dame med huvudmannen Vår Fru AB i Göteborgs kommun"},
-  {"dno":"SI 2026:6874","date":"2026-06-11","subject":"Utredning av lärare eller förskollärare i Hudiksvalls kommun"},
-  {"dno":"SI 2026:6873","date":"2026-06-11","subject":"Uppgift om Skogstorpsskolan med huvudmannen FALKENBERGS KOMMUN i Falkenbergs kommun"},
-  {"dno":"SI 2026:6872","date":"2026-06-10","subject":"Uppgift om Årstadalsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6871","date":"2026-06-10","subject":"Uppgift om Tallbodaskolorna med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:6870","date":"2026-06-10","subject":"Uppgift om Tingbergsskolan med huvudmannen LILLA EDETS KOMMUN i Lilla Edets kommun"},
-  {"dno":"SI 2026:6869","date":"2026-06-10","subject":"Uppgift om Porsnässkolan 4-6 med huvudmannen PITEÅ KOMMUN i Piteå kommun"},
-  {"dno":"SI 2026:6868","date":"2026-06-10","subject":"Uppgift om Håkantorpsskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:6867","date":"2026-06-10","subject":"Uppgift om Ekarängskolan F-6 med huvudmannen BORÅS KOMMUN i Borås kommun"},
-  {"dno":"SI 2026:6866","date":"2026-06-10","subject":"Uppgift om Distra Gymnasium med huvudmannen DISTRA UTBILDNINGS CENTER AB i Stockholms kommun"},
-  {"dno":"SI 2026:6865","date":"2026-06-10","subject":"Uppgift om Mörtviksskolan med huvudmannen HUDDINGE KOMMUN i Huddinge kommun"},
-  {"dno":"SI 2026:6864","date":"2026-06-10","subject":"Uppgift om Adolfsbergsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6863","date":"2026-06-10","subject":"Uppgift om Banslättsskolan med huvudmannen BOTKYRKA KOMMUN i Botkyrka kommun"},
-  {"dno":"SI 2026:6862","date":"2026-06-10","subject":"Uppgift om Raoul Wallenbergskolan Järvastaden med huvudmannen Raoul Wallenbergskolorna AB i Solna kommun"},
-  {"dno":"SI 2026:6861","date":"2026-06-10","subject":"Uppgift om Sköndalsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6860","date":"2026-06-10","subject":"Uppgift om Vrigstad skola med huvudmannen SÄVSJÖ KOMMUN i Sävsjö kommun"},
-  {"dno":"SI 2026:6859","date":"2026-06-10","subject":"Uppgift om Önneredsskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6858","date":"2026-06-10","subject":"Uppgift om Vederslövs skola med huvudmannen VÄXJÖ KOMMUN i Växjö kommun"},
-  {"dno":"SI 2026:6857","date":"2026-06-10","subject":"Uppgift om Skolan LÄR med huvudmannen LÄR I VÄRMDÖ AB i Värmdö kommun"},
-  {"dno":"SI 2026:6856","date":"2026-06-10","subject":"Uppgift om Snättringeskolan med huvudmannen HUDDINGE KOMMUN i Huddinge kommun"},
-  {"dno":"SI 2026:6855","date":"2026-06-10","subject":"Uppgift om Fruängens skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6854","date":"2026-06-10","subject":"Uppgift om Nytorpsskolan med huvudmannen SALEMS KOMMUN i Salems kommun"},
-  {"dno":"SI 2026:6853","date":"2026-06-10","subject":"Uppgift om Håslövs byaskola med huvudmannen Pimapos skola och fritids AB i Vellinge kommun"},
-  {"dno":"SI 2026:6852","date":"2026-06-10","subject":"Uppgift i Stockholms kommun"},
-  {"dno":"SI 2026:6851","date":"2026-06-10","subject":"Uppgift om Förskolan Bråta hagar med huvudmannen MOTALA KOMMUN i Motala kommun"},
-  {"dno":"SI 2026:6850","date":"2026-06-10","subject":"Uppgift om Hemlingborgs skola med huvudmannen GÄVLE KOMMUN i Gävle kommun"},
-  {"dno":"SI 2026:6849","date":"2026-06-10","subject":"Samverkan med Diskrimineringsombudsmannen"},
-  {"dno":"SI 2026:6848","date":"2026-06-10","subject":"Uppgift om Påarps skola med huvudmannen HELSINGBORGS KOMMUN i Helsingborgs kommun"},
-  {"dno":"SI 2026:6847","date":"2026-06-10","subject":"Uppgift om Internationella Engelska Skolan Sundbyberg med huvudmannen Internationella Engelska Skolan i Sverige AB i Sundbybergs kommun"},
-  {"dno":"SI 2026:6846","date":"2026-06-10","subject":"Uppgift om Myrängsskolan med huvudmannen TÄBY KOMMUN i Täby kommun"},
-  {"dno":"SI 2026:6845","date":"2026-06-10","subject":"Överklagande av Skolinspektionens beslut med dnr 2023:6586 avseende Utöva riktad tillsyn av Stefanskolan inom enskild huvudman"},
-  {"dno":"SI 2026:6844","date":"2026-06-10","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Vena skola för Offentlig huvudman HULTSFREDS KOMMUN i Hultsfreds kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6843","date":"2026-06-10","subject":"Uppgift om Backgårdsskolan med huvudmannen PITEÅ KOMMUN i Piteå kommun"},
-  {"dno":"SI 2026:6842","date":"2026-06-10","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad gymnasieskola (inkl HM) av Hultsfreds gymnasium 3 för Offentlig huvudman HULTSFREDS KOMMUN i Hultsfreds kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6841","date":"2026-06-10","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Tallåsskolan F-3 för Offentlig huvudman HÖGSBY KOMMUN i Högsby kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6840","date":"2026-06-10","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Södermalmsskolan 4-6 för Offentlig huvudman KRISTINEHAMNS KOMMUN i Kristinehamns kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6839","date":"2026-06-10","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Stenstalidskolan Anpassad grundskola. för Offentlig huvudman KRISTINEHAMNS KOMMUN i Kristinehamns kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6838","date":"2026-06-10","subject":"Uppgift  angående vuxenutbildningen med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:6837","date":"2026-06-10","subject":"Uppgift om Furulundsskolan med huvudmannen EKSJÖ KOMMUN i Eksjö kommun"},
-  {"dno":"SI 2026:6836","date":"2026-06-10","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Brogymnasiet 2 för Offentlig huvudman KRISTINEHAMNS KOMMUN i Kristinehamns kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6835","date":"2026-06-10","subject":"Uppgift om Gymnasieskolan Gripen med huvudmannen Gymnasieskolan Gripen AB i Malmö kommun"},
-  {"dno":"SI 2026:6834","date":"2026-06-10","subject":"Uppgift om Vuxenutbildning enhet 1 med huvudmannen SKÖVDE KOMMUN i Skövde kommun"},
-  {"dno":"SI 2026:6833","date":"2026-06-10","subject":"Uppgift om Litorina  folkhögskola med huvudmannen KARLSKRONA KOMMUN i Karlskrona kommun"},
-  {"dno":"SI 2026:6832","date":"2026-06-10","subject":"Uppgift om Asklandaskolan F-6 med huvudmannen BORÅS KOMMUN i Borås kommun"},
-  {"dno":"SI 2026:6831","date":"2026-06-10","subject":"Uppgift om Brandströmska skolan Nylöse med huvudmannen STIFTELSEN FÖR KRISTEN SKOLVERKSAMHET i Göteborgs kommun"},
-  {"dno":"SI 2026:6830","date":"2026-06-10","subject":"Uppgift om Internationella Engelska Skolan Älvsjö med huvudmannen Internationella Engelska Skolan i Sverige AB i Stockholms kommun"},
-  {"dno":"SI 2026:6829","date":"2026-06-10","subject":"Uppgift om Bygdeå skola med huvudmannen ROBERTSFORS KOMMUN i Robertsfors kommun"},
-  {"dno":"SI 2026:6828","date":"2026-06-10","subject":"Uppgift om Åvestadalskolan med huvudmannen AVESTA KOMMUN i Avesta kommun"},
-  {"dno":"SI 2026:6827","date":"2026-06-10","subject":"Uppgift om Kyrkenorumskolan med huvudmannen STENUNGSUNDS KOMMUN i Stenungsunds kommun"},
-  {"dno":"SI 2026:6826","date":"2026-06-10","subject":"Uppgift om S:t Jörgens skola med huvudmannen HELSINGBORGS KOMMUN i Helsingborgs kommun"},
-  {"dno":"SI 2026:6825","date":"2026-06-09","subject":"Uppgift om Gäddgårdsskolan 7-9 med huvudmannen ARBOGA KOMMUN i Arboga kommun"},
-  {"dno":"SI 2026:6824","date":"2026-06-09","subject":"Uppgift om Tunaskolan 4-6 med huvudmannen LULEÅ KOMMUN i Luleå kommun"},
-  {"dno":"SI 2026:6823","date":"2026-06-09","subject":"Uppgift om Pilbäckskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6822","date":"2026-06-09","subject":"Uppgift om Svärtingehus 1 med huvudmannen NORRKÖPINGS KOMMUN i Norrköpings kommun"},
-  {"dno":"SI 2026:6821","date":"2026-06-09","subject":"Uppgift om Forshedaskolan med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:6820","date":"2026-06-09","subject":"Uppgift om Profilskolan Excel med huvudmannen Profilfriskolan Excel AB (svb) i Leksands kommun"},
-  {"dno":"SI 2026:6819","date":"2026-06-09","subject":"Uppgift om Förskolan Väduren med huvudmannen Guteskolan AB i Gotlands kommun"},
-  {"dno":"SI 2026:6818","date":"2026-06-09","subject":"Uppgift om Rinnebäcksskolan med huvudmannen KÄVLINGE KOMMUN i Kävlinge kommun"},
-  {"dno":"SI 2026:6817","date":"2026-06-09","subject":"Uppgift om Montessoriskolan Regnbågen med huvudmannen FOLKUNIVERSITETETS SKOLOR AB i Kalmar kommun"},
-  {"dno":"SI 2026:6816","date":"2026-06-09","subject":"Uppgift om Thorildskolan 2 med huvudmannen KUNGÄLVS KOMMUN i Kungälvs kommun"},
-  {"dno":"SI 2026:6815","date":"2026-06-09","subject":"Anmälan om förändring inom ägar- och ledningskretsen från GNESTA WALDORFSKOLEFÖRENING i Ej relevant"},
-  {"dno":"SI 2026:6814","date":"2026-06-09","subject":"Uppgift om Internationella Engelska Skolan Södertälje med huvudmannen Internationella Engelska Skolan i Sverige AB i Södertälje kommun"},
-  {"dno":"SI 2026:6813","date":"2026-06-09","subject":"Uppgift om Majgatans förskola med huvudmannen JÖNKÖPINGS KOMMUN i Jönköpings kommun"},
-  {"dno":"SI 2026:6812","date":"2026-06-09","subject":"Avtal med XX från direktupphandling avseende komplettering och installation av säkerhetsteknik, brandskydd och systemet Integra"},
-  {"dno":"SI 2026:6811","date":"2026-06-09","subject":"Uppgift om Internationella Engelska Skolan Sundbyberg med huvudmannen Internationella Engelska Skolan i Sverige AB i Sundbybergs kommun"},
-  {"dno":"SI 2026:6810","date":"2026-06-09","subject":"Uppgift om Lärande Grundskola Östra med huvudmannen Lärande förskolor och grundskolor i Sverige AB i Norrköpings kommun"},
-  {"dno":"SI 2026:6809","date":"2026-06-09","subject":"Uppgift om Internationella Engelska Skolan Sundbyberg med huvudmannen Internationella Engelska Skolan i Sverige AB i Sundbybergs kommun"},
-  {"dno":"SI 2026:6808","date":"2026-06-09","subject":"Direktupphandling avseende komplettering och installation av säkerhetsteknik, brandskydd och systemet Integra"},
-  {"dno":"SI 2026:6807","date":"2026-06-09","subject":"Avtal med XX från direktupphandling av rekryteringssystem till Skolinspektionen"},
-  {"dno":"SI 2026:6806","date":"2026-06-09","subject":"Direktupphandling av rekryteringssystem till Skolinspektionen"},
-  {"dno":"SI 2026:6805","date":"2026-06-09","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Ej relevant"},
-  {"dno":"SI 2026:6804","date":"2026-06-09","subject":"Uppgift om Aspnässkolan med huvudmannen JÄRFÄLLA KOMMUN i Järfälla kommun"},
-  {"dno":"SI 2026:6803","date":"2026-06-09","subject":"Uppgift om Rytmus Stockholm med huvudmannen Rytmus AB i Nacka kommun"},
-  {"dno":"SI 2026:6802","date":"2026-06-09","subject":"Uppgift om Vivallaskolan med huvudmannen ÖREBRO KOMMUN i Örebro kommun"},
-  {"dno":"SI 2026:6801","date":"2026-06-09","subject":"Utredning av lärare eller förskollärare i Malmö kommun"},
-  {"dno":"SI 2026:6800","date":"2026-06-09","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Ej relevant"},
-  {"dno":"SI 2026:6799","date":"2026-06-09","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Ej relevant"},
-  {"dno":"SI 2026:6798","date":"2026-06-09","subject":"Ansökan om betygsrätt för vuxenutbildning från ABF GÖTEBORG VUXENUTBILDNING AKTIEBOLAG i Ej relevant"},
-  {"dno":"SI 2026:6797","date":"2026-06-09","subject":"Uppgift om Kunskapsskolan Trelleborg med huvudmannen Kunskapsskolan i Sverige Aktiebolag i Trelleborgs kommun"},
-  {"dno":"SI 2026:6796","date":"2026-06-09","subject":"Anmäla lärare eller förskollärare till Lärarnas ansvarsnämnd i Ej relevant"},
-  {"dno":"SI 2026:6795","date":"2026-06-09","subject":"Uppgift om HagaLyckebyskolan med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:6794","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Anpassad grundskola Scheeleskolan för Offentlig huvudman KÖPINGS KOMMUN i Köpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6793","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Nibbleskolan anpassad grundskola för Offentlig huvudman HALLSTAHAMMARS KOMMUN i Hallstahammars kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6792","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Vanadisskolan för Enskild huvudman Individ och familjeinsatser (IOFI) AB i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6791","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Sågbäcksgymnasiet för Offentlig huvudman HUDDINGE KOMMUN i Huddinge kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6790","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Sörviks skola för Offentlig huvudman LUDVIKA KOMMUN i Ludvika kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6789","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Entréskolan Eskilstuna för Enskild huvudman AmiSgo AB i Eskilstuna kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6788","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Sunnansjö skola för Offentlig huvudman LUDVIKA KOMMUN i Ludvika kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6787","date":"2026-06-09","subject":"Uppgift om Hästveda skola F-9 med huvudmannen HÄSSLEHOLMS KOMMUN i Hässleholms kommun"},
-  {"dno":"SI 2026:6786","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Örjanskolan grund för Enskild huvudman FÖRENINGEN ÖRJANSKOLAN i Södertälje kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6785","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Buskoviusskolan för Offentlig huvudman ÄLVDALENS KOMMUN i Älvdalens kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6784","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Grillska Gymnasiet Uppsala för Enskild huvudman STADSMISSIONENS SKOLSTIFTELSE i Uppsala kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6783","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Grillska Gymnasiet Liljeholmen för Enskild huvudman STADSMISSIONENS SKOLSTIFTELSE i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6782","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Engelska skolan Gondolen för Enskild huvudman ESF Skarpnäck AB i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6781","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Uddevalla gymnasieskola, Östrabo 1 VO för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6780","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av S:t Martins gymnasium för Offentlig huvudman SUNDBYBERGS KOMMUN i Sundbybergs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6779","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Älvdalens Utbildningscentrum för Enskild huvudman Älvdalens Utbildningscentrum AB i Älvdalens kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6778","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Uddevalla gymnasieskola, Sinclair ES för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6777","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Bergstrands Gymnasium Märsta för Enskild huvudman Bergstrands Gymnasium AB i Sigtuna kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6776","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Kung Karls skola för Offentlig huvudman KUNGSÖRS KOMMUN i Kungsörs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6775","date":"2026-06-09","subject":"Uppgift om Nordhemsskolan 1-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6774","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Ullvi4 för Offentlig huvudman KÖPINGS KOMMUN i Köpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6773","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Sågmyraskolan för Offentlig huvudman FALU KOMMUN i Falu kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6772","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Östra skolan för Offentlig huvudman FALU KOMMUN i Falu kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6771","date":"2026-06-09","subject":"Uppgift om Nannaskolan med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:6770","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Tal och Språk 7-9 för Offentlig huvudman REGION GOTLAND i Gotlands kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6769","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Bredängsskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6768","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Rinkebyskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6767","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Uddevalla gymnasieskola, Östrabo Y HV för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6766","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Ramnerödsskolan för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6765","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Dalabergsskolan för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6764","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Lane Ryrs skola för Offentlig huvudman UDDEVALLA KOMMUN i Uddevalla kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6763","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Lillholmsskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6762","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Thorildsplans gymnasium 32116280 för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6761","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Bredängsskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6760","date":"2026-06-09","subject":"Anmälan om förändring inom ägar- och ledningskretsen från MONTESSORISKOLAN FLODA SÄTERI i Ej relevant"},
-  {"dno":"SI 2026:6759","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Liljeholmens gymnasium 59409052 för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6758","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Hässelbygårdsskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6757","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Rinkebyskolan för Offentlig huvudman STOCKHOLMS KOMMUN i Stockholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6756","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Svartsö skola för Offentlig huvudman VÄRMDÖ KOMMUN i Värmdö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6755","date":"2026-06-09","subject":"Uppgift om Tegnérskolan med huvudmannen SÄFFLE KOMMUN i Säffle kommun"},
-  {"dno":"SI 2026:6754","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Sjumilaskolan för Offentlig huvudman UPPLANDS VÄSBY KOMMUN i Upplands Väsby kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6753","date":"2026-06-09","subject":"Uppgift om Svalövs Montessoriskola med huvudmannen Svalövs Montessori Ekonomisk förening i Svalövs kommun"},
-  {"dno":"SI 2026:6752","date":"2026-06-09","subject":"Riktad tillsyn, Individs situation av Mockfjärdsskolan för Offentlig huvudman GAGNEFS KOMMUN i Gagnefs kommun"},
-  {"dno":"SI 2026:6751","date":"2026-06-09","subject":"Uppgift om Midsommarkransens skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6750","date":"2026-06-09","subject":"Riktad tillsyn, Individs situation av RULLSTENENS FÖRSKOLA för Offentlig huvudman HÄRRYDA KOMMUN i Härryda kommun"},
-  {"dno":"SI 2026:6749","date":"2026-06-09","subject":"Utredning av lärare eller förskollärare i Eslövs kommun"},
-  {"dno":"SI 2026:6748","date":"2026-06-09","subject":"Riktad tillsyn, Individs situation av Jonsereds skola F-5 för Offentlig huvudman PARTILLE KOMMUN i Partille kommun"},
-  {"dno":"SI 2026:6747","date":"2026-06-09","subject":"Uppgift om Henåns skola F-6 med huvudmannen ORUST KOMMUN i Orusts kommun"},
-  {"dno":"SI 2026:6746","date":"2026-06-09","subject":"Uppgift i Stockholms kommun"},
-  {"dno":"SI 2026:6745","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Hellidsskolan 1 för Offentlig huvudman TIDAHOLMS KOMMUN i Tidaholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6744","date":"2026-06-09","subject":"Uppgift om Vendels skola med huvudmannen TIERPS KOMMUN i Tierps kommun"},
-  {"dno":"SI 2026:6743","date":"2026-06-09","subject":"Uppgift om NORDGÄRDETS FÖRSKOLA med huvudmannen ALE KOMMUN i Ale kommun"},
-  {"dno":"SI 2026:6742","date":"2026-06-09","subject":"Uppgift om Alnöitskolan med huvudmannen Skolalliansen i Sverige AB i Sundsvalls kommun"},
-  {"dno":"SI 2026:6741","date":"2026-06-09","subject":"Uppgift om Vifolkaskolan 7-9 med huvudmannen MJÖLBY KOMMUN i Mjölby kommun"},
-  {"dno":"SI 2026:6740","date":"2026-06-09","subject":"Remiss - judiska studier"},
-  {"dno":"SI 2026:6739","date":"2026-06-09","subject":"Uppgift om Näsbydalskolan med huvudmannen TÄBY KOMMUN i Täby kommun"},
-  {"dno":"SI 2026:6738","date":"2026-06-09","subject":"Utredning av lärare eller förskollärare i Uppsala kommun"},
-  {"dno":"SI 2026:6737","date":"2026-06-09","subject":"Uppgift om TORPAGATAN 50 FÖRSKOLA med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6736","date":"2026-06-09","subject":"Uppgift om Hässelby Villastads skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6735","date":"2026-06-09","subject":"Uppgift i Stockholms kommun"},
-  {"dno":"SI 2026:6734","date":"2026-06-09","subject":"Uppgift om Skansenskolan med huvudmannen MÖRBYLÅNGA KOMMUN i Mörbylånga kommun"},
-  {"dno":"SI 2026:6733","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Kungsängsskolan för Offentlig huvudman NORRKÖPINGS KOMMUN i Norrköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6732","date":"2026-06-09","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Viljaskolan Sollentuna för Enskild huvudman Viljaskolan Sollentuna AB i Sollentuna kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6731","date":"2026-06-09","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Montemini Hbg, Montessoriskola för Enskild huvudman Montemini Hbg's Montessoriskola AB i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6730","date":"2026-06-09","subject":"Uppgift om Ängarydsskolan med huvudmannen TRANÅS KOMMUN i Tranås kommun"},
-  {"dno":"SI 2026:6729","date":"2026-06-09","subject":"Uppgift om Sjöboskolan F-6 med huvudmannen BORÅS KOMMUN i Borås kommun"},
-  {"dno":"SI 2026:6728","date":"2026-06-09","subject":"Uppgift om Västervångskolan med huvudmannen LANDSKRONA KOMMUN i Landskrona kommun"},
-  {"dno":"SI 2026:6727","date":"2026-06-08","subject":"Uppgift om Väskolan MH med huvudmannen KRISTIANSTADS KOMMUN i Kristianstads kommun"},
-  {"dno":"SI 2026:6726","date":"2026-06-08","subject":"Uppgift om SKOGSGLÄNTANS FÖRSKOLA med huvudmannen VINGÅKERS KOMMUN i Vingåkers kommun"},
-  {"dno":"SI 2026:6725","date":"2026-06-08","subject":"Uppgift om Västerskolan med huvudmannen ÖSTRA GÖINGE KOMMUN i Östra Göinge kommun"},
-  {"dno":"SI 2026:6724","date":"2026-06-08","subject":"Uppgift om Mariefreds skola med huvudmannen STRÄNGNÄS KOMMUN i Strängnäs kommun"},
-  {"dno":"SI 2026:6723","date":"2026-06-08","subject":"Uppgift om Internationella Engelska Skolan Eskilstuna med huvudmannen Internationella Engelska Skolan i Sverige AB i Eskilstuna kommun"},
-  {"dno":"SI 2026:6722","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Hannaskolan i Örebro kommun för Enskild huvudman STIFTELSEN HANNASKOLAN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6721","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Södra Utmarkens skola SO 1 i Ängelholms kommun för Offentlig huvudman ÄNGELHOLMS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6720","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Trönninge skola 4-9 i Varbergs kommun för Offentlig huvudman VARBERGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6719","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Internationella Engelska Skolan Tyresö i Tyresö kommun för Enskild huvudman Internationella Engelska Skolan i Sverige AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6718","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Tranängskolan F-6 i Tranemo kommun för Offentlig huvudman TRANEMO KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6717","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Hjortakroksskolan i Sölvesborgs kommun för Offentlig huvudman SÖLVESBORGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6716","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Vallsjöskolan i Sävsjö kommun för Offentlig huvudman SÄVSJÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6715","date":"2026-06-08","subject":"Skolinspektionens pressmeddelande för år 2026"},
-  {"dno":"SI 2026:6714","date":"2026-06-08","subject":"Anmälan om förändring inom ägar- och ledningskretsen från ISLAMIC CENTERS FÖRSAMLING i Ej relevant"},
-  {"dno":"SI 2026:6713","date":"2026-06-08","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Vasalundsskolan för Enskild huvudman Vasalundsskolan AB i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6712","date":"2026-06-08","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Bregårdsskolan 7-9 för Offentlig huvudman KARLSKOGA KOMMUN i Karlskoga kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6711","date":"2026-06-08","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Sandviksskolan för Offentlig huvudman KARLSKOGA KOMMUN i Karlskoga kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6710","date":"2026-06-08","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Duveholmsgymnasiet 1 för Offentlig huvudman KATRINEHOLMS KOMMUN i Katrineholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6709","date":"2026-06-08","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Lindengymnasiet för Offentlig huvudman KATRINEHOLMS KOMMUN i Katrineholms kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6708","date":"2026-06-08","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Malmaskolan för Offentlig huvudman FLENS KOMMUN i Flens kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6707","date":"2026-06-08","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Bettna skola för Offentlig huvudman FLENS KOMMUN i Flens kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6706","date":"2026-06-08","subject":"Uppgift om Franska Skolan/Ecole francaise Gymnasium med huvudmannen STIFTELSEN FRANSKA SKOLAN i Stockholms kommun"},
-  {"dno":"SI 2026:6705","date":"2026-06-08","subject":"Uppgift om Täby Friskola-Enhagen med huvudmannen TÄBY FRISKOLA AKTIEBOLAG i Täby kommun"},
-  {"dno":"SI 2026:6704","date":"2026-06-08","subject":"Uppgift om Linehedsskolan F-3 med huvudmannen HALMSTADS KOMMUN i Halmstads kommun"},
-  {"dno":"SI 2026:6703","date":"2026-06-08","subject":"Skolinspektionens pressmeddelande för år 2021-2025"},
-  {"dno":"SI 2026:6702","date":"2026-06-08","subject":"Uppgift om LBS Kreativa Gymnasiet Stockholm Norra med huvudmannen LBS Kreativa Gymnasiet AB i Solna kommun"},
-  {"dno":"SI 2026:6701","date":"2026-06-08","subject":"Uppgift om JENSEN grundskola Sickla med huvudmannen JENSEN EDUCATION COLLEGE AB i Nacka kommun"},
-  {"dno":"SI 2026:6700","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Höglundaskolan i Säffle kommun för Offentlig huvudman SÄFFLE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6699","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Fria Maria Barnskolas ekonomiska förening i Stockholms kommun för Enskild huvudman FRISKOLAN FRIA MARIA BARNSKOLA EK. FÖR., läsåret 2026/2027"},
-  {"dno":"SI 2026:6698","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Kungshamns skola i Sotenäs kommun för Offentlig huvudman SOTENÄS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6697","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Vittra Frösunda i Solna kommun för Enskild huvudman Vittraskolorna AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6696","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Heneskolan i Skövde kommun för Offentlig huvudman SKÖVDE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6695","date":"2026-06-08","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Mariefreds skola för Offentlig huvudman STRÄNGNÄS KOMMUN i Strängnäs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6694","date":"2026-06-08","subject":"Samlingsärende för uppdragsavtal gällande Tematisk kvalitetsgranskning av gymnasieskolors hantering av värdegrundsfrågor i undervisning i religionskunskap"},
-  {"dno":"SI 2026:6693","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av S:ta Gertruds skola i Sigtuna kommun för Offentlig huvudman SIGTUNA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6692","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Väringaskolan i Sigtuna kommun för Enskild huvudman VÄRINGASKOLANS FÖRÄLDRAFÖRENING, läsåret 2026/2027"},
-  {"dno":"SI 2026:6691","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Runnerydsskolan 2 i Nässjö kommun för Offentlig huvudman NÄSSJÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6690","date":"2026-06-08","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Guldkroksskolan 7-9 för Offentlig huvudman HJO KOMMUN i Hjo kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6689","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Raoul Wallenbergskolan Källberga i Nynäshamns kommun för Enskild huvudman Raoul Wallenbergskolorna AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6688","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Furuborgskolan i Nykvarns kommun för Offentlig huvudman NYKVARNS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6687","date":"2026-06-08","subject":"Uppgift om Sturebyskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6686","date":"2026-06-08","subject":"Uppgift om Vackstanäsgymnasiet med huvudmannen STIFTELSEN OTTO OCH SIGNE BROMS HEMSKOLA Å VACKSTANÄS i Södertälje kommun"},
-  {"dno":"SI 2026:6685","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Ersdungens skola"},
-  {"dno":"SI 2026:6684","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Östermalmsskolan"},
-  {"dno":"SI 2026:6683","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Freinetskolan Mimer i Norrtälje kommun för Enskild huvudman Freinetskolan Mimer ekonomisk förening, läsåret 2026/2027"},
-  {"dno":"SI 2026:6682","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Västangårds skola F-9"},
-  {"dno":"SI 2026:6681","date":"2026-06-08","subject":"Uppgift om T4 skolan med huvudmannen HÄSSLEHOLMS KOMMUN i Hässleholms kommun"},
-  {"dno":"SI 2026:6680","date":"2026-06-08","subject":"Uppgift om Pär Lagerkvistskolan 7-9 med huvudmannen VÄXJÖ KOMMUN i Växjö kommun"},
-  {"dno":"SI 2026:6679","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från SORSELE KOMMUN för Ammarnäs skola"},
-  {"dno":"SI 2026:6678","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Södra Ålidhemsskolan 6-9"},
-  {"dno":"SI 2026:6677","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Sandalidens skola"},
-  {"dno":"SI 2026:6676","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från SORSELE KOMMUN för Vindelälvsskolan F-9"},
-  {"dno":"SI 2026:6675","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från UMEÅ KOMMUN för Carlshöjdsskolan F-6"},
-  {"dno":"SI 2026:6674","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Noblaskolan Lännersta i Nacka kommun för Enskild huvudman AcadeMedia Grundskolor AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6673","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från SORSELE KOMMUN för Vindelälvsskolan F-9"},
-  {"dno":"SI 2026:6672","date":"2026-06-08","subject":"Anmälan om att använda fjärrundervisning från SORSELE KOMMUN för Blattnicksele skola"},
-  {"dno":"SI 2026:6671","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Färjestadens skola i Mörbylånga kommun för Offentlig huvudman MÖRBYLÅNGA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6670","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Munkedalsskolan i Munkedals kommun för Offentlig huvudman MUNKEDALS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6669","date":"2026-06-08","subject":"Uppgift om Montessoriförskolan Alma med huvudmannen HÄSSLEHOLMS KOMMUN i Hässleholms kommun"},
-  {"dno":"SI 2026:6668","date":"2026-06-08","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Gunnarsboskolan i Mullsjö kommun för Offentlig huvudman MULLSJÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6667","date":"2026-06-08","subject":"Uppgift om Hansåkerskolan med huvudmannen RAGUNDA KOMMUN i Ragunda kommun"},
-  {"dno":"SI 2026:6666","date":"2026-06-08","subject":"Uppgift om Romfartunaskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:6665","date":"2026-06-08","subject":"Uppgift med huvudmannen KÖPINGS KOMMUN i Köpings kommun"},
-  {"dno":"SI 2026:6664","date":"2026-06-08","subject":"Uppgift om Kallingeskolan 4-6 med huvudmannen RONNEBY KOMMUN i Ronneby kommun"},
-  {"dno":"SI 2026:6663","date":"2026-06-08","subject":"Uppgift om Internationella Engelska Skolan Karlstad med huvudmannen Internationella Engelska Skolan i Sverige AB i Karlstads kommun"},
-  {"dno":"SI 2026:6662","date":"2026-06-08","subject":"Uppgift om Timmele skola med huvudmannen ULRICEHAMNS KOMMUN i Ulricehamns kommun"},
-  {"dno":"SI 2026:6661","date":"2026-06-08","subject":"Regeringsuppdraget om att Förbereda för ändringar avseende skärpta villkor för friskolesektorn"},
-  {"dno":"SI 2026:6660","date":"2026-06-08","subject":"Riktlinje för beredning av administrativa ärenden"},
-  {"dno":"SI 2026:6659","date":"2026-06-08","subject":"Uppgift om Påhlmans gymnasium med huvudmannen MEDBORGARSKOLAN STOCKHOLMSREGIONEN i Stockholms kommun"},
-  {"dno":"SI 2026:6658","date":"2026-06-08","subject":"Uppgift om Medlearn i Umeå med huvudmannen MedLearn AB i Umeå kommun"},
-  {"dno":"SI 2026:6657","date":"2026-06-08","subject":"Uppgift om T4 skolan med huvudmannen HÄSSLEHOLMS KOMMUN i Hässleholms kommun"},
-  {"dno":"SI 2026:6656","date":"2026-06-08","subject":"Uppgift om Vasaskolan med huvudmannen STIFTELSEN FÖR KRISTNA SKOLOR i Göteborgs kommun"},
-  {"dno":"SI 2026:6655","date":"2026-06-08","subject":"Uppgift om Sannaskolan 7-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6654","date":"2026-06-08","subject":"Uppgift om Brunnsboskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6653","date":"2026-06-07","subject":"Uppgift om Glasbruksskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6652","date":"2026-06-07","subject":"Uppgift om Västerskolan med huvudmannen ÖSTRA GÖINGE KOMMUN i Östra Göinge kommun"},
-  {"dno":"SI 2026:6651","date":"2026-06-07","subject":"Uppgift om Soltorgsgymnasiet med huvudmannen BORLÄNGE KOMMUN i Borlänge kommun"},
-  {"dno":"SI 2026:6650","date":"2026-06-07","subject":"Uppgift om Mora gymnasium ro 1 med huvudmannen MORA KOMMUN i Mora kommun"},
-  {"dno":"SI 2026:6649","date":"2026-06-07","subject":"Uppgift om Lucksta skola med huvudmannen SUNDSVALLS KOMMUN i Sundsvalls kommun"},
-  {"dno":"SI 2026:6648","date":"2026-06-07","subject":"Uppgift om Fridhemsskolan med huvudmannen ARVIDSJAURS KOMMUN i Arvidsjaurs kommun"},
-  {"dno":"SI 2026:6647","date":"2026-06-07","subject":"Uppgift om KLARA Teoretiska Gymnasium Stockholm Södra med huvudmannen KLARA Gymnasium Kunskap AB i Stockholms kommun"},
-  {"dno":"SI 2026:6646","date":"2026-06-07","subject":"Uppgift om Noblaskolan Löddeköpinge med huvudmannen AcadeMedia fria grundskolor AB i Kävlinge kommun"},
-  {"dno":"SI 2026:6645","date":"2026-06-07","subject":"Ansökan om betygsrätt för vuxenutbildning från Amadeo Utbildning AB i Ej relevant"},
-  {"dno":"SI 2026:6644","date":"2026-06-07","subject":"Uppgift om !testverksamhet med ändrat namn med huvudmannen !AnvändsEJ är endast för tester i produktion i Stockholms kommun"},
-  {"dno":"SI 2026:6643","date":"2026-06-07","subject":"Uppgift om TRAVARENS FÖRSKOLA med huvudmannen VARBERGS KOMMUN i Varbergs kommun"},
-  {"dno":"SI 2026:6642","date":"2026-06-07","subject":"Uppgift i Göteborgs kommun"},
-  {"dno":"SI 2026:6641","date":"2026-06-07","subject":"Uppgift med huvudmannen ARVIKA KOMMUN i Arvika kommun"},
-  {"dno":"SI 2026:6640","date":"2026-06-07","subject":"Uppgift om Birger Jarls Gymnasium (A1) med huvudmannen Birger Jarls Gymnasium AB i Stockholms kommun"},
-  {"dno":"SI 2026:6639","date":"2026-06-06","subject":"Uppgift om Västra Stenhagenskolan med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:6638","date":"2026-06-06","subject":"Uppgift om Ölands Friskola med huvudmannen Friskolan Öland AB i Mörbylånga kommun"},
-  {"dno":"SI 2026:6637","date":"2026-06-06","subject":"Uppgift om Ölands Friskola med huvudmannen Friskolan Öland AB i Mörbylånga kommun"},
-  {"dno":"SI 2026:6636","date":"2026-06-06","subject":"Uppgift om Fridhemskolan med huvudmannen VÅRGÅRDA KOMMUN i Vårgårda kommun"},
-  {"dno":"SI 2026:6635","date":"2026-06-06","subject":"Uppgift i Uppsala kommun"},
-  {"dno":"SI 2026:6634","date":"2026-06-05","subject":"Uppgift om Högvadskolan med huvudmannen SVENLJUNGA KOMMUN i Svenljunga kommun"},
-  {"dno":"SI 2026:6633","date":"2026-06-05","subject":"Uppgift om Högvadskolan med huvudmannen SVENLJUNGA KOMMUN i Svenljunga kommun"},
-  {"dno":"SI 2026:6632","date":"2026-06-05","subject":"Uppgift med huvudmannen TJÖRNS KOMMUN i Tjörns kommun"},
-  {"dno":"SI 2026:6631","date":"2026-06-05","subject":"Uppgift om FÖRÄLDRAKOOPERATIVET VICKE VIRE, EK FÖR med huvudmannen FÖRÄLDRAKOOPERATIVET VICKE VIRE, EK FÖR i Stockholms kommun"},
-  {"dno":"SI 2026:6630","date":"2026-06-05","subject":"Uppgift om Fröviskolan 7-9 med huvudmannen LINDESBERGS KOMMUN i Lindesbergs kommun"},
-  {"dno":"SI 2026:6629","date":"2026-06-05","subject":"Uppgift om Mölstadskolan med huvudmannen MÖNSTERÅS KOMMUN i Mönsterås kommun"},
-  {"dno":"SI 2026:6628","date":"2026-06-05","subject":"Uppgift om Vuxenutbildningen Varbergs kommun med huvudmannen VARBERGS KOMMUN i Varbergs kommun"},
-  {"dno":"SI 2026:6627","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Bråstorpskolan i Motala kommun för Offentlig huvudman MOTALA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6626","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Strömskolan 4-6 i Marks kommun för Offentlig huvudman MARKS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6625","date":"2026-06-05","subject":"Uppgift om Gullåkraskolan med huvudmannen STAFFANSTORPS KOMMUN i Staffanstorps kommun"},
-  {"dno":"SI 2026:6624","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Geijerskolan i Malmö kommun för Offentlig huvudman MALMÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6623","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Fladängskolan i Lomma kommun för Offentlig huvudman LOMMA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6622","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Albatross Montessoriskola i Lidingö kommun för Enskild huvudman ALBATROSS MONTESSORISKOLA, läsåret 2026/2027"},
-  {"dno":"SI 2026:6621","date":"2026-06-05","subject":"Uppgift om Norrskolan med huvudmannen UDDEVALLA KOMMUN i Uddevalla kommun"},
-  {"dno":"SI 2026:6620","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Sticklinge skola i Lidingö kommun för Offentlig huvudman LIDINGÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6619","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Kollaskolan 4-6 i Kungsbacka kommun för Offentlig huvudman KUNGSBACKA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6618","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av KMS Kullaviks Montessoriskola i Kungsbacka kommun för Enskild huvudman Kullaviks Montessoriskola Ekonomisk förening, läsåret 2026/2027"},
-  {"dno":"SI 2026:6617","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Kungsfiskareskolan i Klippans kommun för Offentlig huvudman KLIPPANS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6616","date":"2026-06-05","subject":"Lön till generaldirektören och chefen för Statens skolinspektion  Dnr U2026/01171"},
-  {"dno":"SI 2026:6615","date":"2026-06-05","subject":"Uppgift om Lillhagaskolan med huvudmannen NYKVARNS KOMMUN i Nykvarns kommun"},
-  {"dno":"SI 2026:6614","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Bodestorpsskolan i Karlshamns kommun för Offentlig huvudman KARLSHAMNS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6613","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Strandskolan i Karlsborgs kommun för Offentlig huvudman KARLSBORGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6612","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Solenskolan åk F-6 i Härnösands kommun för Offentlig huvudman HÄRNÖSANDS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6611","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Sandvalla skola i Hudiksvalls kommun för Offentlig huvudman HUDIKSVALLS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6610","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Bärstadsskolan 3-6 i Hammarö kommun för Offentlig huvudman HAMMARÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6609","date":"2026-06-05","subject":"Uppgift om Bergsjöskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6608","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Gumaeliusskolan i Örebro kommun för Offentlig huvudman ÖREBRO KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6607","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Kungsgårdsskolan SO 2 i Ängelholms kommun för Offentlig huvudman ÄNGELHOLMS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6606","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Skiljeboskolan i Västerås kommun för Offentlig huvudman VÄSTERÅS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6605","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Withalaskolan 2 i Vetlanda kommun för Offentlig huvudman VETLANDA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6604","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Gottsundaskolan i Uppsala kommun för Offentlig huvudman UPPSALA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6603","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Carlslundsskolan 7-9 i Umeå kommun för Offentlig huvudman UMEÅ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6602","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Töreboda Centralskola i Töreboda kommun för Offentlig huvudman TÖREBODA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6601","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Tyresö skola i Tyresö kommun för Offentlig huvudman TYRESÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6600","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Ängarydsskolan i Tranås kommun för Offentlig huvudman TRANÅS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6599","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Tranängskolan 7-9 i Tranemo kommun för Offentlig huvudman TRANEMO KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6598","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Klockarskolan i Säters kommun för Offentlig huvudman SÄTERS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6597","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Tegnérskolan i Säffle kommun för Offentlig huvudman SÄFFLE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6596","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Hammarskolan i Surahammars kommun för Offentlig huvudman SURAHAMMARS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6595","date":"2026-06-05","subject":"Samlingsärende för Skolinspektionens nyhetsbrev 2026"},
-  {"dno":"SI 2026:6594","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Stocksätterskolan i Hallsbergs kommun för Offentlig huvudman HALLSBERGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6593","date":"2026-06-05","subject":"Rapport tillsyn av redovisning av statlig annonsering enligt EU:s mediefrihetsförordning"},
-  {"dno":"SI 2026:6592","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Hertingsskolan i Falkenbergs kommun för Offentlig huvudman FALKENBERGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6591","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Raoul Wallenbergskolan Skövde för Enskild huvudman Raoul Wallenbergskolorna Skaraborg AB i Skövde kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6590","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Asklandaskolan F-6 i Borås kommun för Offentlig huvudman BORÅS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6589","date":"2026-06-05","subject":"Uppgift om Vallentuna Friskola med huvudmannen VALLENTUNA FRISKOLA AB i Vallentuna kommun"},
-  {"dno":"SI 2026:6588","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Mårängskolan i Bodens kommun för Offentlig huvudman BODENS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6587","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Karlbo skola i Avesta kommun för Offentlig huvudman AVESTA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6586","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Närlundaskolan i Askersunds kommun för Offentlig huvudman ASKERSUNDS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6585","date":"2026-06-05","subject":"Uppgift om Romfartunaskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:6584","date":"2026-06-05","subject":"Uppgift om Sverigefinska skolan, Botkyrka med huvudmannen SVERIGEFINSKA SKOLAN I BOTKYRKA AKTIEBOLAG i Botkyrka kommun"},
-  {"dno":"SI 2026:6583","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Ringelskolan i Arvidsjaurs kommun för Offentlig huvudman ARVIDSJAURS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6582","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Rådaskolan 2 för Offentlig huvudman MELLERUDS KOMMUN i Melleruds kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6581","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Melleruds anpassade grundskola för Offentlig huvudman MELLERUDS KOMMUN i Melleruds kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6580","date":"2026-06-05","subject":"Uppgift om Vallhamra skola F-3 med huvudmannen PARTILLE KOMMUN i Partille kommun"},
-  {"dno":"SI 2026:6579","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, anpassad gymnasieskola (inkl HM) av Ållebergsgymnasiet anpassad gymnasieskola för Offentlig huvudman FALKÖPINGS KOMMUN i Falköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6578","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av JENSEN Gymnasium Kristianstad för Enskild huvudman JENSEN EDUCATION COLLEGE AB i Kristianstads kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6577","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Kinnarpsskolan 7-9 för Offentlig huvudman FALKÖPINGS KOMMUN i Falköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6576","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Minnebergsskolan för Offentlig huvudman ARVIKA KOMMUN i Arvika kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6575","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Ållebergsgymnasiet C för Offentlig huvudman FALKÖPINGS KOMMUN i Falköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6574","date":"2026-06-05","subject":"Promemoria om Barn- och elevombudets bedömning av inkomna uppgifter"},
-  {"dno":"SI 2026:6573","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Gunnarsbyskolan F-9 för Offentlig huvudman EDA KOMMUN i Eda kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6572","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Flobyskolan för Offentlig huvudman FALKÖPINGS KOMMUN i Falköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6571","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, anpassad grundskola (inkl HM) av Anpassad grundskola för Offentlig huvudman HOFORS KOMMUN i Hofors kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6570","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Lillåskolan för Offentlig huvudman HOFORS KOMMUN i Hofors kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6569","date":"2026-06-05","subject":"Anmälan om förändring inom ägar- och ledningskretsen från HEMGÅRDAR I MALMÖ, FÖRENINGEN i Ej relevant"},
-  {"dno":"SI 2026:6568","date":"2026-06-05","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Thomasgymnasiet för Offentlig huvudman STRÄNGNÄS KOMMUN i Strängnäs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6567","date":"2026-06-05","subject":"Uppgift om Kommunal vuxenutbildning med huvudmannen LJUSDALS KOMMUN i Ljusdals kommun"},
-  {"dno":"SI 2026:6566","date":"2026-06-05","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Taserudsgymnasiet för Offentlig huvudman ARVIKA KOMMUN i Arvika kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6565","date":"2026-06-05","subject":"Tematisk kvalitetsgranskning, Skolors arbete med att uppmärksamma och förebygga frånvaro, av Bohusskolan i Ale kommun för Offentlig huvudman ALE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6564","date":"2026-06-05","subject":"Uppgift om Bäckahagens skola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6563","date":"2026-06-05","subject":"Upphandling gällande AI-tjänster anpassade för offentlig verksamhet"},
-  {"dno":"SI 2026:6562","date":"2026-06-05","subject":"Annons. Junior jurist till kansliet för Skolväsendets överklagandenämnd, särskild visstidsanställning"},
-  {"dno":"SI 2026:6561","date":"2026-06-05","subject":"Riktad tillsyn, Individs situation av Bjärehovskolan för Offentlig huvudman LOMMA KOMMUN i Lomma kommun"},
-  {"dno":"SI 2026:6560","date":"2026-06-05","subject":"Riktad tillsyn, Individs situation av HENRIKSDAL för Enskild huvudman Dibber Inspira AB i Nacka kommun"},
-  {"dno":"SI 2026:6559","date":"2026-06-05","subject":"Riktad tillsyn, Individs situation av Casa Montessori för Enskild huvudman MONTESSORISTIFTELSEN I PARTILLE i Partille kommun"},
-  {"dno":"SI 2026:6558","date":"2026-06-05","subject":"Riktad tillsyn, Individs situation av HERRGÅRDENS FÖRSKOLA för Offentlig huvudman GÄVLE KOMMUN i Gävle kommun"},
-  {"dno":"SI 2026:6557","date":"2026-06-05","subject":"Uppgift om Karlskrona Montessorifriskola med huvudmannen KARLSKRONA MONTESSORIFRISKOLA AB i Karlskrona kommun"},
-  {"dno":"SI 2026:6556","date":"2026-06-05","subject":"Uppgift om Lindholmens tekniska gymnasium 3 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6555","date":"2026-06-05","subject":"Uppgift om Osbecksgymnasiet RO1 med huvudmannen LAHOLMS KOMMUN i Laholms kommun"},
-  {"dno":"SI 2026:6554","date":"2026-06-05","subject":"Uppgift om Andersbergsskolan med huvudmannen GÄVLE KOMMUN i Gävle kommun"},
-  {"dno":"SI 2026:6553","date":"2026-06-05","subject":"Återkallande av godkännanden som inte nyttjas för Nytida Solhaga by AB vid Solhaga anpassade gymnasieskola i Lilla Edets kommun"},
-  {"dno":"SI 2026:6552","date":"2026-06-05","subject":"Uppgift om Gärdsåsskolan 4-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6551","date":"2026-06-05","subject":"Uppgift om Minervaskolan med huvudmannen MINERVASKOLAN I UMEÅ AB i Umeå kommun"},
-  {"dno":"SI 2026:6550","date":"2026-06-05","subject":"Uppgift om Örkenedskolan F-9 med huvudmannen OSBY KOMMUN i Osby kommun"},
-  {"dno":"SI 2026:6549","date":"2026-06-05","subject":"Uppgift om Vuxenutbildningen 72 med huvudmannen KRISTIANSTADS KOMMUN i Kristianstads kommun"},
-  {"dno":"SI 2026:6548","date":"2026-06-05","subject":"Uppgift om Hjortsjöskolan 4-6 med huvudmannen VAGGERYDS KOMMUN i Vaggeryds kommun"},
-  {"dno":"SI 2026:6547","date":"2026-06-05","subject":"Makulerat"},
-  {"dno":"SI 2026:6546","date":"2026-06-04","subject":"Uppgift om Hedebyskolan med huvudmannen TROSA KOMMUN i Trosa kommun"},
-  {"dno":"SI 2026:6545","date":"2026-06-04","subject":"Uppgift om Svenshögskolan med huvudmannen BURLÖVS KOMMUN i Burlövs kommun"},
-  {"dno":"SI 2026:6544","date":"2026-06-04","subject":"Uppgift om BLÅSIPPAN med huvudmannen MONTESSORIFÖRSKOLAN BLÅSIPPAN EKONOMISK FÖRENING i Göteborgs kommun"},
-  {"dno":"SI 2026:6543","date":"2026-06-04","subject":"Uppgift om Kirsebergsskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6542","date":"2026-06-04","subject":"Uppgift om Förskolan Porslinskvarteret med huvudmannen Edukatus Alliance AB i Värmdö kommun"},
-  {"dno":"SI 2026:6541","date":"2026-06-04","subject":"Uppgift om Amerikanska Gymnasiet Stockholm Campus Frescati Hage med huvudmannen Amerikanska Gymnasiet i Sverige AB i Stockholms kommun"},
-  {"dno":"SI 2026:6540","date":"2026-06-04","subject":"Uppgift om Amerikanska Gymnasiet Halmstad med huvudmannen Amerikanska Gymnasiet i Sverige AB i Halmstads kommun"},
-  {"dno":"SI 2026:6539","date":"2026-06-04","subject":"Uppgift om Amerikanska Gymnasiet Halmstad med huvudmannen Amerikanska Gymnasiet i Sverige AB i Halmstads kommun"},
-  {"dno":"SI 2026:6538","date":"2026-06-04","subject":"Uppgift om Silverdalens skola med huvudmannen HULTSFREDS KOMMUN i Hultsfreds kommun"},
-  {"dno":"SI 2026:6537","date":"2026-06-04","subject":"Uppgift om AG Stommenskolan med huvudmannen MARKS KOMMUN i Marks kommun"},
-  {"dno":"SI 2026:6536","date":"2026-06-04","subject":"Uppgift om Minervaskolan med huvudmannen MINERVASKOLAN I UMEÅ AB i Umeå kommun"},
-  {"dno":"SI 2026:6535","date":"2026-06-04","subject":"Uppgift i Kungsbacka kommun"},
-  {"dno":"SI 2026:6534","date":"2026-06-04","subject":"Uppgift om Tågarpskolan med huvudmannen BURLÖVS KOMMUN i Burlövs kommun"},
-  {"dno":"SI 2026:6533","date":"2026-06-04","subject":"Uppgift om Kista grundskola med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6532","date":"2026-06-04","subject":"Uppgift om Söderslättsgymnasiet med huvudmannen TRELLEBORGS KOMMUN i Trelleborgs kommun"},
-  {"dno":"SI 2026:6531","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Östra Skolan AB i Ej relevant"},
-  {"dno":"SI 2026:6530","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Dibber Rullen Skola AB i Ej relevant"},
-  {"dno":"SI 2026:6529","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Dibber Norrviken Skola AB i Ej relevant"},
-  {"dno":"SI 2026:6528","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från Dibber Kubikskolan AB i Ej relevant"},
-  {"dno":"SI 2026:6527","date":"2026-06-04","subject":"Riktad tillsyn, Individs situation av Fuxernaskolan F-6 för Offentlig huvudman LILLA EDETS KOMMUN i Lilla Edets kommun"},
-  {"dno":"SI 2026:6526","date":"2026-06-04","subject":"Riktad tillsyn, Individs situation av Svarträvens skola 4-9 för Offentlig huvudman ÖVERTORNEÅ KOMMUN i Övertorneå kommun"},
-  {"dno":"SI 2026:6525","date":"2026-06-04","subject":"Uppgift om Svaleboskolan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6524","date":"2026-06-04","subject":"Riktad tillsyn, Individs situation av Bjärehovskolan för Offentlig huvudman LOMMA KOMMUN i Lomma kommun"},
-  {"dno":"SI 2026:6523","date":"2026-06-04","subject":"Utredning av lärare eller förskollärare i Uppsala kommun"},
-  {"dno":"SI 2026:6522","date":"2026-06-04","subject":"Uppgift om Fröslundaskolan F-6 med huvudmannen ESKILSTUNA KOMMUN i Eskilstuna kommun"},
-  {"dno":"SI 2026:6521","date":"2026-06-04","subject":"Uppgift om Kvarngärdesskolan med huvudmannen UPPSALA KOMMUN i Uppsala kommun"},
-  {"dno":"SI 2026:6520","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Kunskapsskolan Tyresö i Stockholms kommun för Enskild huvudman Kunskapsskolan i Sverige Aktiebolag, läsåret 2026/2027"},
-  {"dno":"SI 2026:6519","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Internationella Engelska Skolan Liljeholmen i Stockholms kommun för Enskild huvudman Internationella Engelska Skolan i Sverige AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6518","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Hallernaskolan 7-9 1 i Stenungsunds kommun för Offentlig huvudman STENUNGSUNDS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6517","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Råsunda Centralskola i Solna kommun för Offentlig huvudman SOLNA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6516","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Helenaskolan i Skövde kommun för Offentlig huvudman SKÖVDE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6515","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från BÖSKOLANS FRISKOLA EK.FÖR. i Ej relevant"},
-  {"dno":"SI 2026:6514","date":"2026-06-04","subject":"Uppgift om Gärdsåsskolan 4-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6513","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Snäckebacksskolan 7-9 i Ronneby kommun för Offentlig huvudman RONNEBY KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6512","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Brinells högstadium i Nässjö kommun för Offentlig huvudman NÄSSJÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6511","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Nyköpings Enskilda Grundskola i Nyköpings kommun för Enskild huvudman Nyköpings Enskilda Grundskola AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6510","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Nyköpings högstadium Alpha i Nyköpings kommun för Offentlig huvudman NYKÖPINGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6509","date":"2026-06-04","subject":"Uppgift om Södra Latins gymnasium 89370947 med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6508","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Ljustadalens skola för Offentlig huvudman SUNDSVALLS KOMMUN i Sundsvalls kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6507","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Granbergsskolan västra för Offentlig huvudman SUNDSVALLS KOMMUN i Sundsvalls kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6506","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Bergsåkers skola för Offentlig huvudman SUNDSVALLS KOMMUN i Sundsvalls kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6505","date":"2026-06-04","subject":"Uppgift om Trälleborg med huvudmannen VÄRNAMO KOMMUN i Värnamo kommun"},
-  {"dno":"SI 2026:6504","date":"2026-06-04","subject":"Utredning av lärare eller förskollärare i Ej relevant"},
-  {"dno":"SI 2026:6503","date":"2026-06-04","subject":"Uppgift om Kronaskolan F-6 1 med huvudmannen ALE KOMMUN i Ale kommun"},
-  {"dno":"SI 2026:6502","date":"2026-06-04","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Ektorpsskolan 1 i Norrköpings kommun för Offentlig huvudman NORRKÖPINGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6501","date":"2026-06-04","subject":"makulerat"},
-  {"dno":"SI 2026:6500","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från SÖDERTÖRNS FRISKOLA EKONOMISK FÖRENING i Ej relevant"},
-  {"dno":"SI 2026:6499","date":"2026-06-04","subject":"Uppgift om Hagaskolan med huvudmannen DJURGÅRDENS WALDORFSKOLEFÖRENING i Solna kommun"},
-  {"dno":"SI 2026:6498","date":"2026-06-04","subject":"Uppgift med huvudmannen Eruditia AB i Ej relevant"},
-  {"dno":"SI 2026:6497","date":"2026-06-04","subject":"Uppgift om Grindtorpsskolan med huvudmannen BOTKYRKA KOMMUN i Botkyrka kommun"},
-  {"dno":"SI 2026:6496","date":"2026-06-04","subject":"Uppgift om Blästadsskolan med huvudmannen LINKÖPINGS KOMMUN i Linköpings kommun"},
-  {"dno":"SI 2026:6495","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Ystad för Enskild huvudman Praktiska Sverige AB i Ystads kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6494","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Västerås för Enskild huvudman Praktiska Sverige AB i Västerås kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6493","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Växjö för Enskild huvudman Praktiska Sverige AB i Växjö kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6492","date":"2026-06-04","subject":"Uppgift om NEPTUNUS FÖRSKOLA med huvudmannen SUNDBYBERGS KOMMUN i Sundbybergs kommun"},
-  {"dno":"SI 2026:6491","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Skellefteå för Enskild huvudman Praktiska Sverige AB i Skellefteå kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6490","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Nykvarn för Enskild huvudman Praktiska Sverige AB i Nykvarns kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6489","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Kungsbacka för Enskild huvudman Praktiska Sverige AB i Kungsbacka kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6488","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Jönköping för Enskild huvudman Praktiska Sverige AB i Jönköpings kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6487","date":"2026-06-04","subject":"Uppgift om Kvarnhagsskolan med huvudmannen BOTKYRKA KOMMUN i Botkyrka kommun"},
-  {"dno":"SI 2026:6486","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Praktiska Gymnasiet Borås för Enskild huvudman Praktiska Sverige AB i Borås kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6485","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Corpore Byskola för Enskild huvudman IMPIUS UTVECKLINGS AB i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6484","date":"2026-06-04","subject":"Uppgift om Högaholmsskolan med huvudmannen MALMÖ KOMMUN i Malmö kommun"},
-  {"dno":"SI 2026:6483","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Kristna skolan Oasen för Enskild huvudman KRISTNA SKOLAN OASEN IDEELLA FÖRENING i Sundsvalls kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6482","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Impius gymnasium för Enskild huvudman IMPIUS UTVECKLINGS AB i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6481","date":"2026-06-04","subject":"Uppgift om Internationella Engelska Skolan Hässleholm med huvudmannen Internationella Engelska Skolan i Sverige AB i Hässleholms kommun"},
-  {"dno":"SI 2026:6480","date":"2026-06-04","subject":"Uppgift om Palettskolan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6479","date":"2026-06-04","subject":"Uppgift om Frösåkersskolan med huvudmannen ÖSTHAMMARS KOMMUN i Östhammars kommun"},
-  {"dno":"SI 2026:6478","date":"2026-06-04","subject":"Uppgift med huvudmannen ÖSTHAMMARS KOMMUN i Östhammars kommun"},
-  {"dno":"SI 2026:6477","date":"2026-06-04","subject":"Uppgift om JYDEKLOVAN 2 FÖRSKOLA med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6476","date":"2026-06-04","subject":"Uppgift om Vuxenutbildningen i Ovanåker med huvudmannen OVANÅKERS KOMMUN i Ovanåkers kommun"},
-  {"dno":"SI 2026:6475","date":"2026-06-04","subject":"Anmälan om förändring inom ägar- och ledningskretsen från STIFTELSEN S:T THOMAS SKOLA i Ej relevant"},
-  {"dno":"SI 2026:6474","date":"2026-06-04","subject":"Uppgift om Vittra Kungshagen med huvudmannen Vittraskolorna AB i Nyköpings kommun"},
-  {"dno":"SI 2026:6473","date":"2026-06-04","subject":"Uppgift om Steningehöjdens skola med huvudmannen SIGTUNA KOMMUN i Sigtuna kommun"},
-  {"dno":"SI 2026:6472","date":"2026-06-04","subject":"Uppgift om Kulturama gr. Hammarby Sjöstad med huvudmannen MEDBORGARSKOLAN STOCKHOLMSREGIONEN i Stockholms kommun"},
-  {"dno":"SI 2026:6471","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Rönnowska skolan för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6470","date":"2026-06-04","subject":"Riktad tillsyn, Individs situation av Parkskolan för Offentlig huvudman SVALÖVS KOMMUN i Svalövs kommun"},
-  {"dno":"SI 2026:6469","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Drottninghögsskolan för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6468","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Musikgrundskolan Synkopen för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6467","date":"2026-06-04","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Huddingegymnasiet för Offentlig huvudman HUDDINGE KOMMUN i Huddinge kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6466","date":"2026-06-04","subject":"Uppgift om Gottsta Skola med huvudmannen NORRTÄLJE KOMMUN i Norrtälje kommun"},
-  {"dno":"SI 2026:6465","date":"2026-06-04","subject":"Uppgift om Skogsbo skola med huvudmannen AVESTA KOMMUN i Avesta kommun"},
-  {"dno":"SI 2026:6464","date":"2026-06-04","subject":"Anmälan till Lärarnas ansvarsnämnd"},
-  {"dno":"SI 2026:6463","date":"2026-06-04","subject":"Planerad tillsyn, Skolenhetsnivå, Förskoleklass och Grundskola (inkl. HM) av Anneroskolan för Offentlig huvudman HELSINGBORGS KOMMUN i Helsingborgs kommun, läsåret 2026/2027"},
-  {"dno":"SI 2026:6462","date":"2026-06-04","subject":"Tematisk tillsyn av huvudmannens klagomålshantering Raoul Wallenbergskolorna Skaraborg AB"},
-  {"dno":"SI 2026:6461","date":"2026-06-04","subject":"Uppgift om Tjörnarps skola med huvudmannen HÖÖRS KOMMUN i Höörs kommun"},
-  {"dno":"SI 2026:6460","date":"2026-06-04","subject":"Uppgift om Nyvångskolan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6459","date":"2026-06-04","subject":"Uppgift om Nyvångskolan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6458","date":"2026-06-04","subject":"Anmälan om att använda fjärrundervisning från SIGTUNA KOMMUN för Skepptuna skola"},
-  {"dno":"SI 2026:6457","date":"2026-06-04","subject":"Uppgift om Björkhagaskolan med huvudmannen SÖDERKÖPINGS KOMMUN i Söderköpings kommun"},
-  {"dno":"SI 2026:6456","date":"2026-06-04","subject":"Uppgift om Futuraskolan International School of Stockholm med huvudmannen FUTURASKOLAN AB i Stockholms kommun"},
-  {"dno":"SI 2026:6455","date":"2026-06-04","subject":"Uppgift om Torslandaskolan 7-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6454","date":"2026-06-04","subject":"Uppgift om Burgårdens Gymnasium 1 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6453","date":"2026-06-04","subject":"Uppgift om Strömsnässkolan 7-9 med huvudmannen MARKARYDS KOMMUN i Markaryds kommun"},
-  {"dno":"SI 2026:6452","date":"2026-06-04","subject":"Uppgift om Krungårdsskolan med huvudmannen MÖNSTERÅS KOMMUN i Mönsterås kommun"},
-  {"dno":"SI 2026:6451","date":"2026-06-03","subject":"Uppgift om Rönnowskolan H1 med huvudmannen KRISTIANSTADS KOMMUN i Kristianstads kommun"},
-  {"dno":"SI 2026:6450","date":"2026-06-03","subject":"Uppgift om Nya Skolan, Lilla Edet med huvudmannen Nya Skolan Sverige AB i Lilla Edets kommun"},
-  {"dno":"SI 2026:6449","date":"2026-06-03","subject":"Uppgift om Apalbyskolan med huvudmannen VÄSTERÅS KOMMUN i Västerås kommun"},
-  {"dno":"SI 2026:6448","date":"2026-06-03","subject":"Uppgift om Snyggatorpsskolan med huvudmannen KLIPPANS KOMMUN i Klippans kommun"},
-  {"dno":"SI 2026:6447","date":"2026-06-03","subject":"Uppgift om Njupkärrs skola med huvudmannen TYRESÖ KOMMUN i Tyresö kommun"},
-  {"dno":"SI 2026:6446","date":"2026-06-03","subject":"Uppgift om Baldersskolan 7-9 med huvudmannen STAFFANSTORPS KOMMUN i Staffanstorps kommun"},
-  {"dno":"SI 2026:6445","date":"2026-06-03","subject":"Uppgift om Hertingsskolan med huvudmannen FALKENBERGS KOMMUN i Falkenbergs kommun"},
-  {"dno":"SI 2026:6444","date":"2026-06-03","subject":"Uppgift om Svaleboskolan med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6443","date":"2026-06-03","subject":"Uppgift om Montessoriskolan Tellus med huvudmannen Montessoriskolan i Höganäs AB i Höganäs kommun"},
-  {"dno":"SI 2026:6442","date":"2026-06-03","subject":"Uppgift om Fäladsgården med huvudmannen LUNDS KOMMUN i Lunds kommun"},
-  {"dno":"SI 2026:6441","date":"2026-06-03","subject":"Remiss Information technology for learning, education and training Metadata for learning resources - SIS remiss SISTK450-00006."},
-  {"dno":"SI 2026:6440","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Sinntorpsskolan 4-9 i Mölndals kommun för Offentlig huvudman MÖLNDALS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6439","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Stenhamreskolan 7-9 i Ljusdals kommun för Offentlig huvudman LJUSDALS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6438","date":"2026-06-03","subject":"Uppgift om Steningehöjdens skola med huvudmannen SIGTUNA KOMMUN i Sigtuna kommun"},
-  {"dno":"SI 2026:6437","date":"2026-06-03","subject":"Riktad tillsyn, Individs situation av Strängnäs Montessoriskola för Enskild huvudman Strängnäs Montessoriskola Ekonomisk förening i Strängnäs kommun"},
-  {"dno":"SI 2026:6436","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Hjortsbergskolan 2 i Ljungby kommun för Offentlig huvudman LJUNGBY KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6435","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Varlaskolan Nord i Kungsbacka kommun för Offentlig huvudman KUNGSBACKA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6434","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Ås skola i Krokoms kommun för Offentlig huvudman KROKOMS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6433","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Snyggatorpsskolan i Klippans kommun för Offentlig huvudman KLIPPANS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6432","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Stenbackaskolan i Karlshamns kommun för Offentlig huvudman KARLSHAMNS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6431","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Ljungarumsskolan 7-9 i Jönköpings kommun för Offentlig huvudman JÖNKÖPINGS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6430","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Hammarlundens skola  7-9 Nord i Hammarö kommun för Offentlig huvudman HAMMARÖ KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6429","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Liljestensskolan 1 i Götene kommun för Offentlig huvudman GÖTENE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6428","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Noblaskolan Nya Hovås åk 6-9 i Göteborgs kommun för Enskild huvudman AcadeMedia Grundskolor AB, läsåret 2026/2027"},
-  {"dno":"SI 2026:6427","date":"2026-06-03","subject":"Uppgift om Kungstensgymnasiet med huvudmannen FOLKUNIVERSITETET STIFT KURSVERKSAMHETEN VID STOCKHOLMS UNIVERSITET i Stockholms kommun"},
-  {"dno":"SI 2026:6426","date":"2026-06-03","subject":"Uppgift om Södermalmsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6425","date":"2026-06-03","subject":"Uppgift om Milnerskolan MH med huvudmannen KRISTIANSTADS KOMMUN i Kristianstads kommun"},
-  {"dno":"SI 2026:6424","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Munktellskolan 7-9 i Eskilstuna kommun för Offentlig huvudman ESKILSTUNA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6423","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Rikstens skola i Botkyrka kommun för Offentlig huvudman BOTKYRKA KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6422","date":"2026-06-03","subject":"Uppgift om Tyresö gymnasium med huvudmannen TYRESÖ KOMMUN i Tyresö kommun"},
-  {"dno":"SI 2026:6421","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Dalsjöskolan 7-9 i Borås kommun för Offentlig huvudman BORÅS KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6420","date":"2026-06-03","subject":"Tematisk kvalitetsgranskning, Grundskolors arbete med att främja ett positivt skolklimat , av Da Vinciskolan 1 i Ale kommun för Offentlig huvudman ALE KOMMUN, läsåret 2026/2027"},
-  {"dno":"SI 2026:6419","date":"2026-06-03","subject":"Uppgift om Sågmyraskolan med huvudmannen FALU KOMMUN i Falu kommun"},
-  {"dno":"SI 2026:6418","date":"2026-06-03","subject":"Uppgift om Britsarvsskolan med huvudmannen FALU KOMMUN i Falu kommun"},
-  {"dno":"SI 2026:6417","date":"2026-06-03","subject":"Uppgift om Duveds skola F-9 med huvudmannen ÅRE KOMMUN i Åre kommun"},
-  {"dno":"SI 2026:6416","date":"2026-06-03","subject":"Uppgift om Högstadium Centrum med huvudmannen FALKÖPINGS KOMMUN i Falköpings kommun"},
-  {"dno":"SI 2026:6415","date":"2026-06-03","subject":"Uppgift om Vega förskola med huvudmannen HANINGE KOMMUN i Haninge kommun"},
-  {"dno":"SI 2026:6414","date":"2026-06-03","subject":"Uppgift om Stagneliusskolan med huvudmannen KALMARSUNDS GYMNASIEFÖRBUND i Kalmar kommun"},
-  {"dno":"SI 2026:6413","date":"2026-06-03","subject":"Uppgift om Tunboskolan med huvudmannen HALLSTAHAMMARS KOMMUN i Hallstahammars kommun"},
-  {"dno":"SI 2026:6412","date":"2026-06-03","subject":"Uppgift om Mariebergsskolan 7-9 med huvudmannen MOTALA KOMMUN i Motala kommun"},
-  {"dno":"SI 2026:6411","date":"2026-06-03","subject":"Uppgift om Centralskolan med huvudmannen TIERPS KOMMUN i Tierps kommun"},
-  {"dno":"SI 2026:6410","date":"2026-06-03","subject":"Uppgift om Flobyskolan med huvudmannen FALKÖPINGS KOMMUN i Falköpings kommun"},
-  {"dno":"SI 2026:6409","date":"2026-06-03","subject":"Hantera överklaganden av tillståndbeslut från KNIVSTA PASTORAT"},
-  {"dno":"SI 2026:6408","date":"2026-06-03","subject":"Uppgift om Kärraskolan F-9 med huvudmannen GÖTEBORGS KOMMUN i Göteborgs kommun"},
-  {"dno":"SI 2026:6407","date":"2026-06-03","subject":"Uppgift om Azbuka Lyceum Grundskola med huvudmannen Azbuka Lyceum AB i Göteborgs kommun"},
-  {"dno":"SI 2026:6406","date":"2026-06-03","subject":"Uppgift om Gröndalsskolan F-9 med huvudmannen NYNÄSHAMNS KOMMUN i Nynäshamns kommun"},
-  {"dno":"SI 2026:6405","date":"2026-06-03","subject":"Uppgift om Konradsbergsskolan med huvudmannen STOCKHOLMS KOMMUN i Stockholms kommun"},
-  {"dno":"SI 2026:6404","date":"2026-06-03","subject":"Uppgift om Eddaskolan med huvudmannen SIGTUNA KOMMUN i Sigtuna kommun"},
-  {"dno":"SI 2026:6403","date":"2026-06-03","subject":"Uppgift om Ronnaskolan med huvudmannen SÖDERTÄLJE KOMMUN i Södertälje kommun"},
-  {"dno":"SI 2026:6402","date":"2026-06-03","subject":"Uppgift om Järvenskolan med huvudmannen ARVIKA KOMMUN i Arvika kommun"},
-  {"dno":"SI 2026:6401","date":"2026-06-03","subject":"Uppgift om Paulinska skolan med huvudmannen STRÄNGNÄS KOMMUN i Strängnäs kommun"},
-  {"dno":"SI 2026:6400","date":"2026-06-03","subject":"Uppgift om Hedensskolan med huvudmannen BODENS KOMMUN i Bodens kommun"},
-  {"dno":"SI 2026:6399","date":"2026-06-03","subject":"Riktad tillsyn, Skolenhetsnivå, gymnasieskola (inkl. HM) av Torsbergsgymnasiet RO5 för Offentlig huvudman Hälsinglands Utbildningsförbund i Bollnäs kommun, läsåret 2026/2027"}\n];
+const PAGE_SIZE = 50;
+let allData = [], filtered = [], sortCol = 'date', sortAsc = false, currentPage = 1;
 
-let sortCol = 1, sortAsc = false, filtered = [];
+document.getElementById('fetchDate').textContent = new Date().toLocaleDateString('sv-SE');
 
-function init() {
-  document.getElementById('fetchDate').textContent = new Date().toLocaleDateString('sv-SE');
-  const years = [...new Set(DATA.map(r => r.date.substring(0,4)))].sort().reverse();
-  const sel = document.getElementById('yearFilter');
-  years.forEach(y => { const o = document.createElement('option'); o.value = y; o.textContent = y; sel.appendChild(o); });
-  filterTable();
+async function loadData() {
+  try {
+    const r = await fetch('data.json');
+    allData = await r.json();
+    document.getElementById('loadingMsg').style.display = 'none';
+    buildDropdowns();
+    onFilter();
+  } catch(e) {
+    document.getElementById('loadingMsg').innerHTML = '⚠ Kunde inte ladda data.json';
+  }
 }
 
-function filterTable() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const yr = document.getElementById('yearFilter').value;
-  filtered = DATA.filter(r =>
-    (!q || r.dno.toLowerCase().includes(q) || r.date.includes(q) || r.subject.toLowerCase().includes(q)) &&
-    (!yr || r.date.startsWith(yr))
-  );
-  sortAndRender();
+function buildDropdowns() {
+  const typs   = [...new Set(allData.map(r => r.typ).filter(Boolean))].sort();
+  const komms  = [...new Set(allData.map(r => r.kommun).filter(Boolean))].sort();
+  const years  = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
+
+  fill('f-typ',  typs);
+  fill('f-kom',  komms);
+  fill('f-year', years);
 }
 
-function sortTable(col) {
-  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
-  ['arr0','arr1','arr2'].forEach((id,i) => document.getElementById(id).textContent = i===col ? (sortAsc?'↑':'↓') : '↕');
-  sortAndRender();
-}
-
-function sortAndRender() {
-  const keys = ['dno','date','subject'];
-  const k = keys[sortCol];
-  filtered.sort((a,b) => {
-    const r = a[k].localeCompare(b[k], 'sv');
-    return sortAsc ? r : -r;
+function fill(id, vals) {
+  const sel = document.getElementById(id);
+  vals.forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
   });
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = filtered.map(r =>
-    `<tr><td class="dno">${esc(r.dno)}</td><td class="date">${esc(r.date)}</td><td class="subject">${esc(r.subject)}</td></tr>`
-  ).join('');
-  document.getElementById('stats').textContent = `Visar ${filtered.length} av ${DATA.length} ärenden`;
-  document.getElementById('noResults').style.display = filtered.length ? 'none' : 'block';
 }
 
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function onFilter() {
+  const q    = document.getElementById('f-search').value.toLowerCase().trim();
+  const typ  = document.getElementById('f-typ').value;
+  const kom  = document.getElementById('f-kom').value;
+  const year = document.getElementById('f-year').value;
 
-init();
+  filtered = allData.filter(r => {
+    if (typ  && r.typ    !== typ)                   return false;
+    if (kom  && r.kommun !== kom)                   return false;
+    if (year && !r.date.startsWith(year))           return false;
+    if (q) {
+      const hay = (r.dno + r.date + r.subject + r.typ + r.kommun).toLowerCase();
+      if (!q.split(' ').every(w => hay.includes(w))) return false;
+    }
+    return true;
+  });
+
+  sortData();
+  currentPage = 1;
+  render();
+}
+
+function doSort(col) {
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  const thMap = {dno:'th-dno', date:'th-date', typ:'th-typ', kommun:'th-kom', subject:'th-sub'};
+  const th = document.getElementById(thMap[col]);
+  if (th) {
+    th.classList.add('sorted');
+    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
+  }
+  sortData();
+  currentPage = 1;
+  render();
+}
+
+function sortData() {
+  filtered.sort((a, b) => {
+    const av = (a[sortCol] || '').toLowerCase();
+    const bv = (b[sortCol] || '').toLowerCase();
+    return sortAsc ? av.localeCompare(bv, 'sv') : bv.localeCompare(av, 'sv');
+  });
+}
+
+function render() {
+  const total = filtered.length;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = filtered.slice(start, start + PAGE_SIZE);
+  const tbody = document.getElementById('tbody');
+
+  document.getElementById('statsCount').innerHTML =
+    total > 0
+      ? `Visar <strong>${start+1}–${Math.min(start+PAGE_SIZE, total)}</strong> av <strong>${total.toLocaleString('sv')}</strong> ärenden (totalt <strong>${allData.length.toLocaleString('sv')}</strong>)`
+      : '';
+
+  document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
+  tbody.innerHTML = '';
+
+  if (total === 0) { renderPagination(0); return; }
+
+  tbody.innerHTML = page.map(r => `
+    <tr>
+      <td class="td-dno">${esc(r.dno)}</td>
+      <td class="td-date">${esc(r.date)}</td>
+      <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.typ)}</span></td>
+      <td class="td-kom">${esc(r.kommun)}</td>
+      <td class="td-subj">${esc(r.subject)}</td>
+    </tr>`).join('');
+
+  renderPagination(total);
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total / PAGE_SIZE);
+  const p = document.getElementById('pagination');
+  if (pages <= 1) { p.innerHTML = ''; return; }
+
+  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ Föregående</button>`;
+
+  const show = pageRange(currentPage, pages);
+  let prev = null;
+  show.forEach(pg => {
+    if (prev !== null && pg - prev > 1) html += `<span style="padding:0 4px;color:#999">…</span>`;
+    html += `<button class="page-btn ${pg===currentPage?'active':''}" onclick="goPage(${pg})">${pg}</button>`;
+    prev = pg;
+  });
+
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}>Nästa ›</button>`;
+  p.innerHTML = html;
+}
+
+function pageRange(cur, tot) {
+  const set = new Set([1, tot, cur-1, cur, cur+1, cur-2, cur+2].filter(p => p >= 1 && p <= tot));
+  return [...set].sort((a,b) => a-b);
+}
+
+function goPage(p) {
+  currentPage = p;
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function resetFilters() {
+  ['f-search','f-typ','f-kom','f-year'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = el.tagName === 'INPUT' ? '' : '';
+  });
+  onFilter();
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadData();
 </script>
 </body>
 </html>
