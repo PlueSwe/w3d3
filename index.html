@@ -290,11 +290,46 @@ const MONTH_NAMES = ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt'
 })();
 
 // ── Load data ──
+// ── Ärendetyp normalisering ──
+function normalizeTyp(raw) {
+  if (!raw) return 'Övrigt';
+  const t = raw.toLowerCase().trim();
+  // Makulerat / test / skräp
+  if (t.includes('makul') || t.startsWith('test') || t === '***' || t === '' || /^4\.\d/.test(t)) return 'Övrigt';
+  // Anmälan (före tillsyn — "anmälan mot lärare" ska inte bli Tillsyn)
+  if (t.includes('anmäl')) return 'Anmälan';
+  // Tillsyn (inkl. "utöva planerad tillsyn", "riktad tillsyn efter uppgift" osv)
+  if (t.includes('tillsyn')) return 'Tillsyn';
+  // Kvalitetsgranskning
+  if (t.includes('kvalitets') || t.includes('kvalitetsgranskning') || t.includes('granskning')) return 'Kvalitetsgranskning';
+  // Uppgift (efter tillsyn-check ovan)
+  if (t.includes('uppgift')) return 'Uppgift';
+  // Uppföljning
+  if (t.includes('uppföljning')) return 'Uppföljning';
+  // Ansökan
+  if (t.includes('ansökan') || t.includes('ansöka')) return 'Ansökan';
+  // Överklagande
+  if (t.includes('överklag') || t.includes('överklagan')) return 'Överklagande';
+  // Återkallande
+  if (t.includes('återkall')) return 'Återkallande';
+  // Etableringskontroll
+  if (t.includes('etablering')) return 'Etableringskontroll';
+  // Samlingsärende
+  if (t.includes('samlingsärende') || t.includes('samlingsdiarienummer')) return 'Samlingsärende';
+  // Begäran / Remiss
+  if (t.includes('begäran')) return 'Begäran';
+  if (t.startsWith('remiss')) return 'Remiss';
+  // Allt övrigt: upphandling, avtal, annons, beslut, delegation, brottmål, statistik, uppdrag…
+  return 'Övrigt';
+}
+
 async function loadData() {
   try {
     const r = await fetch('data.json');
     if (!r.ok) throw new Error('HTTP ' + r.status);
     allData = await r.json();
+    // Lägg till normaliserad ärendetyp på varje post
+    allData.forEach(row => { row.normTyp = normalizeTyp(row.typ); });
     document.getElementById('loadingMsg').style.display = 'none';
     document.getElementById('heroCount').textContent = allData.length.toLocaleString('sv');
     buildDropdowns();
@@ -317,7 +352,7 @@ function buildDropdowns() {
   const years = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
   fill('f-kom', komms); fill('f-year', years);
 
-  allData.forEach(r => { if (r.typ) allTypCounts[r.typ] = (allTypCounts[r.typ]||0)+1; });
+  allData.forEach(r => { allTypCounts[r.normTyp] = (allTypCounts[r.normTyp]||0)+1; });
   renderTypChips();
 }
 function fill(id, vals) {
@@ -388,9 +423,9 @@ function buildCharts() {
     (label) => setFilter('f-year', label)
   );
 
-  // Topp 10 ärendetyper — börjar med allData, uppdateras vid filter
+  // Ärendetyper (normaliserade) — börjar med allData, uppdateras vid filter
   const byTyp = {};
-  allData.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
+  allData.forEach(r => { byTyp[r.normTyp] = (byTyp[r.normTyp]||0)+1; });
   const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
   charts.typ = makeBar('chartTyp', topTyp.map(e=>e[0]), topTyp.map(e=>e[1]), PALETTE, true,
     (label) => setFilter('f-typ', label)
@@ -420,7 +455,7 @@ function updateCharts(data) {
 
   // ── Ärendetyper ──
   const byTyp = {};
-  data.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
+  data.forEach(r => { byTyp[r.normTyp] = (byTyp[r.normTyp]||0)+1; });
   const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
   charts.typ.data.labels = topTyp.map(e=>e[0]);
   charts.typ.data.datasets[0].data = topTyp.map(e=>e[1]);
@@ -566,7 +601,7 @@ function onFilter() {
   const mon  = document.getElementById('f-month').value;
 
   filtered = allData.filter(r => {
-    if (selectedTyps.size > 0 && !selectedTyps.has(r.typ))     return false;
+    if (selectedTyps.size > 0 && !selectedTyps.has(r.normTyp))  return false;
     if (kom  && r.kommun !== kom)                               return false;
     if (year && !r.date.startsWith(year))                      return false;
     if (mon  && r.date.substring(5,7) !== mon)                 return false;
