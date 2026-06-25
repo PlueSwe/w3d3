@@ -11,7 +11,6 @@
       --si-blue-mid:   #006b8a;
       --si-blue-light: #e0eef3;
       --si-yellow:     #fbba30;
-      --si-yellow-bg:  #fff8e6;
       --bg:            #f4f6f8;
       --white:         #ffffff;
       --text:          #1a1a1a;
@@ -24,53 +23,82 @@
 
     /* ── Header ── */
     .site-header { background: var(--si-blue); padding: 0 32px; display: flex; align-items: center; gap: 16px; height: 64px; }
-    .logo-box { width: 36px; height: 36px; background: var(--si-yellow); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 15px; color: var(--si-blue); letter-spacing: -1px; flex-shrink: 0; }
-    .logo-text strong { display: block; color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
+    .logo-box { width: 36px; height: 36px; background: var(--si-yellow); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 15px; color: var(--si-blue); flex-shrink: 0; }
+    .logo-text strong { color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: .02em; display: block; }
     .logo-text span   { color: rgba(255,255,255,.6); font-size: 0.72rem; text-transform: uppercase; letter-spacing: .08em; }
     .accent-bar { height: 4px; background: var(--si-yellow); }
 
-    /* ── Page title ── */
-    .page-band { background: var(--white); border-bottom: 1px solid var(--border); padding: 22px 32px; }
-    .page-band h1 { font-size: 1.55rem; color: var(--si-blue); font-weight: 700; }
-    .page-band p  { color: var(--text-soft); font-size: 0.87rem; margin-top: 4px; }
+    /* ── Hero search ── */
+    .hero {
+      background: var(--si-blue);
+      padding: 28px 32px 32px;
+      border-bottom: 4px solid var(--si-yellow);
+    }
+    .hero h1 { color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+    .hero p  { color: rgba(255,255,255,.65); font-size: 0.87rem; margin-bottom: 18px; }
+    .search-box {
+      display: flex; gap: 0; max-width: 680px;
+    }
+    .search-box input {
+      flex: 1; padding: 13px 18px; font-size: 1rem;
+      border: none; border-radius: 5px 0 0 5px;
+      outline: none; color: var(--text);
+    }
+    .search-box button {
+      padding: 13px 22px; background: var(--si-yellow); border: none;
+      border-radius: 0 5px 5px 0; font-size: 1rem; font-weight: 700;
+      color: var(--si-blue); cursor: pointer; transition: background .15s;
+      white-space: nowrap;
+    }
+    .search-box button:hover { background: #fac820; }
+    .active-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .filter-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.15); color: #fff;
+      padding: 4px 10px; border-radius: 20px; font-size: 0.82rem;
+      cursor: pointer; transition: background .15s;
+    }
+    .filter-chip:hover { background: rgba(255,255,255,.25); }
+    .filter-chip .x { font-size: 1rem; line-height: 1; opacity: .8; }
 
     /* ── Layout ── */
     .container { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
 
     /* ── Dashboard cards ── */
-    .dash-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-    .dash-card {
-      background: var(--white); border: 1px solid var(--border); border-radius: 6px;
-      padding: 18px 20px; display: flex; flex-direction: column; gap: 6px;
-    }
-    .dash-card .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); }
+    .dash-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .dash-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
+    .dash-card .label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); margin-bottom: 6px; }
     .dash-card .value { font-size: 2rem; font-weight: 800; color: var(--si-blue); line-height: 1; }
-    .dash-card .sub   { font-size: 0.82rem; color: var(--text-soft); }
+    .dash-card .sub   { font-size: 0.81rem; color: var(--text-soft); margin-top: 4px; }
     .dash-card.yellow { border-left: 4px solid var(--si-yellow); }
 
     /* ── Charts grid ── */
     .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
-    .chart-card  { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 20px; }
-    .chart-card h3 { font-size: 0.92rem; font-weight: 700; color: var(--si-blue); margin-bottom: 14px; }
-    .chart-wrap  { position: relative; height: 240px; }
+    .chart-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 20px; transition: border-color .2s; }
+    .chart-card:hover { border-color: var(--si-blue-mid); }
+    .chart-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--si-blue); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .chart-hint { font-size: 0.75rem; font-weight: 400; color: var(--text-soft); }
+    .chart-wrap { position: relative; height: 240px; cursor: pointer; }
 
-    /* ── Filter bar ── */
-    .filter-bar {
+    /* ── Filters strip ── */
+    .filter-strip {
       background: var(--white); border: 1px solid var(--border); border-radius: 6px;
-      padding: 16px 20px; margin-bottom: 16px;
-      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr auto; gap: 12px; align-items: end;
+      padding: 14px 18px; margin-bottom: 16px;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
     }
-    .fg label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--si-blue); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
-    .fg input, .fg select {
-      width: 100%; padding: 8px 11px; border: 1px solid var(--border); border-radius: 4px;
-      font-size: 0.9rem; background: var(--white); color: var(--text); transition: border-color .15s;
+    .fg { display: flex; flex-direction: column; gap: 4px; }
+    .fg label { font-size: 0.74rem; font-weight: 700; color: var(--si-blue); text-transform: uppercase; letter-spacing: .05em; }
+    .fg select {
+      padding: 7px 11px; border: 1px solid var(--border); border-radius: 4px;
+      font-size: 0.9rem; background: var(--white); color: var(--text);
+      transition: border-color .15s; min-width: 160px;
     }
-    .fg input:focus, .fg select:focus { outline: none; border-color: var(--si-blue); box-shadow: 0 0 0 2px rgba(0,75,98,.12); }
-    .btn-reset { padding: 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-size: 0.88rem; cursor: pointer; color: var(--text-soft); transition: all .15s; white-space: nowrap; }
+    .fg select:focus { outline: none; border-color: var(--si-blue); box-shadow: 0 0 0 2px rgba(0,75,98,.12); }
+    .btn-reset { padding: 7px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-size: 0.87rem; cursor: pointer; color: var(--text-soft); transition: all .15s; }
     .btn-reset:hover { background: var(--si-blue); color: #fff; border-color: var(--si-blue); }
 
-    /* ── Stats + loading ── */
-    .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px; }
+    /* ── Stats ── */
+    .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .stats-row .count { font-size: 0.87rem; color: var(--text-soft); }
     .stats-row .count strong { color: var(--si-blue); }
     .loading-msg { font-size: 0.87rem; color: var(--si-blue); display: flex; align-items: center; gap: 7px; }
@@ -81,9 +109,9 @@
     .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: var(--si-blue); }
-    th { padding: 11px 14px; text-align: left; font-size: 0.82rem; font-weight: 600; color: #fff; cursor: pointer; user-select: none; white-space: nowrap; }
+    th { padding: 11px 14px; text-align: left; font-size: 0.81rem; font-weight: 600; color: #fff; cursor: pointer; user-select: none; white-space: nowrap; }
     th:hover { background: var(--si-blue-mid); }
-    th .si { margin-left: 4px; opacity: .55; font-size: .75rem; }
+    th .si { margin-left: 4px; opacity: .5; font-size: .75rem; }
     th.sorted .si { opacity: 1; color: var(--si-yellow); }
     td { padding: 9px 14px; font-size: 0.87rem; border-bottom: 1px solid #edf1f4; vertical-align: top; }
     tbody tr:last-child td { border-bottom: none; }
@@ -107,17 +135,8 @@
     footer a { color: var(--si-yellow); text-decoration: none; }
 
     @media (max-width: 1000px) { .charts-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 900px)  {
-      .dash-cards { grid-template-columns: repeat(2,1fr); }
-      .filter-bar { grid-template-columns: 1fr 1fr; }
-      .site-header, .page-band { padding-left: 16px; padding-right: 16px; }
-      .container { padding: 16px; }
-    }
-    @media (max-width: 560px)  {
-      .dash-cards { grid-template-columns: 1fr 1fr; }
-      .filter-bar { grid-template-columns: 1fr; }
-      .td-typ, .td-kom { display: none; }
-    }
+    @media (max-width: 900px)  { .dash-cards { grid-template-columns: repeat(2,1fr); } .site-header, .hero, .container { padding-left: 16px; padding-right: 16px; } }
+    @media (max-width: 560px)  { .dash-cards { grid-template-columns: 1fr 1fr; } .td-typ, .td-kom { display: none; } }
   </style>
 </head>
 <body>
@@ -131,9 +150,15 @@
 </header>
 <div class="accent-bar"></div>
 
-<div class="page-band">
+<!-- Hero search -->
+<div class="hero">
   <h1>Ärendelista</h1>
-  <p>Ärenden hämtade från Skolinspektionens externa sökport &middot; Uppdaterad <span id="fetchDate"></span></p>
+  <p>Sök bland <span id="heroCount">80 796</span> ärenden (2019–2026) &middot; Uppdaterad <span id="fetchDate"></span></p>
+  <div class="search-box">
+    <input id="f-search" type="text" placeholder="Sök på ärendenummer, skola, ärendetyp, ort…" oninput="onFilter()">
+    <button onclick="onFilter()">🔍 Sök</button>
+  </div>
+  <div class="active-filters" id="activeFilters"></div>
 </div>
 
 <div class="container">
@@ -151,9 +176,9 @@
       <div class="sub" id="dc-year-sub">—</div>
     </div>
     <div class="dash-card">
-      <div class="label">Kommuner representerade</div>
+      <div class="label">Kommuner</div>
       <div class="value" id="dc-komm">—</div>
-      <div class="sub">unika kommuner</div>
+      <div class="sub">representerade kommuner</div>
     </div>
     <div class="dash-card">
       <div class="label">Senaste ärende</div>
@@ -162,33 +187,33 @@
     </div>
   </div>
 
-  <!-- Charts -->
+  <!-- Charts — klickbara för filtrering -->
   <div class="charts-grid">
     <div class="chart-card">
-      <h3>Ärenden per år</h3>
+      <h3>Ärenden per år <span class="chart-hint">Klicka för att filtrera</span></h3>
       <div class="chart-wrap"><canvas id="chartYear"></canvas></div>
     </div>
     <div class="chart-card">
-      <h3>Topp 10 ärendetyper</h3>
+      <h3>Topp 10 ärendetyper <span class="chart-hint">Klicka för att filtrera</span></h3>
       <div class="chart-wrap"><canvas id="chartTyp"></canvas></div>
     </div>
     <div class="chart-card">
-      <h3>Topp 10 kommuner</h3>
+      <h3>Topp 10 kommuner <span class="chart-hint">Klicka för att filtrera</span></h3>
       <div class="chart-wrap"><canvas id="chartKom"></canvas></div>
     </div>
     <div class="chart-card">
-      <h3>Ärenden per månad (senaste 24 mån)</h3>
+      <h3>Ärenden per månad (senaste 24 mån) <span class="chart-hint">Klicka för att filtrera</span></h3>
       <div class="chart-wrap"><canvas id="chartMonth"></canvas></div>
     </div>
   </div>
 
-  <!-- Filters -->
-  <div class="filter-bar">
-    <div class="fg"><label for="f-search">Fritextsök</label><input id="f-search" type="text" placeholder="Ärendenummer, skola, ort…" oninput="onFilter()"></div>
+  <!-- Filter strip (dropdowns) -->
+  <div class="filter-strip">
     <div class="fg"><label for="f-typ">Ärendetyp</label><select id="f-typ" onchange="onFilter()"><option value="">Alla typer</option></select></div>
     <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
     <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
-    <button class="btn-reset" onclick="resetFilters()">Rensa</button>
+    <div class="fg"><label for="f-month">Månad</label><select id="f-month" onchange="onFilter()"><option value="">Alla månader</option></select></div>
+    <button class="btn-reset" onclick="resetFilters()">✕ Rensa alla filter</button>
   </div>
 
   <div class="stats-row">
@@ -196,14 +221,14 @@
     <div class="loading-msg" id="loadingMsg"><div class="spinner"></div> Laddar ärenden…</div>
   </div>
 
-  <div class="table-wrap">
+  <div class="table-wrap" id="tableSection">
     <table>
       <thead><tr>
-        <th onclick="doSort('dno')"    id="th-dno">Ärendenummer <span class="si">↕</span></th>
-        <th onclick="doSort('date')"   id="th-date" class="sorted">Datum <span class="si">↓</span></th>
-        <th onclick="doSort('typ')"    id="th-typ">Ärendetyp <span class="si">↕</span></th>
-        <th onclick="doSort('kommun')" id="th-kom">Kommun <span class="si">↕</span></th>
-        <th onclick="doSort('subject')"id="th-sub">Ärendemening <span class="si">↕</span></th>
+        <th onclick="doSort('dno')"     id="th-dno">Ärendenummer <span class="si">↕</span></th>
+        <th onclick="doSort('date')"    id="th-date" class="sorted">Datum <span class="si">↓</span></th>
+        <th onclick="doSort('typ')"     id="th-typ">Ärendetyp <span class="si">↕</span></th>
+        <th onclick="doSort('kommun')"  id="th-kom">Kommun <span class="si">↕</span></th>
+        <th onclick="doSort('subject')" id="th-sub">Ärendemening <span class="si">↕</span></th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -220,23 +245,37 @@
 <script>
 const PAGE_SIZE = 50;
 let allData = [], filtered = [], sortCol = 'date', sortAsc = false, currentPage = 1;
-const BLUE = '#004b62', YELLOW = '#fbba30', LIGHT = '#e0eef3';
-const PALETTE = ['#004b62','#006b8a','#0090b5','#fbba30','#e8a020','#00b5a0','#7fc4d5','#d4e9f0','#f5c96a','#b3d9e5'];
+const BLUE = '#004b62', YELLOW = '#fbba30', BLUE_MID = '#006b8a', BLUE_LIGHT = '#e0eef3';
+const PALETTE = ['#004b62','#006b8a','#0090b5','#00afd0','#5bc4d8','#fbba30','#e8a020','#fcd26a','#b3d9e5','#d4eef5'];
 
 document.getElementById('fetchDate').textContent = new Date().toLocaleDateString('sv-SE');
 
+// ── Months dropdown ──
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+(function() {
+  const sel = document.getElementById('f-month');
+  MONTH_NAMES.forEach((n,i) => {
+    const o = document.createElement('option');
+    o.value = String(i+1).padStart(2,'0');
+    o.textContent = n;
+    sel.appendChild(o);
+  });
+})();
+
+// ── Load data ──
 async function loadData() {
   try {
     const r = await fetch('data.json');
     if (!r.ok) throw new Error('HTTP ' + r.status);
     allData = await r.json();
     document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('heroCount').textContent = allData.length.toLocaleString('sv');
     buildDropdowns();
     buildDashboard();
     buildCharts();
     onFilter();
   } catch(e) {
-    document.getElementById('loadingMsg').innerHTML = '&#9888; Kunde inte ladda data: ' + e.message;
+    document.getElementById('loadingMsg').innerHTML = '⚠ Kunde inte ladda data: ' + e.message;
   }
 }
 
@@ -255,92 +294,170 @@ function buildDashboard() {
   const curYear = new Date().getFullYear().toString();
   const thisYear = allData.filter(r => r.date.startsWith(curYear));
   const komms = new Set(allData.map(r => r.kommun).filter(Boolean));
-  const sorted = [...allData].sort((a,b) => b.date.localeCompare(a.date));
+  const latest = [...allData].sort((a,b) => b.date.localeCompare(a.date))[0];
   document.getElementById('dc-total').textContent     = allData.length.toLocaleString('sv');
   document.getElementById('dc-year').textContent      = thisYear.length.toLocaleString('sv');
   document.getElementById('dc-year-sub').textContent  = 'registrerade ' + curYear;
   document.getElementById('dc-komm').textContent      = komms.size.toLocaleString('sv');
-  document.getElementById('dc-latest').textContent    = sorted[0]?.dno || '—';
-  document.getElementById('dc-latest-date').textContent = sorted[0]?.date || '';
+  document.getElementById('dc-latest').textContent    = latest?.dno || '—';
+  document.getElementById('dc-latest-date').textContent = latest?.date || '';
 }
 
+// ── Charts with click handlers ──
+const charts = {};
+
 function buildCharts() {
-  // ── Per år ──
+  // Per år
   const byYear = {};
   allData.forEach(r => { const y = r.date.substring(0,4); byYear[y] = (byYear[y]||0)+1; });
   const years = Object.keys(byYear).sort();
-  makeBar('chartYear', years, years.map(y => byYear[y]),
-    years.map((_,i) => i === years.length-1 ? YELLOW : BLUE));
+  charts.year = makeBar('chartYear', years, years.map(y=>byYear[y]),
+    years.map(y => y === new Date().getFullYear().toString() ? YELLOW : BLUE),
+    false,
+    (label) => setFilter('f-year', label)
+  );
 
-  // ── Topp 10 ärendetyper ──
+  // Topp 10 ärendetyper
   const byTyp = {};
   allData.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
   const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  makeBar('chartTyp', topTyp.map(e=>e[0]), topTyp.map(e=>e[1]), PALETTE, true);
+  charts.typ = makeBar('chartTyp', topTyp.map(e=>e[0]), topTyp.map(e=>e[1]), PALETTE, true,
+    (label) => setFilter('f-typ', label)
+  );
 
-  // ── Topp 10 kommuner ──
+  // Topp 10 kommuner
   const byKom = {};
   allData.forEach(r => { if (r.kommun) byKom[r.kommun] = (byKom[r.kommun]||0)+1; });
   const topKom = Object.entries(byKom).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  makeBar('chartKom', topKom.map(e=>e[0]), topKom.map(e=>e[1]), PALETTE, true);
+  charts.kom = makeBar('chartKom', topKom.map(e=>e[0]), topKom.map(e=>e[1]), PALETTE, true,
+    (label) => setFilter('f-kom', label)
+  );
 
-  // ── Senaste 24 månader ──
+  // Senaste 24 månader
   const now = new Date(), months = [];
   for (let i = 23; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
     months.push(d.toISOString().substring(0,7));
   }
   const byMonth = {};
-  allData.forEach(r => { const m = r.date.substring(0,7); if (byMonth[m]!==undefined || months.includes(m)) byMonth[m] = (byMonth[m]||0)+1; });
-  makeLine('chartMonth', months.map(m => m.substring(5)+'/'+m.substring(2,4)), months.map(m => byMonth[m]||0));
+  allData.forEach(r => { const m = r.date.substring(0,7); byMonth[m] = (byMonth[m]||0)+1; });
+  charts.month = makeLine('chartMonth',
+    months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + ' ' + m.substring(2,4)),
+    months.map(m => byMonth[m]||0),
+    (idx) => {
+      const m = months[idx];
+      if (!m) return;
+      setFilter('f-year', m.substring(0,4));
+      setFilter('f-month', m.substring(5,7));
+    }
+  );
 }
 
-function makeBar(id, labels, data, colors, horizontal) {
-  new Chart(document.getElementById(id), {
+function makeBar(id, labels, data, colors, horizontal, onClickCb) {
+  const canvas = document.getElementById(id);
+  const bgColors = labels.map((_, i) => Array.isArray(colors) ? colors[i % colors.length] : colors);
+  const chart = new Chart(canvas, {
     type: 'bar',
-    data: { labels, datasets: [{ data, backgroundColor: Array.isArray(colors) ? colors : data.map(()=>colors), borderRadius: 3, borderSkipped: false }] },
+    data: { labels, datasets: [{ data, backgroundColor: bgColors, hoverBackgroundColor: YELLOW, borderRadius: 3, borderSkipped: false }] },
     options: {
       indexAxis: horizontal ? 'y' : 'x',
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ' ' + ctx.parsed[horizontal?'x':'y'].toLocaleString('sv') + ' ärenden'
+      }}},
       scales: {
         x: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } },
-        y: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } }
-      }
+        y: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 }, callback: v => horizontal && typeof v === 'string' && v.length > 22 ? v.substring(0,20)+'…' : v } }
+      },
+      onClick(e) {
+        const pts = chart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
+        if (pts.length) onClickCb(labels[pts[0].index]);
+      },
+      onHover(e) { canvas.style.cursor = chart.getElementsAtEventForMode(e,'nearest',{intersect:true},true).length ? 'pointer' : 'default'; }
     }
   });
+  return chart;
 }
-function makeLine(id, labels, data) {
-  new Chart(document.getElementById(id), {
+
+function makeLine(id, labels, data, onClickCb) {
+  const canvas = document.getElementById(id);
+  const chart = new Chart(canvas, {
     type: 'line',
-    data: { labels, datasets: [{ data, borderColor: BLUE, backgroundColor: 'rgba(0,75,98,.08)', fill: true, tension: .35, pointRadius: 2, pointHoverRadius: 5 }] },
+    data: { labels, datasets: [{ data, borderColor: BLUE, backgroundColor: 'rgba(0,75,98,.08)', fill: true, tension: .35, pointRadius: 3, pointHoverRadius: 7, pointHoverBackgroundColor: YELLOW, pointHoverBorderColor: BLUE }] },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ' ' + ctx.parsed.y.toLocaleString('sv') + ' ärenden'
+      }}},
       scales: {
         x: { grid: { color: '#edf1f4' }, ticks: { font: { size: 10 }, maxRotation: 45 } },
         y: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } }
-      }
+      },
+      onClick(e) {
+        const pts = chart.getElementsAtEventForMode(e, 'nearest', { intersect: false }, true);
+        if (pts.length) onClickCb(pts[0].index);
+      },
+      onHover(e) { canvas.style.cursor = chart.getElementsAtEventForMode(e,'nearest',{intersect:false},true).length ? 'pointer' : 'default'; }
     }
   });
+  return chart;
 }
 
+// ── Set filter from chart click ──
+function setFilter(id, value) {
+  const sel = document.getElementById(id);
+  // Toggle: klick på redan valt värde rensar filtret
+  if (sel.value === value) { sel.value = ''; }
+  else { sel.value = value; }
+  onFilter();
+  document.getElementById('tableSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Active filter chips ──
+function renderChips() {
+  const container = document.getElementById('activeFilters');
+  const chips = [];
+  const q = document.getElementById('f-search').value.trim();
+  if (q) chips.push({ label: '🔍 ' + q, clear: () => { document.getElementById('f-search').value = ''; onFilter(); } });
+  const fields = [
+    { id: 'f-typ',   label: t => '📋 ' + t },
+    { id: 'f-kom',   label: t => '📍 ' + t },
+    { id: 'f-year',  label: t => '📅 ' + t },
+    { id: 'f-month', label: t => '📅 ' + MONTH_NAMES[parseInt(t)-1] },
+  ];
+  fields.forEach(f => {
+    const v = document.getElementById(f.id).value;
+    if (v) chips.push({ label: f.label(v), clear: () => { document.getElementById(f.id).value = ''; onFilter(); } });
+  });
+  container.innerHTML = chips.map((c,i) =>
+    `<span class="filter-chip" onclick="clearChip(${i})"><span>${esc(c.label)}</span><span class="x">×</span></span>`
+  ).join('');
+  // Store clear functions
+  container._chips = chips;
+}
+function clearChip(i) { document.getElementById('activeFilters')._chips[i].clear(); }
+
+// ── Filter logic ──
 function onFilter() {
   const q    = document.getElementById('f-search').value.toLowerCase().trim();
   const typ  = document.getElementById('f-typ').value;
   const kom  = document.getElementById('f-kom').value;
   const year = document.getElementById('f-year').value;
+  const mon  = document.getElementById('f-month').value;
+
   filtered = allData.filter(r => {
-    if (typ  && r.typ    !== typ)          return false;
-    if (kom  && r.kommun !== kom)          return false;
-    if (year && !r.date.startsWith(year)) return false;
-    if (q) {
-      const hay = (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase();
-      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
-    }
+    if (typ  && r.typ    !== typ)                              return false;
+    if (kom  && r.kommun !== kom)                              return false;
+    if (year && !r.date.startsWith(year))                     return false;
+    if (mon  && r.date.substring(5,7) !== mon)                return false;
+    if (q && !q.split(/\s+/).every(w =>
+      (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase().includes(w))) return false;
     return true;
   });
-  sortData(); currentPage = 1; render();
+
+  sortData(); currentPage = 1;
+  renderChips();
+  render();
 }
 
 function doSort(col) {
@@ -351,7 +468,6 @@ function doSort(col) {
   th.classList.add('sorted'); th.querySelector('.si').textContent = sortAsc ? '↑' : '↓';
   sortData(); currentPage = 1; render();
 }
-
 function sortData() {
   filtered.sort((a,b) => {
     const av = (a[sortCol]||'').toLowerCase(), bv = (b[sortCol]||'').toLowerCase();
@@ -364,7 +480,7 @@ function render() {
   const page  = filtered.slice(start, start+PAGE_SIZE);
   document.getElementById('statsCount').innerHTML = total > 0
     ? `Visar <strong>${(start+1).toLocaleString('sv')}–${Math.min(start+PAGE_SIZE,total).toLocaleString('sv')}</strong> av <strong>${total.toLocaleString('sv')}</strong> ärenden`
-    : '';
+    : 'Inga träffar';
   document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
   document.getElementById('tbody').innerHTML = page.map(r => `
     <tr>
@@ -384,7 +500,7 @@ function renderPagination(total) {
   let html = `<button class="pbtn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
   let prev = null;
   range.forEach(pg => {
-    if (prev !== null && pg-prev > 1) html += `<span style="color:#aaa;padding:0 2px">…</span>`;
+    if (prev!==null && pg-prev>1) html += `<span style="color:#aaa;padding:0 3px">…</span>`;
     html += `<button class="pbtn${pg===currentPage?' active':''}" onclick="goPage(${pg})">${pg}</button>`;
     prev = pg;
   });
@@ -392,8 +508,14 @@ function renderPagination(total) {
   p.innerHTML = html;
 }
 
-function goPage(p) { currentPage=p; render(); scrollTo({top:0,behavior:'smooth'}); }
-function resetFilters() { ['f-search','f-typ','f-kom','f-year'].forEach(id => { const e=document.getElementById(id); e.value=''; }); onFilter(); }
+function goPage(p) { currentPage=p; render(); document.getElementById('tableSection').scrollIntoView({behavior:'smooth',block:'start'}); }
+
+function resetFilters() {
+  document.getElementById('f-search').value = '';
+  ['f-typ','f-kom','f-year','f-month'].forEach(id => document.getElementById(id).value = '');
+  onFilter();
+}
+
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 loadData();
