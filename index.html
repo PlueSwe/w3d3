@@ -4,243 +4,117 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skolinspektionen – Ärendelista</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --si-blue:   #004b62;
-      --si-yellow: #fbba30;
-      --si-blue-mid: #006080;
-      --si-blue-light: #e6f0f3;
-      --bg:        #f7f7f7;
-      --white:     #ffffff;
-      --text:      #1a1a1a;
-      --text-soft: #555555;
-      --border:    #d8dee3;
-      --row-hover: #eef5f8;
+      --si-blue:       #004b62;
+      --si-blue-mid:   #006b8a;
+      --si-blue-light: #e0eef3;
+      --si-yellow:     #fbba30;
+      --si-yellow-bg:  #fff8e6;
+      --bg:            #f4f6f8;
+      --white:         #ffffff;
+      --text:          #1a1a1a;
+      --text-soft:     #5a6570;
+      --border:        #d4dbe0;
+      --row-hover:     #eef4f7;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 15px;
-      line-height: 1.5;
-    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; }
 
     /* ── Header ── */
-    .site-header {
-      background: var(--si-blue);
-      padding: 0 32px;
-      display: flex;
-      align-items: stretch;
-      gap: 20px;
-    }
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 0;
-      text-decoration: none;
-    }
-    .logo-icon {
-      width: 40px; height: 40px;
-      background: var(--si-yellow);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 18px; color: var(--si-blue);
-      letter-spacing: -1px; flex-shrink: 0;
-    }
-    .logo-text { color: var(--white); }
-    .logo-text strong { display: block; font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; }
-    .logo-text span   { font-size: 0.78rem; opacity: .7; letter-spacing: .03em; text-transform: uppercase; }
-
-    /* ── Yellow accent bar ── */
+    .site-header { background: var(--si-blue); padding: 0 32px; display: flex; align-items: center; gap: 16px; height: 64px; }
+    .logo-box { width: 36px; height: 36px; background: var(--si-yellow); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 15px; color: var(--si-blue); letter-spacing: -1px; flex-shrink: 0; }
+    .logo-text strong { display: block; color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
+    .logo-text span   { color: rgba(255,255,255,.6); font-size: 0.72rem; text-transform: uppercase; letter-spacing: .08em; }
     .accent-bar { height: 4px; background: var(--si-yellow); }
 
-    /* ── Page title band ── */
-    .page-band {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 24px 32px 20px;
-    }
-    .page-band h1 { font-size: 1.6rem; color: var(--si-blue); font-weight: 700; }
-    .page-band p  { color: var(--text-soft); font-size: 0.88rem; margin-top: 4px; }
+    /* ── Page title ── */
+    .page-band { background: var(--white); border-bottom: 1px solid var(--border); padding: 22px 32px; }
+    .page-band h1 { font-size: 1.55rem; color: var(--si-blue); font-weight: 700; }
+    .page-band p  { color: var(--text-soft); font-size: 0.87rem; margin-top: 4px; }
 
-    /* ── Main layout ── */
-    .container { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+    /* ── Layout ── */
+    .container { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
+
+    /* ── Dashboard cards ── */
+    .dash-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .dash-card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 6px;
+      padding: 18px 20px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .dash-card .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); }
+    .dash-card .value { font-size: 2rem; font-weight: 800; color: var(--si-blue); line-height: 1; }
+    .dash-card .sub   { font-size: 0.82rem; color: var(--text-soft); }
+    .dash-card.yellow { border-left: 4px solid var(--si-yellow); }
+
+    /* ── Charts grid ── */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .chart-card  { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 20px; }
+    .chart-card h3 { font-size: 0.92rem; font-weight: 700; color: var(--si-blue); margin-bottom: 14px; }
+    .chart-wrap  { position: relative; height: 240px; }
 
     /* ── Filter bar ── */
     .filter-bar {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 18px 20px;
-      margin-bottom: 20px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr auto;
-      gap: 12px;
-      align-items: end;
+      background: var(--white); border: 1px solid var(--border); border-radius: 6px;
+      padding: 16px 20px; margin-bottom: 16px;
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr auto; gap: 12px; align-items: end;
     }
-    .filter-group { display: flex; flex-direction: column; gap: 5px; }
-    .filter-group label { font-size: 0.78rem; font-weight: 600; color: var(--si-blue); text-transform: uppercase; letter-spacing: .04em; }
-    .filter-group input,
-    .filter-group select {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.9rem;
-      background: var(--white);
-      color: var(--text);
-      width: 100%;
-      transition: border-color .15s;
+    .fg label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--si-blue); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
+    .fg input, .fg select {
+      width: 100%; padding: 8px 11px; border: 1px solid var(--border); border-radius: 4px;
+      font-size: 0.9rem; background: var(--white); color: var(--text); transition: border-color .15s;
     }
-    .filter-group input:focus,
-    .filter-group select:focus {
-      outline: none;
-      border-color: var(--si-blue);
-      box-shadow: 0 0 0 2px rgba(0,75,98,.12);
-    }
-    .btn-reset {
-      padding: 8px 16px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 0.88rem;
-      cursor: pointer;
-      color: var(--text-soft);
-      white-space: nowrap;
-      transition: background .15s, color .15s;
-    }
-    .btn-reset:hover { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); }
+    .fg input:focus, .fg select:focus { outline: none; border-color: var(--si-blue); box-shadow: 0 0 0 2px rgba(0,75,98,.12); }
+    .btn-reset { padding: 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-size: 0.88rem; cursor: pointer; color: var(--text-soft); transition: all .15s; white-space: nowrap; }
+    .btn-reset:hover { background: var(--si-blue); color: #fff; border-color: var(--si-blue); }
 
-    /* ── Stats row ── */
-    .stats-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding: 0 2px;
-    }
-    .stats-row .count { font-size: 0.88rem; color: var(--text-soft); }
+    /* ── Stats + loading ── */
+    .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px; }
+    .stats-row .count { font-size: 0.87rem; color: var(--text-soft); }
     .stats-row .count strong { color: var(--si-blue); }
-    .loading-msg { font-size: 0.88rem; color: var(--si-blue); display: flex; align-items: center; gap: 6px; }
-    .spinner {
-      width: 14px; height: 14px;
-      border: 2px solid var(--si-blue-light);
-      border-top-color: var(--si-blue);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
+    .loading-msg { font-size: 0.87rem; color: var(--si-blue); display: flex; align-items: center; gap: 7px; }
+    .spinner { width: 14px; height: 14px; border: 2px solid var(--si-blue-light); border-top-color: var(--si-blue); border-radius: 50%; animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── Table ── */
-    .table-wrap {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
+    .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: var(--si-blue); }
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--white);
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
+    th { padding: 11px 14px; text-align: left; font-size: 0.82rem; font-weight: 600; color: #fff; cursor: pointer; user-select: none; white-space: nowrap; }
     th:hover { background: var(--si-blue-mid); }
-    th .sort-icon { margin-left: 5px; opacity: .6; font-size: .75rem; }
-    th.sorted .sort-icon { opacity: 1; color: var(--si-yellow); }
-
-    td {
-      padding: 10px 16px;
-      font-size: 0.87rem;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
+    th .si { margin-left: 4px; opacity: .55; font-size: .75rem; }
+    th.sorted .si { opacity: 1; color: var(--si-yellow); }
+    td { padding: 9px 14px; font-size: 0.87rem; border-bottom: 1px solid #edf1f4; vertical-align: top; }
     tbody tr:last-child td { border-bottom: none; }
     tbody tr:hover { background: var(--row-hover); }
-
-    .td-dno {
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      color: var(--si-blue);
-      white-space: nowrap;
-      width: 130px;
-    }
-    .td-date { white-space: nowrap; color: var(--text-soft); width: 110px; }
-    .td-typ  { width: 200px; }
-    .td-kom  { width: 150px; color: var(--text-soft); }
-    .td-subj { line-height: 1.45; }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 3px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      background: var(--si-blue-light);
-      color: var(--si-blue);
-      white-space: nowrap;
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-soft);
-    }
-    .no-results svg { opacity: .3; margin-bottom: 12px; }
+    .td-dno  { font-family: 'Courier New', monospace; font-weight: 700; color: var(--si-blue); white-space: nowrap; width: 128px; }
+    .td-date { white-space: nowrap; color: var(--text-soft); width: 105px; }
+    .td-typ  { width: 185px; }
+    .td-kom  { width: 145px; color: var(--text-soft); font-size: 0.83rem; }
+    .badge   { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.77rem; font-weight: 600; background: var(--si-blue-light); color: var(--si-blue); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .no-results { text-align: center; padding: 56px 20px; color: var(--text-soft); }
 
     /* ── Pagination ── */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .page-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--white);
-      font-size: 0.85rem;
-      cursor: pointer;
-      color: var(--text);
-      transition: all .15s;
-    }
-    .page-btn:hover:not(:disabled) { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); }
-    .page-btn.active { background: var(--si-blue); color: var(--white); border-color: var(--si-blue); font-weight: 700; }
-    .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 20px; flex-wrap: wrap; }
+    .pbtn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); font-size: 0.85rem; cursor: pointer; color: var(--text); transition: all .15s; }
+    .pbtn:hover:not(:disabled) { background: var(--si-blue); color: #fff; border-color: var(--si-blue); }
+    .pbtn.active { background: var(--si-blue); color: #fff; border-color: var(--si-blue); font-weight: 700; }
+    .pbtn:disabled { opacity: .35; cursor: default; }
 
     /* ── Footer ── */
-    footer {
-      background: var(--si-blue);
-      color: rgba(255,255,255,.65);
-      text-align: center;
-      padding: 20px;
-      font-size: 0.82rem;
-      margin-top: 40px;
-    }
+    footer { background: var(--si-blue); color: rgba(255,255,255,.55); text-align: center; padding: 20px; font-size: 0.82rem; margin-top: 40px; }
     footer a { color: var(--si-yellow); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) { .charts-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px)  {
+      .dash-cards { grid-template-columns: repeat(2,1fr); }
       .filter-bar { grid-template-columns: 1fr 1fr; }
-      .site-header { padding: 0 16px; }
-      .page-band   { padding: 16px; }
-      .container   { padding: 16px; }
+      .site-header, .page-band { padding-left: 16px; padding-right: 16px; }
+      .container { padding: 16px; }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 560px)  {
+      .dash-cards { grid-template-columns: 1fr 1fr; }
       .filter-bar { grid-template-columns: 1fr; }
       .td-typ, .td-kom { display: none; }
     }
@@ -249,46 +123,72 @@
 <body>
 
 <header class="site-header">
-  <div class="logo-area">
-    <div class="logo-icon">SI</div>
-    <div class="logo-text">
-      <strong>Skolinspektionen</strong>
-      <span>Statens skolinspektion</span>
-    </div>
+  <div class="logo-box">SI</div>
+  <div class="logo-text">
+    <strong>Skolinspektionen</strong>
+    <span>Statens skolinspektion</span>
   </div>
 </header>
 <div class="accent-bar"></div>
 
 <div class="page-band">
   <h1>Ärendelista</h1>
-  <p>Ärenden hämtade från Skolinspektionens externa sökport · Uppdaterad <span id="fetchDate"></span></p>
+  <p>Ärenden hämtade från Skolinspektionens externa sökport &middot; Uppdaterad <span id="fetchDate"></span></p>
 </div>
 
 <div class="container">
+
+  <!-- Dashboard cards -->
+  <div class="dash-cards">
+    <div class="dash-card yellow">
+      <div class="label">Totalt antal ärenden</div>
+      <div class="value" id="dc-total">—</div>
+      <div class="sub">2019–2026</div>
+    </div>
+    <div class="dash-card">
+      <div class="label">Ärenden i år</div>
+      <div class="value" id="dc-year">—</div>
+      <div class="sub" id="dc-year-sub">—</div>
+    </div>
+    <div class="dash-card">
+      <div class="label">Kommuner representerade</div>
+      <div class="value" id="dc-komm">—</div>
+      <div class="sub">unika kommuner</div>
+    </div>
+    <div class="dash-card">
+      <div class="label">Senaste ärende</div>
+      <div class="value" id="dc-latest" style="font-size:1rem;padding-top:6px">—</div>
+      <div class="sub" id="dc-latest-date">—</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Ärenden per år</h3>
+      <div class="chart-wrap"><canvas id="chartYear"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Topp 10 ärendetyper</h3>
+      <div class="chart-wrap"><canvas id="chartTyp"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Topp 10 kommuner</h3>
+      <div class="chart-wrap"><canvas id="chartKom"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Ärenden per månad (senaste 24 mån)</h3>
+      <div class="chart-wrap"><canvas id="chartMonth"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Filters -->
   <div class="filter-bar">
-    <div class="filter-group">
-      <label for="f-search">Fritextsök</label>
-      <input id="f-search" type="text" placeholder="Ärendenummer, skola, ort…" oninput="onFilter()">
-    </div>
-    <div class="filter-group">
-      <label for="f-typ">Ärendetyp</label>
-      <select id="f-typ" onchange="onFilter()">
-        <option value="">Alla typer</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="f-kom">Kommun</label>
-      <select id="f-kom" onchange="onFilter()">
-        <option value="">Alla kommuner</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="f-year">År</label>
-      <select id="f-year" onchange="onFilter()">
-        <option value="">Alla år</option>
-      </select>
-    </div>
-    <button class="btn-reset" onclick="resetFilters()">Rensa filter</button>
+    <div class="fg"><label for="f-search">Fritextsök</label><input id="f-search" type="text" placeholder="Ärendenummer, skola, ort…" oninput="onFilter()"></div>
+    <div class="fg"><label for="f-typ">Ärendetyp</label><select id="f-typ" onchange="onFilter()"><option value="">Alla typer</option></select></div>
+    <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
+    <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
+    <button class="btn-reset" onclick="resetFilters()">Rensa</button>
   </div>
 
   <div class="stats-row">
@@ -298,64 +198,130 @@
 
   <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th onclick="doSort('dno')"   id="th-dno">Ärendenummer <span class="sort-icon">↕</span></th>
-          <th onclick="doSort('date')"  id="th-date" class="sorted">Datum <span class="sort-icon">↓</span></th>
-          <th onclick="doSort('typ')"   id="th-typ">Ärendetyp <span class="sort-icon">↕</span></th>
-          <th onclick="doSort('kommun')"id="th-kom">Kommun <span class="sort-icon">↕</span></th>
-          <th onclick="doSort('subject')"id="th-sub">Ärendemening <span class="sort-icon">↕</span></th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th onclick="doSort('dno')"    id="th-dno">Ärendenummer <span class="si">↕</span></th>
+        <th onclick="doSort('date')"   id="th-date" class="sorted">Datum <span class="si">↓</span></th>
+        <th onclick="doSort('typ')"    id="th-typ">Ärendetyp <span class="si">↕</span></th>
+        <th onclick="doSort('kommun')" id="th-kom">Kommun <span class="si">↕</span></th>
+        <th onclick="doSort('subject')"id="th-sub">Ärendemening <span class="si">↕</span></th>
+      </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
-    <div class="no-results" id="noResults" style="display:none">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <div>Inga ärenden matchar sökningen.</div>
-    </div>
+    <div class="no-results" id="noResults" style="display:none">Inga ärenden matchar sökningen.</div>
   </div>
 
   <div class="pagination" id="pagination"></div>
 </div>
 
 <footer>
-  Data hämtad från <a href="https://externsearchport.skolinspektionen.se/search.aspx?view=ac" target="_blank">externsearchport.skolinspektionen.se</a>
+  Data från <a href="https://externsearchport.skolinspektionen.se/search.aspx?view=ac" target="_blank">externsearchport.skolinspektionen.se</a>
 </footer>
 
 <script>
 const PAGE_SIZE = 50;
 let allData = [], filtered = [], sortCol = 'date', sortAsc = false, currentPage = 1;
+const BLUE = '#004b62', YELLOW = '#fbba30', LIGHT = '#e0eef3';
+const PALETTE = ['#004b62','#006b8a','#0090b5','#fbba30','#e8a020','#00b5a0','#7fc4d5','#d4e9f0','#f5c96a','#b3d9e5'];
 
 document.getElementById('fetchDate').textContent = new Date().toLocaleDateString('sv-SE');
 
 async function loadData() {
   try {
     const r = await fetch('data.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     allData = await r.json();
     document.getElementById('loadingMsg').style.display = 'none';
     buildDropdowns();
+    buildDashboard();
+    buildCharts();
     onFilter();
   } catch(e) {
-    document.getElementById('loadingMsg').innerHTML = '⚠ Kunde inte ladda data.json';
+    document.getElementById('loadingMsg').innerHTML = '&#9888; Kunde inte ladda data: ' + e.message;
   }
 }
 
 function buildDropdowns() {
-  const typs   = [...new Set(allData.map(r => r.typ).filter(Boolean))].sort();
-  const komms  = [...new Set(allData.map(r => r.kommun).filter(Boolean))].sort();
-  const years  = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
-
-  fill('f-typ',  typs);
-  fill('f-kom',  komms);
-  fill('f-year', years);
+  const typs  = [...new Set(allData.map(r => r.typ).filter(Boolean))].sort();
+  const komms = [...new Set(allData.map(r => r.kommun).filter(Boolean))].sort();
+  const years = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
+  fill('f-typ', typs); fill('f-kom', komms); fill('f-year', years);
 }
-
 function fill(id, vals) {
   const sel = document.getElementById(id);
-  vals.forEach(v => {
-    const o = document.createElement('option');
-    o.value = v; o.textContent = v;
-    sel.appendChild(o);
+  vals.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; sel.appendChild(o); });
+}
+
+function buildDashboard() {
+  const curYear = new Date().getFullYear().toString();
+  const thisYear = allData.filter(r => r.date.startsWith(curYear));
+  const komms = new Set(allData.map(r => r.kommun).filter(Boolean));
+  const sorted = [...allData].sort((a,b) => b.date.localeCompare(a.date));
+  document.getElementById('dc-total').textContent     = allData.length.toLocaleString('sv');
+  document.getElementById('dc-year').textContent      = thisYear.length.toLocaleString('sv');
+  document.getElementById('dc-year-sub').textContent  = 'registrerade ' + curYear;
+  document.getElementById('dc-komm').textContent      = komms.size.toLocaleString('sv');
+  document.getElementById('dc-latest').textContent    = sorted[0]?.dno || '—';
+  document.getElementById('dc-latest-date').textContent = sorted[0]?.date || '';
+}
+
+function buildCharts() {
+  // ── Per år ──
+  const byYear = {};
+  allData.forEach(r => { const y = r.date.substring(0,4); byYear[y] = (byYear[y]||0)+1; });
+  const years = Object.keys(byYear).sort();
+  makeBar('chartYear', years, years.map(y => byYear[y]),
+    years.map((_,i) => i === years.length-1 ? YELLOW : BLUE));
+
+  // ── Topp 10 ärendetyper ──
+  const byTyp = {};
+  allData.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
+  const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  makeBar('chartTyp', topTyp.map(e=>e[0]), topTyp.map(e=>e[1]), PALETTE, true);
+
+  // ── Topp 10 kommuner ──
+  const byKom = {};
+  allData.forEach(r => { if (r.kommun) byKom[r.kommun] = (byKom[r.kommun]||0)+1; });
+  const topKom = Object.entries(byKom).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  makeBar('chartKom', topKom.map(e=>e[0]), topKom.map(e=>e[1]), PALETTE, true);
+
+  // ── Senaste 24 månader ──
+  const now = new Date(), months = [];
+  for (let i = 23; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push(d.toISOString().substring(0,7));
+  }
+  const byMonth = {};
+  allData.forEach(r => { const m = r.date.substring(0,7); if (byMonth[m]!==undefined || months.includes(m)) byMonth[m] = (byMonth[m]||0)+1; });
+  makeLine('chartMonth', months.map(m => m.substring(5)+'/'+m.substring(2,4)), months.map(m => byMonth[m]||0));
+}
+
+function makeBar(id, labels, data, colors, horizontal) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: Array.isArray(colors) ? colors : data.map(()=>colors), borderRadius: 3, borderSkipped: false }] },
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } },
+        y: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+function makeLine(id, labels, data) {
+  new Chart(document.getElementById(id), {
+    type: 'line',
+    data: { labels, datasets: [{ data, borderColor: BLUE, backgroundColor: 'rgba(0,75,98,.08)', fill: true, tension: .35, pointRadius: 2, pointHoverRadius: 5 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#edf1f4' }, ticks: { font: { size: 10 }, maxRotation: 45 } },
+        y: { grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } }
+      }
+    }
   });
 }
 
@@ -364,114 +330,71 @@ function onFilter() {
   const typ  = document.getElementById('f-typ').value;
   const kom  = document.getElementById('f-kom').value;
   const year = document.getElementById('f-year').value;
-
   filtered = allData.filter(r => {
-    if (typ  && r.typ    !== typ)                   return false;
-    if (kom  && r.kommun !== kom)                   return false;
-    if (year && !r.date.startsWith(year))           return false;
+    if (typ  && r.typ    !== typ)          return false;
+    if (kom  && r.kommun !== kom)          return false;
+    if (year && !r.date.startsWith(year)) return false;
     if (q) {
-      const hay = (r.dno + r.date + r.subject + r.typ + r.kommun).toLowerCase();
-      if (!q.split(' ').every(w => hay.includes(w))) return false;
+      const hay = (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase();
+      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
     }
     return true;
   });
-
-  sortData();
-  currentPage = 1;
-  render();
+  sortData(); currentPage = 1; render();
 }
 
 function doSort(col) {
   if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
-  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
-  const thMap = {dno:'th-dno', date:'th-date', typ:'th-typ', kommun:'th-kom', subject:'th-sub'};
-  const th = document.getElementById(thMap[col]);
-  if (th) {
-    th.classList.add('sorted');
-    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
-  }
-  sortData();
-  currentPage = 1;
-  render();
+  document.querySelectorAll('th').forEach(t => { t.classList.remove('sorted'); t.querySelector('.si').textContent = '↕'; });
+  const thId = {dno:'th-dno',date:'th-date',typ:'th-typ',kommun:'th-kom',subject:'th-sub'}[col];
+  const th = document.getElementById(thId);
+  th.classList.add('sorted'); th.querySelector('.si').textContent = sortAsc ? '↑' : '↓';
+  sortData(); currentPage = 1; render();
 }
 
 function sortData() {
-  filtered.sort((a, b) => {
-    const av = (a[sortCol] || '').toLowerCase();
-    const bv = (b[sortCol] || '').toLowerCase();
-    return sortAsc ? av.localeCompare(bv, 'sv') : bv.localeCompare(av, 'sv');
+  filtered.sort((a,b) => {
+    const av = (a[sortCol]||'').toLowerCase(), bv = (b[sortCol]||'').toLowerCase();
+    return sortAsc ? av.localeCompare(bv,'sv') : bv.localeCompare(av,'sv');
   });
 }
 
 function render() {
-  const total = filtered.length;
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const page  = filtered.slice(start, start + PAGE_SIZE);
-  const tbody = document.getElementById('tbody');
-
-  document.getElementById('statsCount').innerHTML =
-    total > 0
-      ? `Visar <strong>${start+1}–${Math.min(start+PAGE_SIZE, total)}</strong> av <strong>${total.toLocaleString('sv')}</strong> ärenden (totalt <strong>${allData.length.toLocaleString('sv')}</strong>)`
-      : '';
-
+  const total = filtered.length, start = (currentPage-1)*PAGE_SIZE;
+  const page  = filtered.slice(start, start+PAGE_SIZE);
+  document.getElementById('statsCount').innerHTML = total > 0
+    ? `Visar <strong>${(start+1).toLocaleString('sv')}–${Math.min(start+PAGE_SIZE,total).toLocaleString('sv')}</strong> av <strong>${total.toLocaleString('sv')}</strong> ärenden`
+    : '';
   document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
-  tbody.innerHTML = '';
-
-  if (total === 0) { renderPagination(0); return; }
-
-  tbody.innerHTML = page.map(r => `
+  document.getElementById('tbody').innerHTML = page.map(r => `
     <tr>
       <td class="td-dno">${esc(r.dno)}</td>
       <td class="td-date">${esc(r.date)}</td>
       <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.typ)}</span></td>
       <td class="td-kom">${esc(r.kommun)}</td>
-      <td class="td-subj">${esc(r.subject)}</td>
+      <td>${esc(r.subject)}</td>
     </tr>`).join('');
-
   renderPagination(total);
 }
 
 function renderPagination(total) {
-  const pages = Math.ceil(total / PAGE_SIZE);
-  const p = document.getElementById('pagination');
+  const pages = Math.ceil(total/PAGE_SIZE), p = document.getElementById('pagination');
   if (pages <= 1) { p.innerHTML = ''; return; }
-
-  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ Föregående</button>`;
-
-  const show = pageRange(currentPage, pages);
+  const range = [...new Set([1,2,currentPage-1,currentPage,currentPage+1,pages-1,pages].filter(n=>n>=1&&n<=pages))].sort((a,b)=>a-b);
+  let html = `<button class="pbtn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
   let prev = null;
-  show.forEach(pg => {
-    if (prev !== null && pg - prev > 1) html += `<span style="padding:0 4px;color:#999">…</span>`;
-    html += `<button class="page-btn ${pg===currentPage?'active':''}" onclick="goPage(${pg})">${pg}</button>`;
+  range.forEach(pg => {
+    if (prev !== null && pg-prev > 1) html += `<span style="color:#aaa;padding:0 2px">…</span>`;
+    html += `<button class="pbtn${pg===currentPage?' active':''}" onclick="goPage(${pg})">${pg}</button>`;
     prev = pg;
   });
-
-  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}>Nästa ›</button>`;
+  html += `<button class="pbtn" onclick="goPage(${currentPage+1})" ${currentPage===pages?'disabled':''}>›</button>`;
   p.innerHTML = html;
 }
 
-function pageRange(cur, tot) {
-  const set = new Set([1, tot, cur-1, cur, cur+1, cur-2, cur+2].filter(p => p >= 1 && p <= tot));
-  return [...set].sort((a,b) => a-b);
-}
-
-function goPage(p) {
-  currentPage = p;
-  render();
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function resetFilters() {
-  ['f-search','f-typ','f-kom','f-year'].forEach(id => {
-    const el = document.getElementById(id);
-    el.value = el.tagName === 'INPUT' ? '' : '';
-  });
-  onFilter();
-}
-
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function goPage(p) { currentPage=p; render(); scrollTo({top:0,behavior:'smooth'}); }
+function resetFilters() { ['f-search','f-typ','f-kom','f-year'].forEach(id => { const e=document.getElementById(id); e.value=''; }); onFilter(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 loadData();
 </script>
