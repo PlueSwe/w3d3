@@ -307,17 +307,18 @@ function buildDashboard() {
 const charts = {};
 
 function buildCharts() {
-  // Per år
+  const curYear = new Date().getFullYear().toString();
+
+  // Per år — alltid baserat på allData (navigationsgraf)
   const byYear = {};
   allData.forEach(r => { const y = r.date.substring(0,4); byYear[y] = (byYear[y]||0)+1; });
   const years = Object.keys(byYear).sort();
   charts.year = makeBar('chartYear', years, years.map(y=>byYear[y]),
-    years.map(y => y === new Date().getFullYear().toString() ? YELLOW : BLUE),
-    false,
+    years.map(y => y === curYear ? YELLOW : BLUE), false,
     (label) => setFilter('f-year', label)
   );
 
-  // Topp 10 ärendetyper
+  // Topp 10 ärendetyper — börjar med allData, uppdateras vid filter
   const byTyp = {};
   allData.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
   const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
@@ -325,7 +326,7 @@ function buildCharts() {
     (label) => setFilter('f-typ', label)
   );
 
-  // Topp 10 kommuner
+  // Topp 10 kommuner — börjar med allData, uppdateras vid filter
   const byKom = {};
   allData.forEach(r => { if (r.kommun) byKom[r.kommun] = (byKom[r.kommun]||0)+1; });
   const topKom = Object.entries(byKom).sort((a,b)=>b[1]-a[1]).slice(0,10);
@@ -333,24 +334,65 @@ function buildCharts() {
     (label) => setFilter('f-kom', label)
   );
 
-  // Senaste 24 månader
-  const now = new Date(), months = [];
-  for (let i = 23; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    months.push(d.toISOString().substring(0,7));
+  // Månadsgraf — börjar med senaste 24 mån, uppdateras vid filter
+  charts.month = makeLine('chartMonth', [], [], (idx) => {
+    const m = charts.month._months?.[idx];
+    if (!m) return;
+    setFilter('f-year', m.substring(0,4));
+    setFilter('f-month', m.substring(5,7));
+  });
+
+  updateCharts(allData);
+}
+
+function updateCharts(data) {
+  const activeYear = document.getElementById('f-year').value;
+
+  // ── Ärendetyper ──
+  const byTyp = {};
+  data.forEach(r => { if (r.typ) byTyp[r.typ] = (byTyp[r.typ]||0)+1; });
+  const topTyp = Object.entries(byTyp).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  charts.typ.data.labels = topTyp.map(e=>e[0]);
+  charts.typ.data.datasets[0].data = topTyp.map(e=>e[1]);
+  charts.typ.data.datasets[0].backgroundColor = topTyp.map((_,i)=>PALETTE[i%PALETTE.length]);
+  charts.typ.update();
+
+  // ── Kommuner ──
+  const byKom = {};
+  data.forEach(r => { if (r.kommun) byKom[r.kommun] = (byKom[r.kommun]||0)+1; });
+  const topKom = Object.entries(byKom).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  charts.kom.data.labels = topKom.map(e=>e[0]);
+  charts.kom.data.datasets[0].data = topKom.map(e=>e[1]);
+  charts.kom.data.datasets[0].backgroundColor = topKom.map((_,i)=>PALETTE[i%PALETTE.length]);
+  charts.kom.update();
+
+  // ── Månadsgraf — visa månader för valt år, annars senaste 24 mån ──
+  let months = [];
+  if (activeYear) {
+    for (let m = 1; m <= 12; m++) {
+      months.push(activeYear + '-' + String(m).padStart(2,'0'));
+    }
+  } else {
+    const now = new Date();
+    for (let i = 23; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      months.push(d.toISOString().substring(0,7));
+    }
   }
   const byMonth = {};
-  allData.forEach(r => { const m = r.date.substring(0,7); byMonth[m] = (byMonth[m]||0)+1; });
-  charts.month = makeLine('chartMonth',
-    months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + ' ' + m.substring(2,4)),
-    months.map(m => byMonth[m]||0),
-    (idx) => {
-      const m = months[idx];
-      if (!m) return;
-      setFilter('f-year', m.substring(0,4));
-      setFilter('f-month', m.substring(5,7));
-    }
+  data.forEach(r => { const m = r.date.substring(0,7); byMonth[m] = (byMonth[m]||0)+1; });
+  charts.month._months = months;
+  charts.month.data.labels = months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' ' + m.substring(2,4)));
+  charts.month.data.datasets[0].data = months.map(m => byMonth[m]||0);
+  charts.month.update();
+
+  // ── Per år — uppdatera bara färgerna (markera aktivt år) ──
+  const selYear = document.getElementById('f-year').value;
+  const yLabels = charts.year.data.labels;
+  charts.year.data.datasets[0].backgroundColor = yLabels.map(y =>
+    selYear ? (y === selYear ? YELLOW : 'rgba(0,75,98,.3)') : (y === new Date().getFullYear().toString() ? YELLOW : BLUE)
   );
+  charts.year.update();
 }
 
 function makeBar(id, labels, data, colors, horizontal, onClickCb) {
@@ -457,6 +499,7 @@ function onFilter() {
 
   sortData(); currentPage = 1;
   renderChips();
+  updateCharts(filtered);
   render();
 }
 
