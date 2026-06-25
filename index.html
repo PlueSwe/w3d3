@@ -80,6 +80,24 @@
     .chart-hint { font-size: 0.75rem; font-weight: 400; color: var(--text-soft); }
     .chart-wrap { position: relative; height: 240px; cursor: pointer; }
 
+    /* ── Ärendetyp panel ── */
+    .typ-panel { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; margin-bottom: 12px; }
+    .typ-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; flex-wrap: wrap; }
+    .typ-panel-header h3 { font-size: 0.85rem; font-weight: 700; color: var(--si-blue); text-transform: uppercase; letter-spacing: .05em; }
+    .typ-search-wrap { position: relative; }
+    .typ-search { padding: 5px 10px 5px 28px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem; width: 200px; }
+    .typ-search:focus { outline: none; border-color: var(--si-blue); }
+    .typ-search-wrap::before { content: '🔍'; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; pointer-events: none; }
+    .typ-selected-info { font-size: 0.8rem; color: var(--text-soft); }
+    .typ-selected-info strong { color: var(--si-blue); }
+    .typ-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .typ-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all .15s; user-select: none; }
+    .typ-chip:hover { border-color: var(--si-blue); color: var(--si-blue); background: var(--si-blue-light); }
+    .typ-chip.active { background: var(--si-blue); color: #fff; border-color: var(--si-blue); }
+    .typ-chip .cnt { font-size: 0.73rem; font-weight: 700; padding: 1px 5px; border-radius: 10px; background: rgba(255,255,255,.25); color: inherit; }
+    .typ-chip:not(.active) .cnt { background: var(--border); color: var(--text-soft); }
+    .typ-show-more { font-size: 0.82rem; color: var(--si-blue); cursor: pointer; border: none; background: none; padding: 6px 0 0; text-decoration: underline; display: block; }
+
     /* ── Filters strip ── */
     .filter-strip {
       background: var(--white); border: 1px solid var(--border); border-radius: 6px;
@@ -207,9 +225,18 @@
     </div>
   </div>
 
+  <!-- Ärendetyp chip-panel -->
+  <div class="typ-panel">
+    <div class="typ-panel-header">
+      <h3>Ärendetyp <span class="typ-selected-info" id="typSelectedInfo"></span></h3>
+      <div class="typ-search-wrap"><input class="typ-search" id="typSearch" type="text" placeholder="Sök typ…" oninput="renderTypChips()"></div>
+    </div>
+    <div class="typ-chips" id="typChips"></div>
+    <button class="typ-show-more" id="typShowMore" onclick="toggleShowAllTyps()" style="display:none"></button>
+  </div>
+
   <!-- Filter strip (dropdowns) -->
   <div class="filter-strip">
-    <div class="fg"><label for="f-typ">Ärendetyp</label><select id="f-typ" onchange="onFilter()"><option value="">Alla typer</option></select></div>
     <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
     <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
     <div class="fg"><label for="f-month">Månad</label><select id="f-month" onchange="onFilter()"><option value="">Alla månader</option></select></div>
@@ -279,15 +306,58 @@ async function loadData() {
   }
 }
 
+// ── Ärendetyp multi-select state ──
+let selectedTyps = new Set();
+let allTypCounts = {};   // typ -> count (over allData)
+let showAllTyps  = false;
+const TYP_INITIAL = 20;
+
 function buildDropdowns() {
-  const typs  = [...new Set(allData.map(r => r.typ).filter(Boolean))].sort();
   const komms = [...new Set(allData.map(r => r.kommun).filter(Boolean))].sort();
   const years = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
-  fill('f-typ', typs); fill('f-kom', komms); fill('f-year', years);
+  fill('f-kom', komms); fill('f-year', years);
+
+  allData.forEach(r => { if (r.typ) allTypCounts[r.typ] = (allTypCounts[r.typ]||0)+1; });
+  renderTypChips();
 }
 function fill(id, vals) {
   const sel = document.getElementById(id);
   vals.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; sel.appendChild(o); });
+}
+
+function renderTypChips() {
+  const q = (document.getElementById('typSearch')?.value || '').toLowerCase().trim();
+  let entries = Object.entries(allTypCounts).sort((a,b) => b[1]-a[1]);
+  if (q) entries = entries.filter(([t]) => t.toLowerCase().includes(q));
+
+  const visible = (!q && !showAllTyps) ? entries.slice(0, TYP_INITIAL) : entries;
+  const hasMore  = !q && entries.length > TYP_INITIAL;
+
+  document.getElementById('typChips').innerHTML = visible.map(([typ, cnt]) => {
+    const active = selectedTyps.has(typ) ? ' active' : '';
+    return `<span class="typ-chip${active}" data-typ="${esc(typ)}" onclick="toggleTyp(this.dataset.typ)">${esc(typ)}<span class="cnt">${cnt.toLocaleString('sv')}</span></span>`;
+  }).join('');
+
+  const btn = document.getElementById('typShowMore');
+  if (hasMore) {
+    btn.style.display = 'block';
+    btn.textContent = showAllTyps ? `▲ Visa färre` : `▼ Visa alla ${entries.length} ärendetyper`;
+  } else { btn.style.display = 'none'; }
+
+  const info = document.getElementById('typSelectedInfo');
+  info.innerHTML = selectedTyps.size ? `— <strong>${selectedTyps.size}</strong> vald${selectedTyps.size>1?'a':''}` : '';
+}
+
+function toggleTyp(typ) {
+  if (selectedTyps.has(typ)) { selectedTyps.delete(typ); }
+  else { selectedTyps.add(typ); }
+  renderTypChips();
+  onFilter();
+}
+
+function toggleShowAllTyps() {
+  showAllTyps = !showAllTyps;
+  renderTypChips();
 }
 
 function buildDashboard() {
@@ -447,11 +517,18 @@ function makeLine(id, labels, data, onClickCb) {
 
 // ── Set filter from chart click ──
 function setFilter(id, value) {
-  const sel = document.getElementById(id);
-  // Toggle: klick på redan valt värde rensar filtret
-  if (sel.value === value) { sel.value = ''; }
-  else { sel.value = value; }
-  onFilter();
+  if (id === 'f-typ') {
+    // Multi-select via selectedTyps Set
+    if (selectedTyps.has(value)) { selectedTyps.delete(value); }
+    else { selectedTyps.add(value); }
+    renderTypChips();
+    onFilter();
+  } else {
+    const sel = document.getElementById(id);
+    if (sel.value === value) { sel.value = ''; }
+    else { sel.value = value; }
+    onFilter();
+  }
   document.getElementById('tableSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -461,8 +538,11 @@ function renderChips() {
   const chips = [];
   const q = document.getElementById('f-search').value.trim();
   if (q) chips.push({ label: '🔍 ' + q, clear: () => { document.getElementById('f-search').value = ''; onFilter(); } });
+  // Ärendetyp multi-select chips
+  selectedTyps.forEach(typ => {
+    chips.push({ label: '📋 ' + typ, clear: () => { selectedTyps.delete(typ); renderTypChips(); onFilter(); } });
+  });
   const fields = [
-    { id: 'f-typ',   label: t => '📋 ' + t },
     { id: 'f-kom',   label: t => '📍 ' + t },
     { id: 'f-year',  label: t => '📅 ' + t },
     { id: 'f-month', label: t => '📅 ' + MONTH_NAMES[parseInt(t)-1] },
@@ -474,7 +554,6 @@ function renderChips() {
   container.innerHTML = chips.map((c,i) =>
     `<span class="filter-chip" onclick="clearChip(${i})"><span>${esc(c.label)}</span><span class="x">×</span></span>`
   ).join('');
-  // Store clear functions
   container._chips = chips;
 }
 function clearChip(i) { document.getElementById('activeFilters')._chips[i].clear(); }
@@ -482,16 +561,15 @@ function clearChip(i) { document.getElementById('activeFilters')._chips[i].clear
 // ── Filter logic ──
 function onFilter() {
   const q    = document.getElementById('f-search').value.toLowerCase().trim();
-  const typ  = document.getElementById('f-typ').value;
   const kom  = document.getElementById('f-kom').value;
   const year = document.getElementById('f-year').value;
   const mon  = document.getElementById('f-month').value;
 
   filtered = allData.filter(r => {
-    if (typ  && r.typ    !== typ)                              return false;
-    if (kom  && r.kommun !== kom)                              return false;
-    if (year && !r.date.startsWith(year))                     return false;
-    if (mon  && r.date.substring(5,7) !== mon)                return false;
+    if (selectedTyps.size > 0 && !selectedTyps.has(r.typ))     return false;
+    if (kom  && r.kommun !== kom)                               return false;
+    if (year && !r.date.startsWith(year))                      return false;
+    if (mon  && r.date.substring(5,7) !== mon)                 return false;
     if (q && !q.split(/\s+/).every(w =>
       (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase().includes(w))) return false;
     return true;
@@ -555,7 +633,9 @@ function goPage(p) { currentPage=p; render(); document.getElementById('tableSect
 
 function resetFilters() {
   document.getElementById('f-search').value = '';
-  ['f-typ','f-kom','f-year','f-month'].forEach(id => document.getElementById(id).value = '');
+  ['f-kom','f-year','f-month'].forEach(id => document.getElementById(id).value = '');
+  selectedTyps.clear();
+  renderTypChips();
   onFilter();
 }
 
