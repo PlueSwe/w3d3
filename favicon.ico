@@ -1,0 +1,2196 @@
+
+
+<!doctype html>
+<html lang="sv" xml:lang="sv" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <script>
+            var _mtm = _mtm || [];
+            _mtm.push({ 'SIuser': 'false' });
+        </script>
+        <!-- Matomo Tag Manager -->
+        <script>
+            var _mtm = window._mtm = window._mtm || [];
+            _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start' });
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = 'https://analytics.skolinspektionen.se/js/container_3UhekoJe.js'; s.parentNode.insertBefore(g, s);
+        </script>
+        <!-- End Matomo Tag Manager -->
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Language" content="sv">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" name="title" content="404" />
+    <meta property="og:description" name="description" content="404" />
+    <meta property="og:site_name" content="Skolinspektionen" />
+    <meta property="og:url" content="https://www.skolinspektionen.se/404/" />
+    <meta property="og:image" name="image" content="https://www.skolinspektionen.se/globalassets/08-bilder/settings/skolinspektionen_rgb.svg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:title" content="404">
+    <meta name="twitter:description" content="404">
+    <meta name="twitter:image" content="https://www.skolinspektionen.se/globalassets/08-bilder/settings/skolinspektionen_rgb.svg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <title>404</title>
+
+    <script>
+        window.rsConf = { general: { usePost: true } };
+    </script>
+    <script src="//cdn1.readspeaker.com/script/9426/webReader/webReader.js?pids=wr" type="text/javascript"></script>
+
+    <link href="https://www.skolinspektionen.se/404/" rel="canonical" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="preload" as="style" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
+
+        <link rel="shortcut icon" href="/assets/img/icons/favicons/si.png" type="image/x-icon" />
+        <link href="/assets/css/main.css?v=ZFjiNMUougREam4sClDGMYT8i4M" rel="preload" as="style" />
+        <link href="/assets/css/main.css?v=ZFjiNMUougREam4sClDGMYT8i4M" rel="stylesheet" />
+
+
+    
+</head>
+
+<body id="pagestart" class="SI">
+
+    
+
+
+    
+
+<header class="d-print-none">
+    <div>
+        <div class="main-content-link">
+            <a href="#mainContent" class="btn btn-light sr-only sr-only-focusable" tabindex="0" accesskey="S">Till huvudinnehåll</a>
+        </div>
+        <div class="container mw-100">
+            <div class="row justify-content-end  d-none d-md-flex top-menu">
+                <div class="row justify-content-end  d-none d-md-flex">
+                    <nav aria-label="supportmeny" class="navbar navbar-expand">
+                        <ul class="navbar-nav mx-4">
+                            <li class="nav-item active">
+                                <a class="nav-link fsi fsi-easyread" href="/other-languages/lattlast-svenska/">Lättläst</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link rs_href" href="//app-eu.readspeaker.com/cgi-bin/rsent?customerid=9426&amp;lang=sv_se&amp;readid=ReadContent&amp;url=https://www.skolinspektionen.se/404/" onclick="readpage('//app-eu.readspeaker.com/cgi-bin/rsent?customerid=9426&amp;lang=sv_se&amp;readid=ReadContent&amp;url=https://www.skolinspektionen.se/404/', 'xp1'); return false;"><span aria-hidden="true" class="material-icons rs_skip pr-1">volume_up</span>Lyssna</a>
+                            </li>
+                                <li class="nav-item languageselect-container">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownQuickMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            More languages / Fler språk
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownQuickMenuButton">
+                                                <a class="dropdown-item" href="/">Svenska</a>
+                                                <a class="dropdown-item" href="/other-languages/lattlast-svenska/">L&#xE4;ttl&#xE4;st svenska (Sverige)</a>
+                                                <a class="dropdown-item" href="/other-languages/english-engelska/">English (Engelska)</a>
+                                                <a class="dropdown-item" href="/other-languages/suomi-finska/">Suomi (Finska)</a>
+                                                <a class="dropdown-item" href="/other-languages/aarjelsaemie-sydsamiska/">&#xC5;arjelsaemie (Sydsamiska)</a>
+                                                <a class="dropdown-item" href="/other-languages/julevsamegiella-lulesamiska/">Julevs&#xE1;megiella (Lulesamiska)</a>
+                                                <a class="dropdown-item" href="/other-languages/meankieli-tornedalsfinska/">Me&#xE4;nkieli (Tornedalsfinska)</a>
+                                                <a class="dropdown-item" href="/other-languages/-jiddisch/">&#x5D0;&#x5D9;&#x5D3;&#x5D9;&#x5E9; (Jiddisch)</a>
+                                                <a class="dropdown-item" href="/other-languages/romani-arli-romani/">Romani arli (Romani)</a>
+                                                <a class="dropdown-item" href="/other-languages/bosanski-bosniska/">Bosanski (Bosniska)</a>
+                                                <a class="dropdown-item" href="/other-languages/soomaali-somaliska/">Soomaali (Somaliska)</a>
+                                                <a class="dropdown-item" href="/other-languages/polska/">Polski (Polska)</a>
+                                                <a class="dropdown-item" href="/other-languages/espanol-spanska/">Espa&#xF1;ol (Spanska)</a>
+                                                <a class="dropdown-item" href="/other-languages/deutsch-tyska/">Deutsch (Tyska)</a>
+                                                <a class="dropdown-item" href="/other-languages/arabiska/">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; (Arabiska)</a>
+                                                <a class="dropdown-item" href="/other-languages/sorani/">&#x643;&#x648;&#x631;&#x62F;&#x6CC; (Sorani)</a>
+                                                <a class="dropdown-item" href="/other-languages/davvisamigiella-nordsamiska2/">Davvis&#xE1;migiella (Nordsamiska)</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link press" href="/om-oss/press/">Press</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn-sm" href="/login?returnUrl=/404/">Logga in</a>
+                                </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="innercontainer mt-3 mt-md-0">
+                <div class="container">
+                    <div class="row mx-0 mx-md-4 py-2 justify-content-between align-items-center mr-085important">
+
+                        <a class="col-6 col-md-4 navbar-brand" href="/">
+                            <img class="menu-logo" src="/globalassets/08-bilder/settings/skolinspektionen_rgb.svg" alt="Skolinspektionens logotyp som leder till startsidan">
+                        </a>
+                            <a class="signinout-link d-md-none text-black" href="/login?returnUrl=/404/">Logga in</a>
+
+
+
+<div class="quickSearch d-none d-md-flex" role="search">
+<form action="/sok/" method="get">    <div class="input-group input-group-sm">
+            <label for="search-q" class="visually-hidden">Sök</label>
+            <input type="text" id="search-q" class ="form-control quicksearch-input clearfield" aria-label="Sök" name="q" autocomplete="off" placeholder="Vad söker du idag?">
+        <button class="btn btn-light btn-sm ml-2" type="submit" value="Submit"><span aria-hidden="true" class="material-icons rs_skip pr-2">search</span>Sök</button>
+    </div>
+</form></div>                    </div>
+                </div>
+
+
+<div class="container d-none d-md-flex menu-design">
+    <nav aria-label="huvudmeny" class="row justify-content-center py-0">
+        <ul class="nav">
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/inspektion/">
+                        Inspektion
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/tillstand/">
+                        Tillst&#xE5;nd
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/beslut-rapporter/">
+                        Beslut och rapporter
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/statistik/">
+                        Statistik
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/skolenkaten/">
+                        Skolenk&#xE4;ten
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/aktuellt/">
+                        Aktuellt
+                    </a>
+                </li>
+                <li class="nav-item py-1">
+                    <a class="nav-link" href="/om-oss/">
+                        Om oss
+                    </a>
+                </li>
+
+        </ul>
+    </nav>
+</div>
+
+
+<div class="container d-md-none p-0">
+    <div class="row no-gutters mobilemenu-btns">
+        <div class="col-6">
+            <button class="btn btn-block collapsed  " aria-controls="mobileSearchArea" data-toggle="collapse" data-target="#mobileSearchArea" aria-expanded="false"><span aria-hidden="true" class="material-icons rs_skip">search</span> Sök</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-block collapsed collapse-togglelink " aria-controls="mobileMenuArea" data-toggle="collapse" data-target="#mobileMenuArea" aria-expanded="false">
+                <span aria-hidden="true" class="material-icons rs_skip expand">menu</span><span aria-hidden="true" class="material-icons rs_skip minify">close</span> Meny
+            </button>
+        </div>
+    </div>
+</div>            </div>
+
+
+<div id="mobilemenu" class="accordion d-md-none">
+    <div id="mobileSearchArea" class="collapse " data-parent="#mobilemenu">
+        
+
+
+<div class="quickSearch d-md-none" role="search">
+<form action="/sok/" method="get">        <div class="input-group input-group-sm">
+            <label for="" class="visually-hidden">Sök</label>
+            <input type="text"  value="" class="form-control quicksearch-input clearfield clearfield--flex" aria-label="Sök" name="q" autocomplete="off" placeholder="Vad söker du idag?">
+            <button class="btn btn-blabar100 py-2 mt-2 btn-sm" type="submit" value="Submit"><span aria-hidden="true" class="material-icons rs_skip pr-2">search</span>Sök</button>
+        </div>
+</form></div>
+    </div>
+    <div id="mobileMenuArea" class="collapse" data-parent="#mobilemenu">
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/inspektion/">Inspektion</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-6" data-toggle="collapse" aria-expanded="false" aria-controls="section-6" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-6">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/inspektion/urval-for-inspektion/">Anledning till inspektion</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/inspektion/inspektionsformer/">Inspektionsformer</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/">Inspektion &#x2013; steg f&#xF6;r steg</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-784" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-784" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-784">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/infor-inspektion/">Inf&#xF6;r inspektion</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-785" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-785" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-785">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/infor-inspektion/elevfilm/">Informationsfilm f&#xF6;r elever</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/under-inspektion/">Under inspektion</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-91" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-91" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-91">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/under-inspektion/sa-bedoms-skolor/">S&#xE5; bed&#xF6;ms skolor</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/under-inspektion/sa-bedoms-huvudman/">S&#xE5; bed&#xF6;ms huvudm&#xE4;n</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/under-inspektion/lagar-och-forordningar/">Lagar och f&#xF6;rordningar</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/inspektion-steg-for-steg/efter-inspektion/">Efter inspektion</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/inspektion/agar--och-ledningsprovning/">&#xC4;gar- och ledningspr&#xF6;vning</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-7623" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-7623" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-7623">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/anmal-forandringar-i-agar-och-ledningskretsen/">Anm&#xE4;l f&#xF6;r&#xE4;ndringar i &#xE4;gar- och ledningskretsen</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/">St&#xF6;dmaterial f&#xF6;r kommuner</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-25459" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-25459" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-25459">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/">St&#xF6;dmaterial vid pr&#xF6;vning av &#xE4;gare, ledning och ekonomiska f&#xF6;ruts&#xE4;ttningar</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-14904" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-14904" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-14904">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/stodets-omfattning/">St&#xF6;dets omfattning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/agar-och-ledningsprovning/">Allm&#xE4;nt om pr&#xF6;vningen</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/vem-vilka-omfattas-av-provningen/">Vem/vilka omfattas av pr&#xF6;vningen?</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/bedoma-insikt/">Bed&#xF6;ma insikt</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/bedoma-lamplighet/">Bed&#xF6;ma l&#xE4;mplighet</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/6.provning-av-ekonomiska-forutsattningar">Pr&#xF6;vning av ekonomiska f&#xF6;ruts&#xE4;ttningar</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/pedagogisk-omsorg/">Pedagogisk omsorg</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/fatta-beslut/">Beslut och val av ingripande</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-vid-provning-av-agare-ledning-och-ekonomiska-forutsattningar/ordlista/">Ordlista</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/">St&#xF6;dmaterial f&#xF6;r tillsyn av konfessionella inslag i f&#xF6;rskolan</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-25460" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-25460" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-25460">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/stodets-omfattning/">St&#xF6;dets omfattning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/allmant-om-bestammelserna-i-skollagen-om-konfessionella-inslag/">Vad &#xE4;r konfessionella inslag?</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/nar-far-konfessionella-inslag-forekomma-pa-fristaende-forskolor/">D&#xE5; f&#xE5;r en f&#xF6;rskola ha konfessionella inslag</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/utbildning-respektive-undervisning/">Utbildning respektive undervisning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/frivilligt-deltagande/">Deltagandet ska alltid vara frivilligt</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/konfessionella-inslag-ska-avgransas/">Konfessionella inslag ska avgr&#xE4;nsas</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/konfessionella-inslag-i-begransad-omfattning-och-efter-skriftlig-information/">Konfessionella inslag i begr&#xE4;nsad omfattning och efter skriftlig information</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/tillsyn-beslut-och-val-av-ingripande/">Tillsyn, beslut och val av ingripande</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/stodmaterial-for-tillsyn-av-konfessionella-inslag-i-forskolan/konfessionella-inslag-och-gransdragning-mot-kultur-och-tradition/">Konfessionella inslag och gr&#xE4;nsdragning mot kultur och tradition</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/inspektion/stodmaterial-for-kommuner/webbinariun-om-det-utokade-stodmaterialet/">Webbinarium om det ut&#xF6;kade st&#xF6;dmaterialet</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/tillstand/">Tillst&#xE5;nd</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-20084" data-toggle="collapse" aria-expanded="false" aria-controls="section-20084" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-20084">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/tillstand/ansok/">Ans&#xF6;k om tillst&#xE5;nd</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20736" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20736" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20736">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/tillstand/ansok/starta-eller-utoka-fristaende-skola/">Starta eller ut&#xF6;ka frist&#xE5;ende skola</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20752" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20752" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20752">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/starta-eller-utoka-fristaende-skola/forutsattningar-godkannande/">F&#xF6;ruts&#xE4;ttningar f&#xF6;r godk&#xE4;nnande</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/starta-eller-utoka-fristaende-skola/provning-utanfor-ansokningstiden/">Pr&#xF6;vning utanf&#xF6;r ans&#xF6;kningstiden</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/avvikelse-fran-de-nationella-programmen/">Avvikelse fr&#xE5;n de nationella programmen</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/starta-internationell-skola/">Starta internationell skola</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/distansundervisning/">Distansundervisning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/betygsratt-for-vuxenutbildning/">Betygsr&#xE4;tt f&#xF6;r vuxenutbildning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/undervisning-pa-engelska/">Undervisning p&#xE5; engelska</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/fardighetsprov/">F&#xE4;rdighetsprov</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/utbildning-utan-timplan/">Utbildning utan timplan</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/ansok/andring-av-ett-beslut/">&#xC4;ndring av ett beslut</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/">Anm&#xE4;lan om &#xE4;ndringar i skolverksamheten</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20740" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20740" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20740">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/anmal-forandringar-i-agar-och-ledningskretsen/">Anm&#xE4;l f&#xF6;r&#xE4;ndringar i &#xE4;gar- och ledningskretsen</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/fjarrundervisning/">Fj&#xE4;rrundervisning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/undervisning-enligt-gymnasieskolans-amnesplan/">Undervisning enligt gymnasieskolans &#xE4;mnesplan</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/tvasprakig-undervisning/">Tv&#xE5;spr&#xE5;kig undervisning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/andringar-i-skolverksamheten/avtal-om-samverkan/">Avtal om samverkan</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/tillstand/mina-sidor/">Mina sidor</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/tillstand/aktuellt/">Aktuellt</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-19312" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-19312" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-19312">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/aktuellt/anmal-beslut-om-elever-ska-lasa-amnen-enligt-gymnasieskolans-amnesplaner/">Anm&#xE4;l beslut om elever ska l&#xE4;sa &#xE4;mnen enligt gymnasieskolans &#xE4;mnesplaner</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/tillstand/aktuellt/nu-aterkallar-skolinspektionen-godkannanden-som-inte-nyttjas/">Skolinspektionen &#xE5;terkallar godk&#xE4;nnanden som inte nyttjas</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/tillstand/etableringskontroll/">Etableringskontroll</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/tillstand/fragor-och-svar/">Fr&#xE5;gor och svar</a>
+                                        </div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/beslut-rapporter/">Beslut och rapporter</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-189" data-toggle="collapse" aria-expanded="false" aria-controls="section-189" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-189">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/beslut-rapporter/publikationssok/">Publikationss&#xF6;k</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/">Teman fr&#xE5;n v&#xE5;r inspektion</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20309" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20309" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20309">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/bedomning-och-betygssattning/">Bed&#xF6;mning och betygss&#xE4;ttning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/elevers-halsa/">Elevers h&#xE4;lsa</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/forskolan/">F&#xF6;rskolan</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/huvudmannens-styrning/">Huvudmannens styrning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/jamstalldhet/">J&#xE4;mst&#xE4;lldhet</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20649" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20649" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20649">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/jamstalldhet/hur-skolinspektionen-arbetar-med-jamstalldhet/">Hur Skolinspektionen arbetar med j&#xE4;mst&#xE4;lldhet</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/kallkritik/">K&#xE4;llkritik</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/normer-och-varden/">Normer och v&#xE4;rden</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/stodinsatser/">St&#xF6;dinsatser</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/trygghet-och-studiero/">Trygghet och studiero</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/vuxenutbildning/">Vuxenutbildning</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20459" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20459" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20459">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/teman-fran-var-inspektionen/vuxenutbildning/inspektion-av-komvux/">Inspektion av komvux</a>
+            </div>
+        </div>
+</div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/beslut-rapporter/sok-beslut/">S&#xF6;k beslut</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-9411" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-9411" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-9411">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/beslut-rapporter/sok-beslut/senaste-beslut/">Senaste beslut</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/beslut-rapporter/remissvar/">Remissvar</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/beslut-rapporter/diariet/">Diariet</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/pagaende-granskningar/">P&#xE5;g&#xE5;ende granskningar</a>
+                                        </div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/statistik/">Statistik</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-538" data-toggle="collapse" aria-expanded="false" aria-controls="section-538" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-538">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/">Statistik om tillsyn</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-19602" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-19602" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-19602">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/planerad-tillsyn/">Planerad tillsyn</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-19604" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-19604" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-19604">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/planerad-tillsyn/planerad-tillsyn-2025/">Planerad tillsyn 2025</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/planerad-tillsyn/planerad-tillsyn-2024/">Planerad tillsyn 2024</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/planerad-tillsyn/planerad-tillsyn-2023/">Planerad tillsyn 2023</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/planerad-tillsyn/regelbunden-tillsyn-2008--2022/">Regelbunden tillsyn 2008-2022</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/">Riktad tillsyn</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-19605" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-19605" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-19605">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn---individ-2025/">Riktad tillsyn - individ 2025</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn--individ-2024/">Riktad tillsyn &#x2013; individ 2024</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn-individ-2023/">Riktad tillsyn - individ 2023</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/statistik-over-individarenden-2015-2022/">Riktad tillsyn individ 2015-2022</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn---generell-2025/">Riktad tillsyn - generell 2025</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn--generell-2024/">Riktad tillsyn &#x2013; generell 2024</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn-generell-2023/">Riktad tillsyn - generell 2023</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/riktad-tillsyn/riktad-tillsyn-2021-2022/">Riktad tillsyn 2021-2022</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/etableringskontroller-av-fristaende-skolor/">Etableringskontroller av frist&#xE5;ende skolor</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/anmalningar-till-lararnas-ansvarsnamnd/">Anm&#xE4;lningar till L&#xE4;rarnas ansvarsn&#xE4;mnd</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/statistik-over-viten/">Statistik &#xF6;ver viten</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/tematisk-tillsyn/">Tematisk tillsyn</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-25093" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-25093" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-25093">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-tillsyn/tematisk-tillsyn/tematisk-tillsyn-2025/">Tematisk tillsyn 2025</a>
+            </div>
+        </div>
+</div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/">Statistik om kvalitetsgranskning</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-24962" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-24962" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-24962">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/tematisk-kvalitetsgranskning/">Tematisk kvalitetsgranskning</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-25090" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-25090" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-25090">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/tematisk-kvalitetsgranskning/tematisk-kvalitetsgranskning-2025/">Tematisk kvalitetsgranskning 2025</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/planerad-kvalitetsgranskning/">Planerad kvalitetsgranskning</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-576" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-576" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-576">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/planerad-kvalitetsgranskning/planerad-kvalitetsgranskning-2025/">Planerad kvalitetsgranskning 2025</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/planerad-kvalitetsgranskning/planerad-kvalitetsgranskning-2024/">Planerad kvalitetsgranskning 2024</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/planerad-kvalitetsgranskning/planerad-kvalitetsgranskning-2023/">Planerad kvalitetsgranskning 2023</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-kvalitetsgranskning/planerad-kvalitetsgranskning/regelbunden-kvalitetsgranskning-2018-2022/">Regelbunden kvalitetsgranskning 2018-2022</a>
+            </div>
+        </div>
+</div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/">Statistik tillst&#xE5;nd frist&#xE5;ende skolor</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-613" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-613" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-613">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-202728/">Tillst&#xE5;nd skolstart 2027/28</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-for-skolstart-202627/">Tillst&#xE5;nd skolstart 2026/27</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2025-26/">Tillst&#xE5;nd skolstart 2025/26</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-202425/">Tillst&#xE5;nd skolstart 2024/25</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2023-24/">Tillst&#xE5;nd skolstart 2023/24</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2022-23/">Tillst&#xE5;nd skolstart 2022/23</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2021-22/">Tillst&#xE5;nd skolstart 2021/22</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2020-2021/">Tillst&#xE5;nd skolstart 2020/21</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/tillstand-skolstart-2019-2020/">Tillst&#xE5;nd skolstart 2019/20</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-tillstand-fristande-skolor/skolstart-201819/">Tillst&#xE5;nd skolstart 2018/19</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/">Statistik om j&#xE4;mst&#xE4;lldhet</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-677" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-677" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-677">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2025-2026/">Statistik om j&#xE4;mst&#xE4;lldhet 2025-2026</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2024-2025/">Statistik om j&#xE4;mst&#xE4;lldhet 2024-2025</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2023-2024/">Statistik om j&#xE4;mst&#xE4;lldhet 2023-2024</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2022-2023/">Statistik om j&#xE4;mst&#xE4;lldhet 2022-2023</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2021-2022/">Statistik om j&#xE4;mst&#xE4;lldhet 2021-2022</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2020-2021/">Statistik om j&#xE4;mst&#xE4;lldhet 2020-2021</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/statistik/statistik-om-jamstalldhet/statistik-om-jamstalldhet-2019-2020/">Statistik om j&#xE4;mst&#xE4;lldhet 2019-2020</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/statistik/ombedomning-av-nationella-prov/">Ombed&#xF6;mning av nationella prov</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/statistik/fragor-och-svar/">Fr&#xE5;gor och svar</a>
+                                        </div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/skolenkaten/">Skolenk&#xE4;ten</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-12160" data-toggle="collapse" aria-expanded="false" aria-controls="section-12160" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-12160">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/skolenkaten/om-skolenkaten/">Om Skolenk&#xE4;ten</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/">Resultat fr&#xE5;n Skolenk&#xE4;ten</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-586" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-586" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-586">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2026/">Resultat Skolenk&#xE4;ten 2026</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-26123" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-26123" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-26123">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2026/trygghet-och-studiero-2026/">Trygghet och studiero 2026</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2025/">Resultat Skolenk&#xE4;ten 2025</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-23041" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-23041" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-23041">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2025/trygghet-och-studiero-2025/">Trygghet och studiero 2025</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2024/">Resultat Skolenk&#xE4;ten 2024</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-20483" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-20483" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-20483">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2024/trygghet-och-studiero-2024/">Trygghet och studiero 2024</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2023/">Resultat Skolenk&#xE4;ten 2023</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-16188" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-16188" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-16188">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2023/trygghet-och-studiero-2023/">Trygghet och studiero 2023</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2022/">Resultat Skolenk&#xE4;ten 2022</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-13121" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-13121" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-13121">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2022/trygghet-och-studiero-2022/">Trygghet och studiero 2022</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2021/">Resultat Skolenk&#xE4;ten 2021</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/skolenkaten/resultat-fran-skolenkaten/resultat-skolenkaten-2015-2020/">Resultat Skolenk&#xE4;ten 2015-2020</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/skolenkaten/information-till-huvudman-och-skolor/">Information till huvudm&#xE4;n och skolor</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/skolenkaten/fragor-och-svar2/">Fr&#xE5;gor och svar</a>
+                                        </div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/aktuellt/">Aktuellt</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-9" data-toggle="collapse" aria-expanded="false" aria-controls="section-9" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-9">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/aktuellt/pagaende-granskningar/">P&#xE5;g&#xE5;ende granskningar</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-10811" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-10811" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-10811">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/aktuellt/pagaende-granskningar/pagaende-regeringsuppdrag/">P&#xE5;g&#xE5;ende regeringsuppdrag</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/evenemang/">Evenemang</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/inspektionspodden/">Inspektionspodden</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/skolsamtalet/">Skolsamtalet</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/">Nyheter</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/skolinspektionens-nyhetsbrev/">Prenumerationer</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/aktuellt/sociala-medier/">Sociala medier</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/aktuellt/gd-kronika/">Gd-kr&#xF6;nika</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-24459" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-24459" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-24459">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/aktuellt/gd-kronika/skolmyndigheternas-olika-uppdrag-och-vad-som-skiljer-oss-at/">Skolmyndigheternas olika uppdrag och vad som skiljer oss &#xE5;t</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/aktuellt/gd-kronika/skolpersonal-ska-tryggt-kunna-lamna-uppgifter-till-skolinspektionen/">Skolpersonal ska tryggt kunna l&#xE4;mna uppgifter till Skolinspektionen</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="left-menu">
+                <nav aria-label="meny nivå ett" class="flex-column m-1 w-100">
+                    <div class="row m-0">
+                        <div class="menu-item menu-item--toplevel col-10 ">
+                            <a class="nav-link px-0" href="/om-oss/">Om oss</a>
+                        </div>
+                            <div class="menu-item menu-item--toplevel col-2 menu-collapse">
+                                <button href="#section-1446" data-toggle="collapse" aria-expanded="false" aria-controls="section-1446" class="collapse-togglelink justify-content-center">
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 expand">add</span>
+                                    <span aria-hidden="true" class="material-icons rs_skip p-0 minify">remove</span>
+                                    <span class="sr-only expand">Öppna undermeny</span>
+                                    <span class="sr-only minify">Stäng undermeny</span>
+                                </button>
+                            </div>
+                            <div class="nav flex-column border-bottom-0 w-100 collapse " id="section-1446">
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/">Uppdrag och verksamhet</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-352" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-352" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-352">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/verksamheter-vi-inspekterar/">Verksamheter vi inspekterar</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/organisation/">Organisation</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-937" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-937" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-937">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/organisation/ledning/">Ledning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/organisation/insynsradet/">Insynsr&#xE5;det</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/malbild-och-vardegrund/">M&#xE5;lbild och v&#xE4;rdegrund</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-371" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-371" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-371">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/malbild-och-vardegrund/miljoledning/">Milj&#xF6;ledning</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/styrning-uppfoljning/">Styrning och uppf&#xF6;ljning</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/uppdrag-och-verksamhet/historik/">Historiebeskrivning &#x2013; skolinspektioner &#xF6;ver tid</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/">Jobba hos oss</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-383" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-383" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-383">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/praktik/">Praktik</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/lediga-jobb/">Lediga jobb</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-931" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-931" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-931">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/lediga-jobb/status-for-rekrytering/">Status f&#xF6;r rekrytering</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/lediga-jobb/overklaga-anstallningsbeslut/">&#xD6;verklaga anst&#xE4;llningsbeslut</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/lediga-jobb/foretradesratt-vid-ateranstallning/">F&#xF6;retr&#xE4;desr&#xE4;tt vid &#xE5;teranst&#xE4;llning</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/formaner-och-villkor/">F&#xF6;rm&#xE5;ner och villkor</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/jobba-hos-oss/facklig-information/">Facklig information</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/om-oss/kontakta-oss/">Kontakta oss</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-24993" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-24993" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-24993">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/begaran-om-allman-handling/">Beg&#xE4;ran om allm&#xE4;n handling</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-22290" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-22290" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-22290">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/begaran-om-allman-handling/vad-ar-en-allman-handling/">Vad &#xE4;r en allm&#xE4;n handling?</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/begaran-om-allman-handling/om-du-vill-vara-anonym/">Om du vill vara anonym</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/begaran-om-allman-handling/avgifter/">Avgifter</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/fakturor-till-skolinspektionen/">Fakturor till Skolinspektionen</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-10">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/">L&#xE4;mna information till Skolinspektionen och BEO</a>
+            </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-23229" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-23229" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-23229">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/det-har-innan-du-lamnar-information-till-oss/">G&#xF6;r det h&#xE4;r innan du l&#xE4;mnar information till oss</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/webbformular/">Webbformul&#xE4;r f&#xF6;r att l&#xE4;mna information</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/lamna-uppgifter-om-olamplig-legitimerad-larare-eller-forskollarare/">L&#xE4;mna uppgifter om ol&#xE4;mplig legitimerad l&#xE4;rare eller f&#xF6;rskoll&#xE4;rare</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/vand-dig-till-ratt-myndighet/">V&#xE4;nd dig till r&#xE4;tt myndighet</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/lamna-information-till-skolinspektionen/orosanmaler-skolinspektionen-till-socialtjansten/">Orosanm&#xE4;ler Skolinspektionen till socialtj&#xE4;nsten?</a>
+            </div>
+        </div>
+</div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/telefon-e-post-och-adresser/">Telefon, e-post och adresser</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/kontakta-oss/visselblasning/">Visselbl&#xE5;sning</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/om-oss/press/">Pressrum</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-19985" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-19985" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-19985">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/press/pressmeddelanden/">Pressmeddelanden</a>
+            </div>
+        </div>
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/press/pressbilder/">Pressbilder</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-12 ">
+                                            <a class="nav-link px-0" href="/om-oss/skolinspektionens-behandling-av-personuppgifter/">Skolinspektionens behandling av personuppgifter</a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="menu-item col-10 ">
+                                            <a class="nav-link px-0" href="/om-oss/om-webbplatsen/">Om webbplatsen</a>
+                                        </div>
+
+<div class="col-2 menu-collapse position-relative">
+    <a href="#section-Mobile-2771" data-toggle="collapse" aria-expanded="false" aria-controls="section-Mobile-2771" 
+        class="collapse-togglelink collapse-togglelink--absolute justify-content-center stretched-link h-100 m-0">
+        <span aria-hidden="true" class="material-icons rs_skip p-0 expand my-auto">add</span>
+        <span aria-hidden="true" class="material-icons rs_skip p-0 minify my-auto">remove</span>
+        <span class="sr-only expand">Öppna undermeny</span>
+        <span class="sr-only minify">Stäng undermeny</span>
+    </a>
+</div>
+<div class="subnav flex-column w-100 border-top border-bottom collapse" id="section-Mobile-2771">
+        <div class="row m-0 w-100">
+            <div class="menu-item col-12">
+                <a class="nav-link px-0" href="/om-oss/om-webbplatsen/tillganglighet-for-skolinspektionen.se">Tillg&#xE4;nglighet f&#xF6;r skolinspektionen.se</a>
+            </div>
+        </div>
+</div>
+                                    </div>
+                            </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="languageselect-mobile">
+                <button class="btn btn-primary btn-block color-white bg-blabar100 btn-arrow-up text-left pl-4" type="button" lang="en" data-toggle="collapse" data-target="#languageselect-mobile-collape" aria-expanded="false" aria-controls="languageselect-mobile-collape">
+                    <span aria-hidden="true" class="material-icons rs_skip">public</span> Change Language
+                </button>
+                <div class="collapse" id="languageselect-mobile-collape">
+                    <button class="btn btn-primary btn-block btn-blabar btn-arrow-down text-left pl-4" type="button" lang="en" data-toggle="collapse" data-target="#languageselect-mobile-collape" aria-expanded="false" aria-controls="languageselect-mobile-collape">
+                        <span aria-hidden="true" class="material-icons rs_skip">public</span> Change Language
+                    </button>
+                    <div class="languageselect-list">
+                            <a class="dropdown-item pl-5" href="/">Svenska</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/lattlast-svenska/">L&#xE4;ttl&#xE4;st svenska (Sverige)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/english-engelska/">English (Engelska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/suomi-finska/">Suomi (Finska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/aarjelsaemie-sydsamiska/">&#xC5;arjelsaemie (Sydsamiska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/julevsamegiella-lulesamiska/">Julevs&#xE1;megiella (Lulesamiska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/meankieli-tornedalsfinska/">Me&#xE4;nkieli (Tornedalsfinska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/-jiddisch/">&#x5D0;&#x5D9;&#x5D3;&#x5D9;&#x5E9; (Jiddisch)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/romani-arli-romani/">Romani arli (Romani)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/bosanski-bosniska/">Bosanski (Bosniska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/soomaali-somaliska/">Soomaali (Somaliska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/polska/">Polski (Polska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/espanol-spanska/">Espa&#xF1;ol (Spanska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/deutsch-tyska/">Deutsch (Tyska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/arabiska/">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; (Arabiska)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/sorani/">&#x643;&#x648;&#x631;&#x62F;&#x6CC; (Sorani)</a>
+                            <a class="dropdown-item pl-5" href="/other-languages/davvisamigiella-nordsamiska2/">Davvis&#xE1;migiella (Nordsamiska)</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>            <div class="collapse navbar">
+
+                <form class="form-inline my-2 my-md-0">
+                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="arch-wrapper">
+        <div id="arch-visitor">
+        </div>
+</div>    <main id="mainContent">
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8Nkma8z6OhpBpjBrL7yXT5js57uFKMqxu9-O77VKRmpTSMkseNn3q8oeLFj_g4Nd12c9dj9aGLIe0ZivhH7S10jDwH4lB3jUdvJqw2qe_fJ7cnc5vM6SXjlCjkIkJ94mP9nSFaWKXnSvuCJOcXmpaSc" />
+            
+
+
+            
+    <div class="container breadcrumb-container d-none d-md-flex justify-content-between">
+        <nav aria-label="Brödsmula">
+            <ol class="breadcrumb px-0 pt-3">
+                <li class="breadcrumb-item"><a href="/"><span aria-hidden="true" class="material-icons rs_skip">home</span><span class="sr-only">Startsida</span></a></li>
+            </ol>
+
+        </nav>
+    </div>
+        
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 d-none d-md-flex no-print pb-3">
+
+        </div>
+        <div class="col-md-8">
+
+            <article id="ReadContent" class="row no-gutters justify-content-md-center" >
+                <div class="col-md-10">
+                    <div class="pt-2 pb-3 text-black80 updatedate">Publicerad: 29 september 2020</div>
+
+                    <h1 >Sidan kunde inte hittas</h1>
+
+
+
+<div id="xp1" class="rs_splitbutton rs_skip rsbtn rs_preserve">
+    <a rel="nofollow" class="rsbtn_play" accesskey="L" href="//app-eu.readspeaker.com/cgi-bin/rsent?customerid=9426&amp;lang=sv_se&amp;readid=ReadContent&amp;url=https://www.skolinspektionen.se/404/">
+        <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Lyssna</span></span></span>
+        <span class="rsbtn_right rsimg rsplay rspart"></span>
+    </a>
+</div>
+                    <p  class="lead"></p>
+                    
+
+                  
+                    <div class="pt-3 mt-3">
+                        
+
+
+
+                        
+    <div class="FullwidthBlock">
+        <div class="pt-1 pb-3 row justify-content-center">
+            <div class="col-12 col-md-11 row justify-content-center border">
+                <div class="col-12 py-3 px-0 px-md-3 my-1">
+                    <h2 class="block-header">Dela sidan</h2>
+                    <ul class="shareactions-list p-0 mt-2 m-0">
+                            <li class="shareactions-item notexternal">
+                                <a aria-label="Dela sidan på Facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://www.skolinspektionen.se/404/" rel="noopener" class="fsi fsi-social-media_facebook notexternal" target="_blank">
+                                    <span class="ShareActions-name">Facebook</span>
+                                </a>
+                            </li>
+                            <li class="shareactions-item notexternal">
+                                <a aria-label="Dela sidan på LinkedIn" href="https://www.linkedin.com/sharing/share-offsite/?url=https://www.skolinspektionen.se/404/" rel="noopener" class="fsi fsi-social-media_linkedin notexternal" target="_blank">
+                                    <span class="ShareActions-name">LinkedIn</span>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                        <div class="py-3 text-black80 updatedate">Senast uppdaterad: <strong>29 september 2020</strong></div>
+
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+
+
+    </main>
+
+    <style>
+
+        .bg-footer {
+            background: url( /globalassets/08-bilder/settings/sidfot_mobil.png ) no-repeat center top / cover;
+        }
+
+        @media only screen and (min-width : 700px){
+             .bg-footer {
+                    background: url( /globalassets/08-bilder/settings/sidfot.png ) no-repeat center top / cover;
+            }
+
+        }
+
+    </style>
+
+<footer class="d-print-none">
+    <div class="innercontainer text-white bg-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="m-xxs m-7 bg-white w-100">
+                    <div class="container px-lg-4">
+                        <div class="row py-4 px-0">
+                            <div class="col-xl-3 col-lg-6 col-md-6 ">
+                                <div class="p-3">
+                                    <h2 class="card-title font-size17">Postadress</h2>
+                                    <ul class="nav flex-column">
+                                            <li class="nav-item noindent">
+                                                <span>Box 23069, 104 35 Stockholm </span>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="mailto:skolinspektionen@skolinspektionen.se"><span>skolinspektionen  @skolinspektionen.se</span></a>
+                                            </li>
+                                    </ul>
+                                </div>
+                                <div class="p-3">
+                                    <h2 class="card-title font-size17">Org.nummer: 202100-6065</h2>
+                                    <ul class="nav flex-column">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="p-3">
+                                    <div class="pb-3">      
+
+        <div class="card-title"><h2 class="font-size17">Mer kontaktuppgifter</h2></div>
+    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="internal"  href="/om-oss/kontakta-oss/" ><span>Kontakta oss</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="internal"  href="/om-oss/" ><span>Om oss</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="internal"  href="/aktuellt/skolinspektionens-nyhetsbrev/" ><span>Prenumerationstj&#xE4;nster</span></a>
+            </li>
+    </ul>
+                                    </div>
+                                    <div class="py-3">
+
+        <div class="card-title"><h2 class="font-size17"><a href="/om-oss/om-webbplatsen/">Om webbplatsen</a></h2></div>
+    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="internal"  href="mailto:webbredaktionen@skolinspektionen.se" ><span>Har du fr&#xE5;gor om webbplatsen?</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="internal"  href="/om-oss/om-webbplatsen/tillganglighet-for-skolinspektionen.se" ><span>Tillg&#xE4;nglighetsredog&#xF6;relse</span></a>
+            </li>
+    </ul>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="internal changeCookieSettings" href="#" target="_self"><span>Ändra inställningar för kakor</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="p-3">
+
+        <div class="card-title"><h2 class="font-size17">Skolmyndigheter</h2></div>
+    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a rel=noopener href="http://www.sameskolstyrelsen.se/" target =&quot;_blank&quot;><span>Sameskolstyrelsen</span></a>
+            </li>
+            <li class="nav-item">
+                <a rel=noopener href="http://www.skolfi.se/" target =&quot;_blank&quot;><span>Skolforskningsinstitutet</span></a>
+            </li>
+            <li class="nav-item">
+                <a rel=noopener href="http://www.skolverket.se/" target =&quot;_blank&quot;><span>Skolverket</span></a>
+            </li>
+            <li class="nav-item">
+                <a rel=noopener href="https://www.skolverket.se/kontakt" ><span>Skolverkets r&#xE5;d och v&#xE4;gledning</span></a>
+            </li>
+            <li class="nav-item">
+                <a rel=noopener href="https://www.overklagandenamnden.se/" ><span>Skolv&#xE4;sendets &#xF6;verklaganden&#xE4;mnd</span></a>
+            </li>
+            <li class="nav-item">
+                <a rel=noopener href="http://www.spsm.se/" target =&quot;_blank&quot;><span>Specialpedagogiska skolmyndigheten (SPSM)</span></a>
+            </li>
+    </ul>
+                                    </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 d-flex flex-column">
+                                <div class="p-3">
+                                    <h2 class="card-title font-size17">Följ oss</h2>
+                                    <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="notexternal" href="https://www.facebook.com/skolinspektionen/" target="_blank" aria-label="Facebook, öppnas i nytt fönster"><span class="fsi fsi-social-media_facebook text-blabar100" aria-hidden="true"></span>Facebook</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="notexternal" href="https://www.linkedin.com/company/skolinspektionen" target="_blank" aria-label="LinkedIn, öppnas i nytt fönster"><span class="fsi fsi-social-media_linkedin text-blabar100" aria-hidden="true"></span>LinkedIn</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="notexternal" href="http://www.youtube.com/skolinspektionen" target="_blank" aria-label="Youtube, öppnas i nytt fönster"><span class="fsi fsi-social-media_youtube text-blabar100" aria-hidden="true"></span>Youtube</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="notexternal" href="https://www.skolinspektionen.se/aktuellt/skolinspektionens-nyhetsbrev" aria-label="Prenumerera på Skolinspektionens nyhetsbrev"><span class="fsi fsi-social-media_newsletter" aria-hidden="true"></span>Nyhetsbrev</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="notexternal" href="https://www.skolinspektionen.se/aktuellt/inspektionspodden/" aria-label="Poddar"><span class="fsi fsi-social-media_pod" aria-hidden="true"></span>Poddar</a>
+                                            </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pt-2">
+        <div class="row">
+            <div class="col-md-12 px-0">
+                <a href="#pagestart" class="btn btn-block btn-blabar btn-totop py-3">Tillbaka till toppen<span aria-hidden="true" class="material-icons rs_skip text-white">arrow_upward</span></a>
+            </div>
+        </div>
+    </div>
+</footer>    <script defer="defer" src="/Util/Find/epi-util/find.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){if(typeof FindApi === 'function'){var api = new FindApi();api.setApplicationUrl('/');api.setServiceApiBaseUrl('/find_v2/');api.processEventFromCurrentUri();api.bindWindowEvents();api.bindAClickEvent();api.sendBufferedEvents();}})
+</script>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="cookieconsentdialogheader" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-hav15 text-black">
+            <div class="modal-header flex-column border-0 px-md-5 px-3">
+                <img src="/globalassets/08-bilder/settings/skolinspektionen_rgb.svg" alt="Skolinspektionens logotyp som leder till startsidan">
+                <h2 class="modal-title" id="cookieconsentdialogheader">Vi använder cookies</h2>
+            </div>
+            <div class="modal-body px-md-5 px-4">
+                <div>
+                    <p>P&aring; skolinspektionen.se anv&auml;nder vi kakor (cookies) f&ouml;r att g&ouml;ra din upplevelse p&aring; webbplatsen s&aring; bra som m&ouml;jligt. En kaka &auml;r en liten textfil som skapas och lagras p&aring; den enhet du anv&auml;nder f&ouml;r att bes&ouml;ka v&aring;r webbplats, som till exempel en dator eller en mobiltelefon.</p>
+<h4>Vi anv&auml;nder kakor f&ouml;r att:</h4>
+<ul>
+<li>F&ouml;renkla ditt bes&ouml;k p&aring; skolinspektionen.se</li>
+<li>Sidan ska fungera s&aring; bra som m&ouml;jligt ur anv&auml;ndar- och tillg&auml;nglighetsperspektiv</li>
+<li>Samla information om hur sidans bes&ouml;kare anv&auml;nder webbplatsen</li>
+<li>Hantera personuppgifter</li>
+</ul>
+<p>Om det &auml;r okej kan du klicka p&aring; Acceptera allt. Du kan ocks&aring; begr&auml;nsa vad du delar med oss genom att klicka p&aring; Anpassa. Du kan &auml;ndra ditt beslut n&auml;r som helst. Du kan ocks&aring; l&auml;sa mer om hur vi anv&auml;nder kakor i v&aring;r cookie policy.</p>
+                </div>
+            </div>
+            <div class="modal-footer bg-white px-md-5 px-2 py-md-4 py-3 justify-content-around">
+                <button type="button" id="cookie-changesettings-btn" class="btn btn-light border p-2 px-md-4 px-3 mr-2" data-toggle="collapse" data-target="#cookiesettings" role="button" aria-expanded="false" aria-controls="cookiesettings">Anpassa</button>
+                <button type="button" id="cookie-acceptsettings-btn" class="btn btn-eucalyptus110  p-2 px-md-4 px-3 ml-2" data-all="true">Acceptera allt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cookiesettingsModal" tabindex="-1" role="dialog" aria-labelledby="cookiesettingsdialogheader" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-hav15 text-black">
+            <div class="modal-header flex-column px-5">
+                <h3 class="modal-title" id="cookiesettingsdialogheader">Anpassa cookie-inställningar</h3>
+            </div>
+            <div class="modal-body bg-black10 text-black px-5">
+                <div id="cookiesettings">
+                            <div class="row pb-3">
+            <div class="col-10">
+                <span class="font-weight-bold">
+                    Nödvändiga cookies
+                </span>
+                <p>Dessa kakor är obligatoriska. De ger tillgång till basfunktionerna för webbplatsen och de relaterade tjänsterna. Utan de här kakorna kan inte webbplatsen fungera. Därför går de inte att inaktivera.</p>
+            </div>
+            <div class="col-2">
+                <input class="customslider" type="checkbox" checked="checked" disabled id="requiredcookies" data-type="required" /><label for="requiredcookies"><span aria-hidden="true" class="material-icons icon--off">toggle_off</span><span aria-hidden="true" class="material-icons icon--on">toggle_on</span></label>
+            </div>
+                <div class="col-12">
+                    <a class="d-flex text-nounderline" role="button" href="#collapserequired" aria-expanded="false" data-toggle="collapse" aria-controls="collapserequired">
+                        <span aria-hidden="true" class="material-icons closed text-nounderline">keyboard_arrow_down</span><span aria-hidden="true" class="material-icons open text-nounderline">keyboard_arrow_up</span>
+                        <span class="text-underline text-black font-size16">Cookie information</span>
+                    </a>
+                </div>
+                <div id="collapserequired" class="col-12 collapse cookieinformation">
+                    <p><table style="border-collapse: collapse; width: 100%; height: 55px;">
+<tbody>
+<tr style="height: 18px;">
+<th style="width: 33.3333%; height: 18px;">Namn</th>
+<th style="width: 33.3333%; height: 18px;">Tid</th>
+<th style="width: 33.3333%; height: 18px;">Syfte</th>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 33.3333%; height: 18px; vertical-align: top;">ASP.NET_SessionId​​</td>
+<td style="width: 33.3333%; height: 18px; vertical-align: top;">Session</td>
+<td style="width: 33.3333%; height: 18px; vertical-align: top;">Detta st&auml;lls in av ASP.NET-ramverket och identifierar unikt anv&auml;ndarsessionen p&aring; servern. den anv&auml;nds av ramverket f&ouml;r att skicka information mellan serverf&ouml;rfr&aring;gningar.</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 33.3333%; height: 19px; vertical-align: top;">__epiXSRF</td>
+<td style="width: 33.3333%; height: 19px; vertical-align: top;">Session</td>
+<td style="width: 33.3333%; height: 19px; vertical-align: top;">
+<p>Denna cookie anv&auml;nds f&ouml;r att skydda anv&auml;ndaren mot f&ouml;rfalskning p&aring; beg&auml;ran &ouml;ver flera webbplatser (XSRF). Den anv&auml;nds endast av EPiServer CMS.</p>
+</td>
+</tr>
+<tr>
+<td style="width: 33.3333%; vertical-align: top;">.EPiServerLogin, EPiDPCKEY, .ASPXRoles</td>
+<td style="width: 33.3333%; vertical-align: top;">Session</td>
+<td style="width: 33.3333%; vertical-align: top;">
+<p>Dessa cookies anv&auml;nds f&ouml;r att till&aring;ta inloggning och hantera &aring;tkomst och beh&ouml;righeter n&auml;r du anv&auml;nder EPiServer CMS.</p>
+</td>
+</tr>
+</tbody>
+</table></p>
+                </div>
+        </div>
+
+                            <div class="row pb-3">
+            <div class="col-10">
+                <span class="font-weight-bold">
+                    Funktionella cookies
+                </span>
+                <p>Funktionella kakor kommer ihåg uppgifter som ändrar webbplatsens utseende eller funktioner.</p>
+            </div>
+            <div class="col-2">
+                <input class="customslider" type="checkbox" checked="checked"  id="functionalcookies" data-type="functional" /><label for="functionalcookies"><span aria-hidden="true" class="material-icons icon--off">toggle_off</span><span aria-hidden="true" class="material-icons icon--on">toggle_on</span></label>
+            </div>
+                <div class="col-12">
+                    <a class="d-flex text-nounderline" role="button" href="#collapsefunctional" aria-expanded="false" data-toggle="collapse" aria-controls="collapsefunctional">
+                        <span aria-hidden="true" class="material-icons closed text-nounderline">keyboard_arrow_down</span><span aria-hidden="true" class="material-icons open text-nounderline">keyboard_arrow_up</span>
+                        <span class="text-underline text-black font-size16">Cookie information</span>
+                    </a>
+                </div>
+                <div id="collapsefunctional" class="col-12 collapse cookieinformation">
+                    <p><p>&nbsp;</p>
+<p>&nbsp;</p></p>
+                </div>
+        </div>
+
+                            <div class="row pb-3">
+            <div class="col-10">
+                <span class="font-weight-bold">
+                    Statistiska cookies
+                </span>
+                <p>Statistiska kakor samlar in och rapporterar information om hur du som besökare interagerar med webbplatsen. Informationen hjälper oss att förstå hur vi kan förbättra ditt besök på webbplatsen.</p>
+            </div>
+            <div class="col-2">
+                <input class="customslider" type="checkbox" checked="checked"  id="analyticalcookies" data-type="analytical" /><label for="analyticalcookies"><span aria-hidden="true" class="material-icons icon--off">toggle_off</span><span aria-hidden="true" class="material-icons icon--on">toggle_on</span></label>
+            </div>
+        </div>
+
+                </div>
+            </div>
+            <div class="modal-footer bg-white px-md-5 px-2 py-md-4 py-3 justify-content-around">
+                <button type="button" id="cookie-closesettings-btn" class="btn btn-light border p-2 px-md-4 px-3 mr-2">Stäng</button>
+                <button type="button" id="cookie-updatesettings-btn" class="btn btn-eucalyptus110  p-2 px-md-4 px-3 ml-2">Spara</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- END Bootstrap-Cookie-Alert -->
+    <script src="/assets/js/main.js?v=sYzQhIcmBl0gOlicxDGm0IW6D-c"></script>
+</body>
+</html>
