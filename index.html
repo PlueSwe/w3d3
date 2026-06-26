@@ -171,6 +171,24 @@
     @media (max-width: 1000px) { .charts-grid { grid-template-columns: 1fr; } }
     tr.row-today { background: #fffbf0; }
     .badge-ny { display:inline-block; background:#fbba30; color:#004b62; font-size:0.62rem; font-weight:800; letter-spacing:.05em; padding:1px 5px; border-radius:3px; margin-left:5px; vertical-align:middle; text-transform:uppercase; }
+    tbody tr.data-row { cursor:pointer; }
+    tbody tr.data-row:hover td { background: #f0f6f9; }
+    tbody tr.data-row.expanded td { background: #e8f2f7; border-bottom: none; }
+    tr.detail-row td { padding: 0; border-top: none; }
+    .detail-panel { padding: 16px 20px 20px; border-top: 2px solid var(--si-blue); background: #f7fbfd; }
+    .detail-panel .dp-grid { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 0.88rem; margin-bottom: 14px; }
+    .detail-panel .dp-label { font-weight: 700; color: var(--text-soft); white-space: nowrap; }
+    .detail-panel .dp-value { color: var(--text); }
+    .detail-panel .dp-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .dp-btn { display:inline-block; padding:7px 14px; border-radius:4px; font-size:0.83rem; font-weight:700; text-decoration:none; cursor:pointer; border:none; }
+    .dp-btn-primary { background:var(--si-blue); color:#fff; }
+    .dp-btn-primary:hover { background:#003a4d; }
+    .dp-btn-secondary { background:transparent; border:1.5px solid var(--si-blue); color:var(--si-blue); }
+    .dp-btn-secondary:hover { background:#e8f2f7; }
+    .dp-beslut-list { margin-top: 10px; }
+    .dp-beslut-list a { display:block; color:var(--si-blue); font-size:0.85rem; margin-bottom:4px; text-decoration:underline; }
+    .dp-loading { color:var(--text-soft); font-size:0.85rem; font-style:italic; }
+    .dp-error { color:#c0392b; font-size:0.85rem; }
     @media (max-width: 900px)  { .dash-cards { grid-template-columns: repeat(2,1fr); } .site-header, .hero, .container { padding-left: 16px; padding-right: 16px; } }
     @media (max-width: 560px)  { .dash-cards { grid-template-columns: 1fr 1fr; } .td-typ, .td-kom { display: none; } }
   </style>
@@ -839,14 +857,18 @@ function render() {
     : 'Inga träffar';
   document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
   const today = new Date().toISOString().slice(0,10);
-  document.getElementById('tbody').innerHTML = page.map(r => {
+  document.getElementById('tbody').innerHTML = page.map((r, i) => {
     const isToday = r.date === today;
-    return `<tr${isToday ? ' class="row-today"' : ''}>
+    const rowClass = ['data-row', isToday ? 'row-today' : ''].filter(Boolean).join(' ');
+    const dnoId = 'row-' + CSS.escape(r.dno.replace(/\s/g,'_'));
+    return `<tr class="${rowClass}" id="${dnoId}" onclick="toggleDetail(this, ${JSON.stringify(r.dno)})">
       <td class="td-dno">${esc(r.dno)}${isToday ? '<span class="badge-ny">Ny</span>' : ''}</td>
       <td class="td-date">${esc(r.date)}</td>
       <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.normTyp)}</span></td>
       <td class="td-kom">${esc(r.kommun)}</td>
       <td>${esc(r.subject)}</td>
+    </tr><tr class="detail-row" id="${dnoId}-detail" style="display:none">
+      <td colspan="5"><div class="detail-panel" id="${dnoId}-panel"></div></td>
     </tr>`;
   }).join('');
   renderPagination(total);
@@ -878,6 +900,61 @@ function resetFilters() {
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Expanderbar ärendedetalj ──
+async function toggleDetail(tr, dno) {
+  const detailRow = tr.nextElementSibling;
+  const panel     = detailRow?.querySelector('.detail-panel');
+  if (!detailRow || !panel) return;
+
+  const isOpen = detailRow.style.display !== 'none';
+  document.querySelectorAll('.detail-row').forEach(r => { r.style.display = 'none'; });
+  document.querySelectorAll('.data-row.expanded').forEach(r => r.classList.remove('expanded'));
+
+  if (isOpen) return;
+
+  tr.classList.add('expanded');
+  detailRow.style.display = '';
+
+  // Visa metadata direkt, hämta sedan beslutslänkar
+  const rec = filtered.find(x => x.dno === dno) || allData.find(x => x.dno === dno);
+  const statusId = 'dp-status';
+
+  panel.innerHTML = `
+    <div class="dp-grid">
+      <span class="dp-label">Ärendenummer</span><span class="dp-value">${esc(dno)}</span>
+      <span class="dp-label">Datum</span><span class="dp-value">${esc(rec?.date||'')}</span>
+      <span class="dp-label">Ärendetyp</span><span class="dp-value">${esc(rec?.normTyp||rec?.typ||'')}</span>
+      <span class="dp-label">Kommun</span><span class="dp-value">${esc(rec?.kommun||'')}</span>
+      <span class="dp-label">Ärendemening</span><span class="dp-value">${esc(rec?.subject||'')}</span>
+    </div>
+    <div id="${statusId}" class="dp-loading">⏳ Hämtar beslutslänkar…</div>`;
+
+  try {
+    const res  = await fetch('fetch_case.php?dno=' + encodeURIComponent(dno));
+    const data = await res.json();
+    const statusEl = panel.querySelector('#' + statusId);
+    if (!statusEl) return;
+
+    let html = '';
+    if (data.beslut && data.beslut.length > 0) {
+      html += '<div class="dp-beslut-list">';
+      data.beslut.forEach((url, i) => {
+        html += `<a href="${esc(url)}" target="_blank" rel="noopener">📄 Beslut${data.beslut.length > 1 ? ' ' + (i+1) : ''}</a>`;
+      });
+      html += '</div>';
+    }
+    html += `<div class="dp-actions">
+      <a class="dp-btn dp-btn-primary" href="${esc(data.searchUrl)}" target="_blank" rel="noopener">Sök på Skolinspektionen</a>
+      <a class="dp-btn dp-btn-secondary" href="${esc(data.sirisSearchUrl)}" target="_blank" rel="noopener">Sök i SIRIS</a>
+    </div>`;
+    statusEl.outerHTML = html;
+  } catch(e) {
+    const statusEl = panel.querySelector('#' + statusId);
+    if (statusEl) statusEl.outerHTML = `<div class="dp-error">Kunde inte hämta beslut.</div>
+      <div class="dp-actions"><a class="dp-btn dp-btn-primary" href="https://www.skolinspektionen.se/beslut-rapporter/sok-beslut/?query=${encodeURIComponent(dno)}" target="_blank" rel="noopener">Sök manuellt</a></div>`;
+  }
+}
 
 async function fetchNew() {
   const btn = document.getElementById('btnFetch');
