@@ -66,7 +66,7 @@
     .container { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
 
     /* ── Dashboard cards ── */
-    .dash-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .dash-cards { display: grid; grid-template-columns: repeat(5,1fr); gap: 16px; margin-bottom: 28px; }
     .dash-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 18px 20px; }
     .dash-card .label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); margin-bottom: 6px; }
     .dash-card .value { font-size: 2rem; font-weight: 800; color: var(--si-blue); line-height: 1; }
@@ -154,6 +154,8 @@
     footer a { color: var(--si-yellow); text-decoration: none; }
 
     @media (max-width: 1000px) { .charts-grid { grid-template-columns: 1fr; } }
+    tr.row-today { background: #fffbf0; }
+    .badge-ny { display:inline-block; background:#fbba30; color:#004b62; font-size:0.62rem; font-weight:800; letter-spacing:.05em; padding:1px 5px; border-radius:3px; margin-left:5px; vertical-align:middle; text-transform:uppercase; }
     @media (max-width: 900px)  { .dash-cards { grid-template-columns: repeat(2,1fr); } .site-header, .hero, .container { padding-left: 16px; padding-right: 16px; } }
     @media (max-width: 560px)  { .dash-cards { grid-template-columns: 1fr 1fr; } .td-typ, .td-kom { display: none; } }
   </style>
@@ -198,6 +200,11 @@
       <div class="label">Kommuner</div>
       <div class="value" id="dc-komm">—</div>
       <div class="sub" id="dc-komm-sub">representerade kommuner</div>
+    </div>
+    <div class="dash-card">
+      <div class="label">Kommuner utan ärenden</div>
+      <div class="value" id="dc-komm-miss">—</div>
+      <div class="sub" id="dc-komm-miss-sub">av 290 kommuner</div>
     </div>
     <div class="dash-card">
       <div class="label">Senaste ärende</div>
@@ -535,11 +542,16 @@ function buildDashboard() {
   document.getElementById('dc-latest-date').textContent = latest?.date || '';
 }
 
+const TOTAL_KOMMUNER = 290;
 function updateKommCard(data) {
   const year = document.getElementById('f-year').value;
   const komms = new Set(data.map(r => r.kommun).filter(Boolean));
-  document.getElementById('dc-komm').textContent = komms.size.toLocaleString('sv');
-  document.getElementById('dc-komm-sub').textContent = year ? `kommuner med ärenden ${year}` : 'representerade kommuner';
+  const withCases = komms.size;
+  const without   = TOTAL_KOMMUNER - withCases;
+  document.getElementById('dc-komm').textContent          = withCases.toLocaleString('sv');
+  document.getElementById('dc-komm-sub').textContent      = year ? `kommuner med ärenden ${year}` : 'representerade kommuner';
+  document.getElementById('dc-komm-miss').textContent     = without > 0 ? without.toLocaleString('sv') : '0';
+  document.getElementById('dc-komm-miss-sub').textContent = year ? `kommuner utan ärenden ${year}` : 'av 290 kommuner';
 }
 
 // ── Charts with click handlers ──
@@ -773,14 +785,17 @@ function render() {
     ? `Visar <strong>${(start+1).toLocaleString('sv')}–${Math.min(start+PAGE_SIZE,total).toLocaleString('sv')}</strong> av <strong>${total.toLocaleString('sv')}</strong> ärenden`
     : 'Inga träffar';
   document.getElementById('noResults').style.display = total === 0 ? 'block' : 'none';
-  document.getElementById('tbody').innerHTML = page.map(r => `
-    <tr>
-      <td class="td-dno">${esc(r.dno)}</td>
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('tbody').innerHTML = page.map(r => {
+    const isToday = r.date === today;
+    return `<tr${isToday ? ' class="row-today"' : ''}>
+      <td class="td-dno">${esc(r.dno)}${isToday ? '<span class="badge-ny">Ny</span>' : ''}</td>
       <td class="td-date">${esc(r.date)}</td>
-      <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.typ)}</span></td>
+      <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.normTyp)}</span></td>
       <td class="td-kom">${esc(r.kommun)}</td>
       <td>${esc(r.subject)}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
   renderPagination(total);
 }
 
