@@ -941,21 +941,21 @@ async function toggleDetail(tr, dno) {
     if (data.portalLinks) data.portalLinks.forEach(u => { if (!allLinks.includes(u)) allLinks.push(u); });
     if (data.beslut) data.beslut.forEach(u => { if (!allLinks.includes(u)) allLinks.push(u); });
 
-    let html = '<div class="dp-actions">';
+    let html = '';
     if (allLinks.length > 0) {
+      html = '<div class="dp-actions">';
       allLinks.forEach((url, i) => {
         const label = allLinks.length > 1 ? `Öppna beslut ${i+1}` : 'Öppna beslut';
         html += `<a class="dp-btn dp-btn-primary" href="${esc(url)}" target="_blank" rel="noopener">📄 ${label}</a>`;
       });
+      html += '</div>';
     } else {
-      html += `<a class="dp-btn dp-btn-secondary" href="${esc(data.sirisSearchUrl)}" target="_blank" rel="noopener">Sök i SIRIS</a>`;
+      html = '<span style="font-size:.83rem;color:var(--text-soft)">Inget beslut hittades för detta ärende.</span>';
     }
-    html += '</div>';
     statusEl.outerHTML = html;
   } catch(e) {
     const statusEl = panel.querySelector('#' + statusId);
-    if (statusEl) statusEl.outerHTML = `<div class="dp-error">Kunde inte hämta beslut.</div>
-      <div class="dp-actions"><a class="dp-btn dp-btn-secondary" href="${encodeURIComponent(dno)}" target="_blank" rel="noopener">Sök i SIRIS</a></div>`;
+    if (statusEl) statusEl.outerHTML = `<span class="dp-error">Kunde inte hämta beslutsinformation.</span>`;
   }
 }
 
