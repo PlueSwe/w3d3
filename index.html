@@ -52,6 +52,14 @@
       white-space: nowrap;
     }
     .search-box button:hover { background: #fac820; }
+    .komm-tooltip { display:none; position:absolute; z-index:200; top:calc(100% + 8px); left:50%;
+      transform:translateX(-50%); background:#1a1a2e; color:#fff; border-radius:7px;
+      padding:12px 16px; min-width:220px; max-width:320px; max-height:340px; overflow-y:auto;
+      box-shadow:0 4px 20px rgba(0,0,0,.3); font-size:0.82rem; line-height:1.7; white-space:normal; }
+    .komm-tooltip::before { content:''; position:absolute; bottom:100%; left:50%;
+      transform:translateX(-50%); border:6px solid transparent; border-bottom-color:#1a1a2e; }
+    .dash-card.has-tooltip { position:relative; cursor:default; }
+    .dash-card.has-tooltip:hover .komm-tooltip { display:block; }
     .btn-fetch { margin-left: 10px; padding: 13px 18px; background: transparent;
       border: 2px solid rgba(255,255,255,.5); border-radius: 5px; font-size: 0.88rem;
       font-weight: 700; color: #fff; cursor: pointer; transition: border-color .15s, background .15s;
@@ -212,10 +220,11 @@
       <div class="value" id="dc-komm">—</div>
       <div class="sub" id="dc-komm-sub">representerade kommuner</div>
     </div>
-    <div class="dash-card">
+    <div class="dash-card has-tooltip">
       <div class="label">Kommuner utan ärenden</div>
       <div class="value" id="dc-komm-miss">—</div>
       <div class="sub" id="dc-komm-miss-sub">av 290 kommuner</div>
+      <div class="komm-tooltip" id="kommMissTooltip"></div>
     </div>
     <div class="dash-card">
       <div class="label">Senaste ärende</div>
@@ -553,16 +562,18 @@ function buildDashboard() {
   document.getElementById('dc-latest-date').textContent = latest?.date || '';
 }
 
-const TOTAL_KOMMUNER = 290;
+const ALL_KOMMUNER = ['Ale','Alingsås','Alvesta','Aneby','Arboga','Arjeplog','Arvidsjaur','Arvika','Askersund','Avesta','Bengtsfors','Berg','Bjurholm','Bjuv','Boden','Bollebygd','Bollnäs','Borgholm','Borlänge','Borås','Botkyrka','Boxholm','Bromölla','Bräcke','Burlöv','Båstad','Dals-Ed','Danderyd','Degerfors','Dorotea','Eda','Ekerö','Eksjö','Emmaboda','Enköping','Eskilstuna','Eslöv','Essunga','Fagersta','Falkenberg','Falköping','Falun','Filipstad','Finspång','Flen','Forshaga','Färgelanda','Gagnef','Gislaved','Gnesta','Gnosjö','Gotland','Grums','Grästorp','Gullspång','Gällivare','Gävle','Göteborg','Götene','Habo','Hagfors','Hallsberg','Hallstahammar','Halmstad','Hammarö','Haninge','Haparanda','Heby','Hedemora','Helsingborg','Herrljunga','Hjo','Hofors','Huddinge','Hudiksvall','Hultsfred','Hylte','Håbo','Hällefors','Härjedalen','Härnösand','Härryda','Hässleholm','Höganäs','Högsby','Hörby','Höör','Jokkmokk','Järfälla','Jönköping','Kalix','Kalmar','Karlsborg','Karlshamn','Karlskoga','Karlskrona','Karlstad','Katrineholm','Kil','Kinda','Kiruna','Klippan','Knivsta','Kramfors','Kristianstad','Kristinehamn','Krokom','Kumla','Kungsbacka','Kungsör','Kungälv','Kävlinge','Köping','Laholm','Landskrona','Laxå','Lekeberg','Leksand','Lerum','Lessebo','Lidingö','Lidköping','Lilla Edet','Lindesberg','Linköping','Ljungby','Ljusdal','Ljusnarsberg','Lomma','Ludvika','Luleå','Lund','Lycksele','Lysekil','Malmö','Malung-Sälen','Malå','Mariestad','Mark','Markaryd','Mellerud','Mjölby','Mora','Motala','Mullsjö','Munkedal','Munkfors','Mölndal','Mönsterås','Mörbylånga','Nacka','Nora','Norberg','Nordanstig','Nordmaling','Norrköping','Norrtälje','Norsjö','Nybro','Nykvarn','Nyköping','Nynäshamn','Nässjö','Ockelbo','Olofström','Orsa','Orust','Osby','Oskarshamn','Ovanåker','Oxelösund','Pajala','Partille','Perstorp','Piteå','Ragunda','Robertsfors','Ronneby','Rättvik','Sala','Salem','Sandviken','Sigtuna','Simrishamn','Sjöbo','Skara','Skellefteå','Skinnskatteberg','Skurup','Skövde','Smedjebacken','Sollefteå','Sollentuna','Solna','Sorsele','Sotenäs','Staffanstorp','Stenungsund','Stockholm','Storfors','Storuman','Strängnäs','Strömstad','Strömsund','Sundbyberg','Sundsvall','Sunne','Surahammar','Svalöv','Svedala','Svenljunga','Säffle','Säter','Sävsjö','Söderhamn','Söderköping','Södertälje','Sölvesborg','Tanum','Tibro','Tidaholm','Tierp','Timrå','Tingsryd','Tjörn','Tomelilla','Torsby','Torsås','Tranemo','Tranås','Trelleborg','Trollhättan','Trosa','Tyresö','Täby','Töreboda','Uddevalla','Ulricehamn','Umeå','Upplands-Bro','Upplands Väsby','Uppsala','Uppvidinge','Vadstena','Vaggeryd','Valdemarsvik','Vallentuna','Vansbro','Vara','Varberg','Vaxholm','Vellinge','Vetlanda','Vilhelmina','Vimmerby','Vindeln','Vingåker','Vårgårda','Vänersborg','Vännäs','Värmdö','Värnamo','Västervik','Västerås','Växjö','Ydre','Ystad','Åmål','Ånge','Åre','Årjäng','Åsele','Åstorp','Åtvidaberg','Älmhult','Älvdalen','Älvkarleby','Älvsbyn','Ängelholm','Öckerö','Ödeshög','Örebro','Örkelljunga','Örnsköldsvik','Östersund','Österåker','Östhammar','Östra Göinge','Överkalix','Övertorneå'];
+
 function updateKommCard(data) {
   const year = document.getElementById('f-year').value;
-  const komms = new Set(data.map(r => r.kommun).filter(Boolean));
-  const withCases = komms.size;
-  const without   = TOTAL_KOMMUNER - withCases;
-  document.getElementById('dc-komm').textContent          = withCases.toLocaleString('sv');
+  const withSet = new Set(data.map(r => r.kommun).filter(Boolean));
+  const missing  = ALL_KOMMUNER.filter(k => !withSet.has(k)).sort((a,b) => a.localeCompare(b,'sv'));
+  document.getElementById('dc-komm').textContent          = withSet.size.toLocaleString('sv');
   document.getElementById('dc-komm-sub').textContent      = year ? `kommuner med ärenden ${year}` : 'representerade kommuner';
-  document.getElementById('dc-komm-miss').textContent     = without > 0 ? without.toLocaleString('sv') : '0';
+  document.getElementById('dc-komm-miss').textContent     = missing.length.toLocaleString('sv');
   document.getElementById('dc-komm-miss-sub').textContent = year ? `kommuner utan ärenden ${year}` : 'av 290 kommuner';
+  document.getElementById('kommMissTooltip').innerHTML    =
+    missing.length ? missing.map(k => esc(k)).join('<br>') : 'Alla kommuner har ärenden';
 }
 
 // ── Charts with click handlers ──
