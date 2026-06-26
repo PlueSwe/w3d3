@@ -290,6 +290,111 @@ const MONTH_NAMES = ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt'
 })();
 
 // ── Load data ──
+// ── Kommunnamn-normalisering (stavningskorrigering) ──
+const KOMMUN_ALIAS = {
+  // Alingsås
+  'alingså': 'Alingsås',
+  // Bengtsfors
+  'bengtsfor': 'Bengtsfors',
+  // Bollnäs
+  'bollnä': 'Bollnäs',
+  // Borås
+  'borå': 'Borås',
+  // Dals-Ed
+  'dals-ed': 'Dals-Ed',
+  // Degerfors
+  'degerfor': 'Degerfors',
+  // Falun
+  'falu': 'Falun',
+  // Göteborg
+  'göteborgs': 'Göteborg',
+  'götebrog': 'Göteborg',
+  'torslanda': 'Göteborg',
+  // Hagfors
+  'hagfor': 'Hagfors',
+  'hagsfor': 'Hagfors',
+  // Helsingborg
+  'helsinborg': 'Helsingborg',
+  'helsingsborg': 'Helsingborg',
+  'helsingsborg': 'Helsingborg',
+  // Hofors
+  'hofor': 'Hofors',
+  // Huddinge
+  'hudddinge': 'Huddinge',
+  // Hultsfred
+  'hultfred': 'Hultsfred',
+  // Hällefors
+  'hällefor': 'Hällefors',
+  // Höganäs
+  'höganä': 'Höganäs',
+  // Kramfors
+  'kramfor': 'Kramfors',
+  // Kungälv
+  'kungsälv': 'Kungälv',
+  // Malmö
+  'malmö': 'Malmö',
+  'mallmö': 'Malmö',
+  // Malung-Sälen
+  'malung': 'Malung-Sälen',
+  'malung-sälen': 'Malung-Sälen',
+  // Munkfors
+  'munkfor': 'Munkfors',
+  // Norrköping
+  'norrköpng': 'Norrköping',
+  'norrköpig': 'Norrköping',
+  // Nyköping
+  'nyköpng': 'Nyköping',
+  // Oskarshamn
+  'oskarhamn': 'Oskarshamn',
+  // Robertsfors
+  'robertsfor': 'Robertsfors',
+  // Solna
+  'solan': 'Solna',
+  // Sotenäs
+  'sotenä': 'Sotenäs',
+  // Staffanstorp
+  'staffantorp': 'Staffanstorp',
+  // Stenungsund
+  'stenungssund': 'Stenungsund',
+  'stenungsundsund': 'Stenungsund',
+  // Stockholm
+  'stockhom': 'Stockholm',
+  // Storfors
+  'storfor': 'Storfors',
+  // Strängnäs
+  'strängnä': 'Strängnäs',
+  'stängnä': 'Strängnäs',
+  // Svalöv
+  'svalov': 'Svalöv',
+  // Torsås
+  'torså': 'Torsås',
+  // Tranås
+  'tranå': 'Tranås',
+  // Trelleborg
+  'trellerborg': 'Trelleborg',
+  // Upplands Väsby
+  'upplands-väsby': 'Upplands Väsby',
+  // Upplands-Bro
+  'upplands-bro': 'Upplands-Bro',
+  // Vänersborg
+  'vänerborg': 'Vänersborg',
+  'värnersborg': 'Vänersborg',
+  // Västerås
+  'västerå': 'Västerås',
+  // Växjö
+  'växsjö': 'Växjö',
+  'växö': 'Växjö',
+  // Örebro
+  'örebo': 'Örebro',
+  // Örnsköldsvik
+  'örnsköldesvik': 'Örnsköldsvik',
+  'örnsköldvik': 'Örnsköldsvik',
+};
+function normalizeKommun(raw) {
+  if (!raw) return '';
+  return KOMMUN_ALIAS[raw.toLowerCase().trim()] || raw;
+}
+
 // ── Ärendetyp normalisering ──
 function normalizeTyp(raw) {
   if (!raw) return 'Övrigt';
@@ -329,12 +434,18 @@ async function loadData() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     allData = await r.json();
     // Lägg till normaliserad ärendetyp på varje post
-    allData.forEach(row => { row.normTyp = normalizeTyp(row.typ); });
+    allData.forEach(row => {
+      row.normTyp  = normalizeTyp(row.typ);
+      row.kommun   = normalizeKommun(row.kommun);
+    });
     document.getElementById('loadingMsg').style.display = 'none';
     document.getElementById('heroCount').textContent = allData.length.toLocaleString('sv');
     buildDropdowns();
     buildDashboard();
     buildCharts();
+    // Standardfilter: innevarande år
+    const curYear = new Date().getFullYear().toString();
+    document.getElementById('f-year').value = curYear;
     onFilter();
   } catch(e) {
     document.getElementById('loadingMsg').innerHTML = '⚠ Kunde inte ladda data: ' + e.message;
