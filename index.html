@@ -640,23 +640,33 @@ function updateCharts(data) {
   charts.kom.data.datasets[0].backgroundColor = topKom.map((_,i)=>PALETTE[i%PALETTE.length]);
   charts.kom.update();
 
-  // ── Månadsgraf — visa månader för valt år, annars senaste 24 mån ──
+  // ── Månadsgraf — visa månader för valt år (t.o.m. nuvarande månad), annars senaste 24 mån ──
+  const now = new Date();
+  const curYearStr = now.getFullYear().toString();
+  const curMonth   = now.getMonth() + 1; // 1-12
   let months = [];
+  let monthTitle = '';
   if (activeYear) {
-    for (let m = 1; m <= 12; m++) {
+    const maxMonth = activeYear === curYearStr ? curMonth : 12;
+    for (let m = 1; m <= maxMonth; m++) {
       months.push(activeYear + '-' + String(m).padStart(2,'0'));
     }
+    monthTitle = `Ärenden per månad ${activeYear}`;
   } else {
-    const now = new Date();
     for (let i = 23; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
       months.push(d.toISOString().substring(0,7));
     }
+    monthTitle = 'Ärenden per månad (senaste 24 mån)';
   }
+  // Uppdatera rubriken
+  const monthCard = document.getElementById('chartMonth').closest('.chart-card').querySelector('h3');
+  monthCard.innerHTML = `${monthTitle} <span class="chart-hint">Klicka för att filtrera</span>`;
+
   const byMonth = {};
   data.forEach(r => { const m = r.date.substring(0,7); byMonth[m] = (byMonth[m]||0)+1; });
   charts.month._months = months;
-  charts.month.data.labels = months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' ' + m.substring(2,4)));
+  charts.month.data.labels = months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' \'' + m.substring(2,4)));
   charts.month.data.datasets[0].data = months.map(m => byMonth[m]||0);
   charts.month.update();
 
