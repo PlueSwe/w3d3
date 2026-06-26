@@ -936,10 +936,15 @@ async function toggleDetail(tr, dno) {
     const statusEl = panel.querySelector('#' + statusId);
     if (!statusEl) return;
 
+    // Samla alla beslutslänkar: portalLinks + SIRIS-matchningar
+    const allLinks = [];
+    if (data.portalLinks) data.portalLinks.forEach(u => { if (!allLinks.includes(u)) allLinks.push(u); });
+    if (data.beslut) data.beslut.forEach(u => { if (!allLinks.includes(u)) allLinks.push(u); });
+
     let html = '<div class="dp-actions">';
-    if (data.beslut && data.beslut.length > 0) {
-      data.beslut.forEach((url, i) => {
-        const label = data.beslut.length > 1 ? `Öppna beslut ${i+1} (PDF)` : 'Öppna beslut (PDF)';
+    if (allLinks.length > 0) {
+      allLinks.forEach((url, i) => {
+        const label = allLinks.length > 1 ? `Öppna beslut ${i+1}` : 'Öppna beslut';
         html += `<a class="dp-btn dp-btn-primary" href="${esc(url)}" target="_blank" rel="noopener">📄 ${label}</a>`;
       });
     } else {
