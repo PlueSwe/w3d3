@@ -517,9 +517,28 @@ function fill(id, vals) {
   vals.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; sel.appendChild(o); });
 }
 
+// Räkna typantal baserat på aktiva filter (exkl. typ-filtret självt)
+function currentTypCounts() {
+  const q    = document.getElementById('f-search').value.toLowerCase().trim();
+  const kom  = document.getElementById('f-kom').value;
+  const year = document.getElementById('f-year').value;
+  const mon  = document.getElementById('f-month').value;
+  const counts = {};
+  allData.forEach(r => {
+    if (kom  && r.kommun !== kom)              return;
+    if (year && !r.date.startsWith(year))      return;
+    if (mon  && r.date.substring(5,7) !== mon) return;
+    if (q && !q.split(/\s+/).every(w =>
+      (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase().includes(w))) return;
+    counts[r.normTyp] = (counts[r.normTyp]||0) + 1;
+  });
+  return counts;
+}
+
 function renderTypChips() {
   const q = (document.getElementById('typSearch')?.value || '').toLowerCase().trim();
-  let entries = Object.entries(allTypCounts).sort((a,b) => b[1]-a[1]);
+  const counts = currentTypCounts();
+  let entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
   if (q) entries = entries.filter(([t]) => t.toLowerCase().includes(q));
 
   const visible = (!q && !showAllTyps) ? entries.slice(0, TYP_INITIAL) : entries;
@@ -791,6 +810,7 @@ function onFilter() {
 
   sortData(); currentPage = 1;
   renderChips();
+  renderTypChips();
   updateCharts(filtered);
   updateKommCard(filtered);
   render();
