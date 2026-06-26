@@ -924,6 +924,7 @@ function toggleDetail(tr, dno) {
       <span class="dp-label">Ärendetyp</span><span class="dp-value">${esc(rec?.normTyp||rec?.typ||'')}</span>
       <span class="dp-label">Kommun</span><span class="dp-value">${esc(rec?.kommun||'')}</span>
       <span class="dp-label">Ärendemening</span><span class="dp-value">${esc(rec?.subject||'')}</span>
+      ${rec?.hauptman ? `<span class="dp-label">Huvudman</span><span class="dp-value">${esc(rec.hauptman)}</span>` : ''}
     </div>`;
 }
 
