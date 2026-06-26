@@ -269,7 +269,15 @@
 
   <!-- Trendgraf per huvudman -->
   <div class="chart-card-full">
-    <h3>Trendkurvor – inkomna ärenden per huvudmannaskap</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+      <h3 style="margin:0">Trendkurvor – inkomna ärenden per huvudmannaskap</h3>
+      <div class="fg" style="flex-direction:row;align-items:center;gap:8px">
+        <label style="font-size:0.74rem;font-weight:700;color:var(--si-blue);text-transform:uppercase;letter-spacing:.05em">Ärendetyp</label>
+        <select id="hmTypFilter" onchange="updateHauptmanChart()" style="padding:5px 10px;border:1px solid var(--border);border-radius:4px;font-size:0.87rem">
+          <option value="">Alla typer</option>
+        </select>
+      </div>
+    </div>
     <div class="hm-toggles" id="hmToggles"></div>
     <div class="chart-wrap-tall"><canvas id="chartHauptman"></canvas></div>
   </div>
@@ -547,6 +555,10 @@ function buildDropdowns() {
   const years = [...new Set(allData.map(r => r.date.substring(0,4)))].sort().reverse();
   fill('f-kom', komms); fill('f-year', years);
 
+  // Populate ärendetyp dropdown in trend chart
+  const typs = [...new Set(allData.map(r => r.normTyp).filter(Boolean))].sort();
+  fill('hmTypFilter', typs);
+
   allData.forEach(r => { allTypCounts[r.normTyp] = (allTypCounts[r.normTyp]||0)+1; });
   renderTypChips();
 }
@@ -762,36 +774,7 @@ function updateCharts(data) {
   charts.month.data.datasets[0].data = months.map(m => byMonth[m]||0);
   charts.month.update();
 
-  // ── Trendgraf per huvudman ──
-  if (charts.hauptman) {
-    // Build month axis same as above
-    const hmMonths = months; // reuse from above
-    const hmLabels = hmMonths.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' \'' + m.substring(2,4)));
-    // Count per type per month
-    const byHmMonth = {};
-    data.forEach(r => {
-      const t = r.hauptman; if (!t) return;
-      const mo = r.date.substring(0,7);
-      if (!byHmMonth[t]) byHmMonth[t] = {};
-      byHmMonth[t][mo] = (byHmMonth[t][mo]||0) + 1;
-    });
-    charts.hauptman.data.labels = hmLabels;
-    charts.hauptman.data.datasets = HM_TYPES.filter(t => selectedHm.has(t)).map(t => {
-      const col = HM_COLORS[t] || '#888';
-      return {
-        label: t,
-        data: hmMonths.map(m => (byHmMonth[t]||{})[m] || 0),
-        borderColor: col,
-        backgroundColor: col + '18',
-        fill: false,
-        tension: .35,
-        pointRadius: 2,
-        pointHoverRadius: 6,
-        borderWidth: 2,
-      };
-    });
-    charts.hauptman.update();
-  }
+  updateHauptmanChart(data, months, activeYear);
 
   // ── Per år — uppdatera bara färgerna (markera aktivt år) ──
   const selYear = document.getElementById('f-year').value;
@@ -859,7 +842,51 @@ function toggleHm(btn, type) {
     selectedHm.add(type);
   }
   renderHmToggles();
-  updateCharts(filtered);
+  updateHauptmanChart();
+}
+
+function updateHauptmanChart(data, months, activeYear) {
+  if (!charts.hauptman) return;
+  // Allow calling with no args — recompute from current state
+  if (!data) data = filtered;
+  if (!activeYear) activeYear = document.getElementById('f-year').value;
+  if (!months) {
+    const now = new Date(), curYearStr = now.getFullYear().toString(), curMonth = now.getMonth()+1;
+    months = [];
+    if (activeYear) {
+      const maxMonth = activeYear === curYearStr ? curMonth : 12;
+      for (let m = 1; m <= maxMonth; m++) months.push(activeYear + '-' + String(m).padStart(2,'0'));
+    } else {
+      for (let i = 23; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+        months.push(d.toISOString().substring(0,7));
+      }
+    }
+  }
+
+  const hmTyp = document.getElementById('hmTypFilter')?.value || '';
+  const src = hmTyp ? data.filter(r => r.normTyp === hmTyp) : data;
+
+  const labels = months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' \'' + m.substring(2,4)));
+  const byHmMonth = {};
+  src.forEach(r => {
+    const t = r.hauptman; if (!t) return;
+    const mo = r.date.substring(0,7);
+    if (!byHmMonth[t]) byHmMonth[t] = {};
+    byHmMonth[t][mo] = (byHmMonth[t][mo]||0) + 1;
+  });
+
+  charts.hauptman.data.labels = labels;
+  charts.hauptman.data.datasets = HM_TYPES.filter(t => selectedHm.has(t)).map(t => {
+    const col = HM_COLORS[t] || '#888';
+    return {
+      label: t,
+      data: months.map(m => (byHmMonth[t]||{})[m] || 0),
+      borderColor: col, backgroundColor: col + '18',
+      fill: false, tension: .35, pointRadius: 2, pointHoverRadius: 6, borderWidth: 2,
+    };
+  });
+  charts.hauptman.update();
 }
 
 // ── Set filter from chart click ──
