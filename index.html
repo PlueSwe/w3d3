@@ -861,7 +861,7 @@ function render() {
     const isToday = r.date === today;
     const rowClass = ['data-row', isToday ? 'row-today' : ''].filter(Boolean).join(' ');
     const dnoId = 'row-' + CSS.escape(r.dno.replace(/\s/g,'_'));
-    return `<tr class="${rowClass}" id="${dnoId}" onclick="toggleDetail(this, ${JSON.stringify(r.dno)})">
+    return `<tr class="${rowClass}" id="${dnoId}" data-dno="${esc(r.dno)}" onclick="toggleDetail(this, this.dataset.dno)">
       <td class="td-dno">${esc(r.dno)}${isToday ? '<span class="badge-ny">Ny</span>' : ''}</td>
       <td class="td-date">${esc(r.date)}</td>
       <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.normTyp)}</span></td>
