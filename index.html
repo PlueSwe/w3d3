@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skolinspektionen – Ärendelista</title>
+  <link rel="icon" href="https://www.skolinspektionen.se/favicon.ico" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <style>
     :root {
@@ -196,7 +197,7 @@
     <div class="dash-card">
       <div class="label">Kommuner</div>
       <div class="value" id="dc-komm">—</div>
-      <div class="sub">representerade kommuner</div>
+      <div class="sub" id="dc-komm-sub">representerade kommuner</div>
     </div>
     <div class="dash-card">
       <div class="label">Senaste ärende</div>
@@ -526,14 +527,19 @@ function toggleShowAllTyps() {
 function buildDashboard() {
   const curYear = new Date().getFullYear().toString();
   const thisYear = allData.filter(r => r.date.startsWith(curYear));
-  const komms = new Set(allData.map(r => r.kommun).filter(Boolean));
   const latest = [...allData].sort((a,b) => b.date.localeCompare(a.date))[0];
   document.getElementById('dc-total').textContent     = allData.length.toLocaleString('sv');
   document.getElementById('dc-year').textContent      = thisYear.length.toLocaleString('sv');
   document.getElementById('dc-year-sub').textContent  = 'registrerade ' + curYear;
-  document.getElementById('dc-komm').textContent      = komms.size.toLocaleString('sv');
   document.getElementById('dc-latest').textContent    = latest?.dno || '—';
   document.getElementById('dc-latest-date').textContent = latest?.date || '';
+}
+
+function updateKommCard(data) {
+  const year = document.getElementById('f-year').value;
+  const komms = new Set(data.map(r => r.kommun).filter(Boolean));
+  document.getElementById('dc-komm').textContent = komms.size.toLocaleString('sv');
+  document.getElementById('dc-komm-sub').textContent = year ? `kommuner med ärenden ${year}` : 'representerade kommuner';
 }
 
 // ── Charts with click handlers ──
@@ -741,6 +747,7 @@ function onFilter() {
   sortData(); currentPage = 1;
   renderChips();
   updateCharts(filtered);
+  updateKommCard(filtered);
   render();
 }
 
