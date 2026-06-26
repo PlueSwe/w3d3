@@ -52,6 +52,13 @@
       white-space: nowrap;
     }
     .search-box button:hover { background: #fac820; }
+    .btn-fetch { margin-left: 10px; padding: 13px 18px; background: transparent;
+      border: 2px solid rgba(255,255,255,.5); border-radius: 5px; font-size: 0.88rem;
+      font-weight: 700; color: #fff; cursor: pointer; transition: border-color .15s, background .15s;
+      white-space: nowrap; flex-shrink: 0; }
+    .btn-fetch:hover:not(:disabled) { border-color: #fff; background: rgba(255,255,255,.12); }
+    .btn-fetch:disabled { opacity: .5; cursor: default; }
+    .fetch-status { font-size: 0.83rem; color: rgba(255,255,255,.85); margin-top: 6px; min-height: 1.2em; }
     .active-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .filter-chip {
       display: inline-flex; align-items: center; gap: 6px;
@@ -175,10 +182,14 @@
 <div class="hero">
   <h1>Ärendelista</h1>
   <p>Sök bland <span id="heroCount">80 796</span> ärenden (2019–2026) &middot; Uppdaterad <span id="fetchDate"></span></p>
-  <div class="search-box">
-    <input id="f-search" type="text" placeholder="Sök på ärendenummer, skola, ärendetyp, ort…" oninput="onFilter()">
-    <button onclick="onFilter()">🔍 Sök</button>
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0;max-width:780px">
+    <div class="search-box" style="flex:1;min-width:280px">
+      <input id="f-search" type="text" placeholder="Sök på ärendenummer, skola, ärendetyp, ort…" oninput="onFilter()">
+      <button onclick="onFilter()">🔍 Sök</button>
+    </div>
+    <button class="btn-fetch" id="btnFetch" onclick="fetchNew()">↓ Hämta nya ärenden</button>
   </div>
+  <div class="fetch-status" id="fetchStatus"></div>
   <div class="active-filters" id="activeFilters"></div>
 </div>
 
@@ -825,6 +836,35 @@ function resetFilters() {
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function fetchNew() {
+  const btn = document.getElementById('btnFetch');
+  const status = document.getElementById('fetchStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ Hämtar…';
+  status.textContent = 'Kontaktar Skolinspektionens portal…';
+  try {
+    const res = await fetch('fetch_new.php', { method: 'POST' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    if (data.new === 0) {
+      status.textContent = '✓ Inga nya ärenden sedan ' + data.from + '.';
+    } else {
+      status.textContent = `✓ ${data.new} nya ärenden hämtade (${data.from} – ${data.to}). Laddar om…`;
+      await new Promise(r => setTimeout(r, 1200));
+      // Ladda om data utan sidladdning
+      allData = [];
+      document.getElementById('loadingMsg').style.display = 'block';
+      await loadData();
+    }
+  } catch(e) {
+    status.textContent = '⚠ Fel: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '↓ Hämta nya ärenden';
+  }
+}
 
 loadData();
 </script>
