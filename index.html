@@ -949,8 +949,6 @@ async function toggleDetail(tr, dno) {
         html += `<a class="dp-btn dp-btn-primary" href="${esc(url)}" target="_blank" rel="noopener">📄 ${label}</a>`;
       });
       html += '</div>';
-    } else {
-      html = '<span style="font-size:.83rem;color:var(--text-soft)">Inget beslut hittades för detta ärende.</span>';
     }
     statusEl.outerHTML = html;
   } catch(e) {
