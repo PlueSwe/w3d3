@@ -89,12 +89,20 @@
     .dash-card.yellow { border-left: 4px solid var(--si-yellow); }
 
     /* ── Charts grid ── */
-    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
     .chart-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 20px; transition: border-color .2s; }
     .chart-card:hover { border-color: var(--si-blue-mid); }
-    .chart-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--si-blue); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .chart-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--si-blue); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
     .chart-hint { font-size: 0.75rem; font-weight: 400; color: var(--text-soft); }
     .chart-wrap { position: relative; height: 240px; cursor: pointer; }
+    /* ── Trendgraf huvudman ── */
+    .chart-card-full { grid-column: 1 / -1; margin-bottom: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 20px; }
+    .chart-card-full h3 { font-size: 0.9rem; font-weight: 700; color: var(--si-blue); margin-bottom: 10px; }
+    .hm-toggles { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .hm-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 2px solid transparent; cursor: pointer; transition: all .15s; user-select: none; }
+    .hm-toggle .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .hm-toggle.off { opacity: .4; filter: grayscale(.6); }
+    .chart-wrap-tall { position: relative; height: 300px; }
 
     /* ── Ärendetyp panel ── */
     .typ-panel { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; margin-bottom: 12px; }
@@ -259,6 +267,13 @@
     <button class="btn-reset" onclick="resetFilters()">✕ Rensa alla filter</button>
   </div>
 
+  <!-- Trendgraf per huvudman -->
+  <div class="chart-card-full">
+    <h3>Trendkurvor – inkomna ärenden per huvudmannaskap</h3>
+    <div class="hm-toggles" id="hmToggles"></div>
+    <div class="chart-wrap-tall"><canvas id="chartHauptman"></canvas></div>
+  </div>
+
   <!-- Charts — klickbara för filtrering -->
   <div class="charts-grid">
     <div class="chart-card">
@@ -321,6 +336,11 @@ const PAGE_SIZE = 50;
 let allData = [], filtered = [], sortCol = 'date', sortAsc = false, currentPage = 1;
 const BLUE = '#004b62', YELLOW = '#fbba30', BLUE_MID = '#006b8a', BLUE_LIGHT = '#e0eef3';
 const PALETTE = ['#004b62','#006b8a','#0090b5','#00afd0','#5bc4d8','#fbba30','#e8a020','#fcd26a','#b3d9e5','#d4eef5'];
+
+// ── Huvudman trendgraf ──
+const HM_TYPES = ['Kommunal','Fristående','Kommunalförbund','Specialskola','Region','Sameskolan','Statlig'];
+const HM_COLORS = { 'Kommunal':'#004b62', 'Fristående':'#fbba30', 'Kommunalförbund':'#0090b5', 'Specialskola':'#e8a020', 'Region':'#5bc4d8', 'Sameskolan':'#9b59b6', 'Statlig':'#e74c3c' };
+let selectedHm = new Set(HM_TYPES.slice(0,2)); // Kommunal + Fristående on by default
 
 document.getElementById('fetchDate').textContent = new Date().toLocaleDateString('sv-SE');
 
@@ -653,7 +673,42 @@ function buildCharts() {
     setFilter('f-month', m.substring(5,7));
   });
 
+  // ── Trendgraf per huvudman ──
+  renderHmToggles();
+  charts.hauptman = new Chart(document.getElementById('chartHauptman'), {
+    type: 'line',
+    data: { labels: [], datasets: [] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString('sv') } }
+      },
+      scales: {
+        x: { grid: { color: '#edf1f4' }, ticks: { font: { size: 10 }, maxRotation: 45 } },
+        y: { beginAtZero: true, grid: { color: '#edf1f4' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+
   updateCharts(allData);
+}
+
+function renderHmToggles() {
+  const container = document.getElementById('hmToggles');
+  if (!container) return;
+  // Only show types that exist in data
+  const existing = new Set(allData.map(r => r.hauptman).filter(Boolean));
+  container.innerHTML = HM_TYPES.filter(t => existing.has(t)).map(t => {
+    const on = selectedHm.has(t);
+    const col = HM_COLORS[t] || '#888';
+    return `<button class="hm-toggle${on?'':' off'}" data-hm="${t}"
+      style="border-color:${col};color:${on?'#fff':col};background:${on?col:'transparent'}"
+      onclick="toggleHm(this,'${t}')">
+      <span class="dot" style="background:${col}"></span>${t}
+    </button>`;
+  }).join('');
 }
 
 function updateCharts(data) {
@@ -706,6 +761,37 @@ function updateCharts(data) {
   charts.month.data.labels = months.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' \'' + m.substring(2,4)));
   charts.month.data.datasets[0].data = months.map(m => byMonth[m]||0);
   charts.month.update();
+
+  // ── Trendgraf per huvudman ──
+  if (charts.hauptman) {
+    // Build month axis same as above
+    const hmMonths = months; // reuse from above
+    const hmLabels = hmMonths.map(m => MONTH_NAMES[parseInt(m.substring(5))-1] + (activeYear ? '' : ' \'' + m.substring(2,4)));
+    // Count per type per month
+    const byHmMonth = {};
+    data.forEach(r => {
+      const t = r.hauptman; if (!t) return;
+      const mo = r.date.substring(0,7);
+      if (!byHmMonth[t]) byHmMonth[t] = {};
+      byHmMonth[t][mo] = (byHmMonth[t][mo]||0) + 1;
+    });
+    charts.hauptman.data.labels = hmLabels;
+    charts.hauptman.data.datasets = HM_TYPES.filter(t => selectedHm.has(t)).map(t => {
+      const col = HM_COLORS[t] || '#888';
+      return {
+        label: t,
+        data: hmMonths.map(m => (byHmMonth[t]||{})[m] || 0),
+        borderColor: col,
+        backgroundColor: col + '18',
+        fill: false,
+        tension: .35,
+        pointRadius: 2,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+      };
+    });
+    charts.hauptman.update();
+  }
 
   // ── Per år — uppdatera bara färgerna (markera aktivt år) ──
   const selYear = document.getElementById('f-year').value;
@@ -764,6 +850,16 @@ function makeLine(id, labels, data, onClickCb) {
     }
   });
   return chart;
+}
+
+function toggleHm(btn, type) {
+  if (selectedHm.has(type)) {
+    if (selectedHm.size > 1) selectedHm.delete(type);
+  } else {
+    selectedHm.add(type);
+  }
+  renderHmToggles();
+  updateCharts(filtered);
 }
 
 // ── Set filter from chart click ──
