@@ -233,6 +233,14 @@
     </div>
   </div>
 
+  <!-- Filter strip — direkt under boxarna -->
+  <div class="filter-strip">
+    <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
+    <div class="fg"><label for="f-month">Månad</label><select id="f-month" onchange="onFilter()"><option value="">Alla månader</option></select></div>
+    <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
+    <button class="btn-reset" onclick="resetFilters()">✕ Rensa alla filter</button>
+  </div>
+
   <!-- Charts — klickbara för filtrering -->
   <div class="charts-grid">
     <div class="chart-card">
@@ -263,13 +271,6 @@
     <button class="typ-show-more" id="typShowMore" onclick="toggleShowAllTyps()" style="display:none"></button>
   </div>
 
-  <!-- Filter strip (dropdowns) -->
-  <div class="filter-strip">
-    <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
-    <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
-    <div class="fg"><label for="f-month">Månad</label><select id="f-month" onchange="onFilter()"><option value="">Alla månader</option></select></div>
-    <button class="btn-reset" onclick="resetFilters()">✕ Rensa alla filter</button>
-  </div>
 
   <div class="stats-row">
     <div class="count" id="statsCount"></div>
