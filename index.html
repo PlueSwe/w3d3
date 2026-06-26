@@ -936,23 +936,21 @@ async function toggleDetail(tr, dno) {
     const statusEl = panel.querySelector('#' + statusId);
     if (!statusEl) return;
 
-    let html = '';
+    let html = '<div class="dp-actions">';
     if (data.beslut && data.beslut.length > 0) {
-      html += '<div class="dp-beslut-list">';
       data.beslut.forEach((url, i) => {
-        html += `<a href="${esc(url)}" target="_blank" rel="noopener">📄 Beslut${data.beslut.length > 1 ? ' ' + (i+1) : ''}</a>`;
+        const label = data.beslut.length > 1 ? `Öppna beslut ${i+1} (PDF)` : 'Öppna beslut (PDF)';
+        html += `<a class="dp-btn dp-btn-primary" href="${esc(url)}" target="_blank" rel="noopener">📄 ${label}</a>`;
       });
-      html += '</div>';
+    } else {
+      html += `<a class="dp-btn dp-btn-secondary" href="${esc(data.sirisSearchUrl)}" target="_blank" rel="noopener">Sök i SIRIS</a>`;
     }
-    html += `<div class="dp-actions">
-      <a class="dp-btn dp-btn-primary" href="${esc(data.searchUrl)}" target="_blank" rel="noopener">Sök på Skolinspektionen</a>
-      <a class="dp-btn dp-btn-secondary" href="${esc(data.sirisSearchUrl)}" target="_blank" rel="noopener">Sök i SIRIS</a>
-    </div>`;
+    html += '</div>';
     statusEl.outerHTML = html;
   } catch(e) {
     const statusEl = panel.querySelector('#' + statusId);
     if (statusEl) statusEl.outerHTML = `<div class="dp-error">Kunde inte hämta beslut.</div>
-      <div class="dp-actions"><a class="dp-btn dp-btn-primary" href="https://www.skolinspektionen.se/beslut-rapporter/sok-beslut/?query=${encodeURIComponent(dno)}" target="_blank" rel="noopener">Sök manuellt</a></div>`;
+      <div class="dp-actions"><a class="dp-btn dp-btn-secondary" href="${encodeURIComponent(dno)}" target="_blank" rel="noopener">Sök i SIRIS</a></div>`;
   }
 }
 
