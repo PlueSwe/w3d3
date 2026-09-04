@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skolinspektionen – Ärendelista</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
@@ -197,6 +197,26 @@
     .dp-beslut-list a { display:block; color:var(--si-blue); font-size:0.85rem; margin-bottom:4px; text-decoration:underline; }
     .dp-loading { color:var(--text-soft); font-size:0.85rem; font-style:italic; }
     .dp-error { color:#c0392b; font-size:0.85rem; }
+    .skolinfo-card { margin-top:14px; border:1.5px solid #b3d9e5; border-radius:8px; overflow:hidden; }
+    .skolinfo-header { display:flex; align-items:center; gap:8px; padding:9px 14px; background:#e0eef3; cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--si-blue); user-select:none; }
+    .skolinfo-header:hover { background:#cde4ed; }
+    .skolinfo-body { padding:12px 16px; display:none; background:#fff; }
+    .skolinfo-body.open { display:block; }
+    .skolinfo-grid { display:grid; grid-template-columns:auto 1fr; gap:5px 14px; font-size:0.84rem; }
+    .skolinfo-grid .lbl { font-weight:700; color:var(--text-soft); white-space:nowrap; }
+    .skolinfo-stat { display:inline-flex; align-items:center; gap:4px; background:#f0f7fa; border:1px solid #b3d9e5; border-radius:4px; padding:3px 8px; font-size:0.8rem; margin:2px; }
+    .skolinfo-stat .val { font-weight:700; color:var(--si-blue); }
+    .skol-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .skol-table th { background:var(--si-blue); color:#fff; padding:8px 10px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:.04em; white-space:nowrap; }
+    .skol-table td { padding:7px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .skol-row { cursor:pointer; transition:background .1s; }
+    .skol-row:hover { background:#f0f7fa; }
+    .skol-row.expanded { background:#e0eef3; }
+    .skol-badge-row td { padding:0; border-bottom:2px solid #b3d9e5; }
+    .skol-badge { padding:14px 16px; background:#f7fbfd; }
+    .bar-wrap { display:inline-flex; align-items:center; gap:6px; }
+    .bar-bg { display:inline-block; width:55px; height:7px; background:#e0e0e0; border-radius:4px; overflow:hidden; vertical-align:middle; }
+    .bar-fill { display:block; height:100%; border-radius:4px; }
     @media (max-width: 900px)  { .dash-cards { grid-template-columns: repeat(2,1fr); } .site-header, .hero, .container { padding-left: 16px; padding-right: 16px; } }
     @media (max-width: 560px)  { .dash-cards { grid-template-columns: 1fr 1fr; } .td-typ, .td-kom { display: none; } }
   </style>
@@ -237,7 +257,7 @@
       <div class="sub">2019–2026</div>
     </div>
     <div class="dash-card">
-      <div class="label">Ärenden i år</div>
+      <div class="label" id="dc-year-label">Ärenden i år</div>
       <div class="value" id="dc-year">—</div>
       <div class="sub" id="dc-year-sub">—</div>
     </div>
@@ -264,6 +284,10 @@
     <div class="fg"><label for="f-year">År</label><select id="f-year" onchange="onFilter()"><option value="">Alla år</option></select></div>
     <div class="fg"><label for="f-month">Månad</label><select id="f-month" onchange="onFilter()"><option value="">Alla månader</option></select></div>
     <div class="fg"><label for="f-kom">Kommun</label><select id="f-kom" onchange="onFilter()"><option value="">Alla kommuner</option></select></div>
+    <label class="fg" style="flex-direction:row;align-items:center;gap:6px;cursor:pointer;user-select:none">
+      <input type="checkbox" id="f-beslut" onchange="onFilter()" style="width:16px;height:16px;accent-color:#c0392b">
+      <span style="font-size:0.82rem;font-weight:700;color:#c0392b">● Endast med beslut</span>
+    </label>
     <button class="btn-reset" onclick="resetFilters()">✕ Rensa alla filter</button>
   </div>
 
@@ -280,6 +304,44 @@
     </div>
     <div class="hm-toggles" id="hmToggles"></div>
     <div class="chart-wrap-tall"><canvas id="chartHauptman"></canvas></div>
+  </div>
+
+  <!-- Skolöversikt -->
+  <div class="chart-card-full" id="skolovCard">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <h3 style="margin:0">Skolöversikt – elever per lärare</h3>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div class="fg" style="flex-direction:row;align-items:center;gap:8px;flex-wrap:wrap">
+          <label style="font-size:0.74rem;font-weight:700;color:var(--si-blue);text-transform:uppercase;letter-spacing:.05em">Skoltyp</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.84rem;cursor:pointer"><input type="checkbox" id="stGr" value="gr" checked onchange="renderSkolovFiltered()" style="accent-color:var(--si-blue)"> Grundskola</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.84rem;cursor:pointer"><input type="checkbox" id="stGy" value="gy" onchange="renderSkolovFiltered()" style="accent-color:var(--si-blue)"> Gymnasium</label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.84rem;cursor:pointer"><input type="checkbox" id="stFsk" value="fsk" onchange="renderSkolovFiltered()" style="accent-color:var(--si-blue)"> Förskola</label>
+        </div>
+        <div class="fg" style="flex-direction:row;align-items:center;gap:6px">
+          <label style="font-size:0.74rem;font-weight:700;color:var(--si-blue);text-transform:uppercase;letter-spacing:.05em">Huvudman</label>
+          <select id="skolHmF" onchange="renderSkolovFiltered()" style="padding:5px 10px;border:1px solid var(--border);border-radius:4px;font-size:0.87rem">
+            <option value="">Alla</option>
+            <option value="Kommunal">Kommunal</option>
+            <option value="Fristående">Fristående</option>
+          </select>
+        </div>
+        <select id="skolSortF" style="display:none">
+          <option value="name_asc">Namn A–Ö</option>
+          <option value="name_desc">Namn Ö–A</option>
+          <option value="el_asc">el_asc</option><option value="el_desc">el_desc</option>
+          <option value="beh_asc">beh_asc</option><option value="beh_desc">beh_desc</option>
+          <option value="typ_asc">typ_asc</option><option value="typ_desc">typ_desc</option>
+          <option value="hm_asc">hm_asc</option><option value="hm_desc">hm_desc</option>
+        </select>
+        <input id="skolSearch" type="text" placeholder="Sök skola…" oninput="renderSkolovFiltered()"
+          style="padding:5px 10px;border:1px solid var(--border);border-radius:4px;font-size:0.87rem;width:160px">
+        <label style="flex-direction:row;align-items:center;gap:6px;cursor:pointer;display:flex;font-size:0.82rem;font-weight:700;color:#666;white-space:nowrap">
+          <input type="checkbox" id="skolVisaSpecial" onchange="renderSkolovFiltered()" style="width:15px;height:15px;accent-color:var(--si-blue)">
+          Visa resursskolor &amp; specialskolor
+        </label>
+      </div>
+    </div>
+    <div id="skolovTable" style="overflow-x:auto"></div>
   </div>
 
   <!-- Charts — klickbara för filtrering -->
@@ -342,6 +404,10 @@
 <script>
 const PAGE_SIZE = 50;
 let allData = [], filtered = [], sortCol = 'date', sortAsc = false, currentPage = 1;
+let beslutMap = {}; // dno -> docID
+let skolorData = []; // all school units from skolor.json
+let skolovPage = 1;
+let skolovPageSize = 5;
 const BLUE = '#004b62', YELLOW = '#fbba30', BLUE_MID = '#006b8a', BLUE_LIGHT = '#e0eef3';
 const PALETTE = ['#004b62','#006b8a','#0090b5','#00afd0','#5bc4d8','#fbba30','#e8a020','#fcd26a','#b3d9e5','#d4eef5'];
 
@@ -522,9 +588,11 @@ function normalizeTyp(raw) {
 
 async function loadData() {
   try {
-    const r = await fetch('data.json');
+    const [r, rb, rs] = await Promise.all([fetch('data.json'), fetch('beslut.json').catch(()=>null), fetch('skolor.json').catch(()=>null)]);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     allData = await r.json();
+    if (rb?.ok) beslutMap = await rb.json();
+    if (rs?.ok) { skolorData = await rs.json(); renderSkolov(); }
     // Lägg till normaliserad ärendetyp på varje post
     allData.forEach(row => {
       row.normTyp  = normalizeTyp(row.typ);
@@ -622,14 +690,20 @@ function toggleShowAllTyps() {
 }
 
 function buildDashboard() {
-  const curYear = new Date().getFullYear().toString();
-  const thisYear = allData.filter(r => r.date.startsWith(curYear));
   const latest = [...allData].sort((a,b) => b.date.localeCompare(a.date))[0];
-  document.getElementById('dc-total').textContent     = allData.length.toLocaleString('sv');
-  document.getElementById('dc-year').textContent      = thisYear.length.toLocaleString('sv');
-  document.getElementById('dc-year-sub').textContent  = 'registrerade ' + curYear;
-  document.getElementById('dc-latest').textContent    = latest?.dno || '—';
-  document.getElementById('dc-latest-date').textContent = latest?.date || '';
+  document.getElementById('dc-total').textContent        = allData.length.toLocaleString('sv');
+  document.getElementById('dc-latest').textContent       = latest?.dno || '—';
+  document.getElementById('dc-latest-date').textContent  = latest?.date || '';
+  updateYearCard();
+}
+
+function updateYearCard() {
+  const selectedYear = document.getElementById('f-year')?.value;
+  const curYear = selectedYear || new Date().getFullYear().toString();
+  const count = allData.filter(r => r.date.startsWith(curYear)).length;
+  document.getElementById('dc-year-label').textContent = selectedYear ? 'Ärenden ' + curYear : 'Ärenden i år';
+  document.getElementById('dc-year').textContent       = count.toLocaleString('sv');
+  document.getElementById('dc-year-sub').textContent   = 'registrerade ' + curYear;
 }
 
 const ALL_KOMMUNER = ['Ale','Alingsås','Alvesta','Aneby','Arboga','Arjeplog','Arvidsjaur','Arvika','Askersund','Avesta','Bengtsfors','Berg','Bjurholm','Bjuv','Boden','Bollebygd','Bollnäs','Borgholm','Borlänge','Borås','Botkyrka','Boxholm','Bromölla','Bräcke','Burlöv','Båstad','Dals-Ed','Danderyd','Degerfors','Dorotea','Eda','Ekerö','Eksjö','Emmaboda','Enköping','Eskilstuna','Eslöv','Essunga','Fagersta','Falkenberg','Falköping','Falun','Filipstad','Finspång','Flen','Forshaga','Färgelanda','Gagnef','Gislaved','Gnesta','Gnosjö','Gotland','Grums','Grästorp','Gullspång','Gällivare','Gävle','Göteborg','Götene','Habo','Hagfors','Hallsberg','Hallstahammar','Halmstad','Hammarö','Haninge','Haparanda','Heby','Hedemora','Helsingborg','Herrljunga','Hjo','Hofors','Huddinge','Hudiksvall','Hultsfred','Hylte','Håbo','Hällefors','Härjedalen','Härnösand','Härryda','Hässleholm','Höganäs','Högsby','Hörby','Höör','Jokkmokk','Järfälla','Jönköping','Kalix','Kalmar','Karlsborg','Karlshamn','Karlskoga','Karlskrona','Karlstad','Katrineholm','Kil','Kinda','Kiruna','Klippan','Knivsta','Kramfors','Kristianstad','Kristinehamn','Krokom','Kumla','Kungsbacka','Kungsör','Kungälv','Kävlinge','Köping','Laholm','Landskrona','Laxå','Lekeberg','Leksand','Lerum','Lessebo','Lidingö','Lidköping','Lilla Edet','Lindesberg','Linköping','Ljungby','Ljusdal','Ljusnarsberg','Lomma','Ludvika','Luleå','Lund','Lycksele','Lysekil','Malmö','Malung-Sälen','Malå','Mariestad','Mark','Markaryd','Mellerud','Mjölby','Mora','Motala','Mullsjö','Munkedal','Munkfors','Mölndal','Mönsterås','Mörbylånga','Nacka','Nora','Norberg','Nordanstig','Nordmaling','Norrköping','Norrtälje','Norsjö','Nybro','Nykvarn','Nyköping','Nynäshamn','Nässjö','Ockelbo','Olofström','Orsa','Orust','Osby','Oskarshamn','Ovanåker','Oxelösund','Pajala','Partille','Perstorp','Piteå','Ragunda','Robertsfors','Ronneby','Rättvik','Sala','Salem','Sandviken','Sigtuna','Simrishamn','Sjöbo','Skara','Skellefteå','Skinnskatteberg','Skurup','Skövde','Smedjebacken','Sollefteå','Sollentuna','Solna','Sorsele','Sotenäs','Staffanstorp','Stenungsund','Stockholm','Storfors','Storuman','Strängnäs','Strömstad','Strömsund','Sundbyberg','Sundsvall','Sunne','Surahammar','Svalöv','Svedala','Svenljunga','Säffle','Säter','Sävsjö','Söderhamn','Söderköping','Södertälje','Sölvesborg','Tanum','Tibro','Tidaholm','Tierp','Timrå','Tingsryd','Tjörn','Tomelilla','Torsby','Torsås','Tranemo','Tranås','Trelleborg','Trollhättan','Trosa','Tyresö','Täby','Töreboda','Uddevalla','Ulricehamn','Umeå','Upplands-Bro','Upplands Väsby','Uppsala','Uppvidinge','Vadstena','Vaggeryd','Valdemarsvik','Vallentuna','Vansbro','Vara','Varberg','Vaxholm','Vellinge','Vetlanda','Vilhelmina','Vimmerby','Vindeln','Vingåker','Vårgårda','Vänersborg','Vännäs','Värmdö','Värnamo','Västervik','Västerås','Växjö','Ydre','Ystad','Åmål','Ånge','Åre','Årjäng','Åsele','Åstorp','Åtvidaberg','Älmhult','Älvdalen','Älvkarleby','Älvsbyn','Ängelholm','Öckerö','Ödeshög','Örebro','Örkelljunga','Örnsköldsvik','Östersund','Österåker','Östhammar','Östra Göinge','Överkalix','Övertorneå'];
@@ -934,11 +1008,13 @@ function clearChip(i) { document.getElementById('activeFilters')._chips[i].clear
 
 // ── Filter logic ──
 function onFilter() {
+  updateYearCard();
   const q    = document.getElementById('f-search').value.toLowerCase().trim();
   const kom  = document.getElementById('f-kom').value;
   const year = document.getElementById('f-year').value;
   const mon  = document.getElementById('f-month').value;
 
+  const onlyBeslut = document.getElementById('f-beslut')?.checked;
   filtered = allData.filter(r => {
     if (selectedTyps.size > 0 && !selectedTyps.has(r.normTyp))  return false;
     if (kom  && r.kommun !== kom)                               return false;
@@ -946,6 +1022,7 @@ function onFilter() {
     if (mon  && r.date.substring(5,7) !== mon)                 return false;
     if (q && !q.split(/\s+/).every(w =>
       (r.dno+r.date+r.subject+r.typ+r.kommun).toLowerCase().includes(w))) return false;
+    if (onlyBeslut && !beslutMap[r.dno])                       return false;
     return true;
   });
 
@@ -985,7 +1062,7 @@ function render() {
     const rowClass = ['data-row', isToday ? 'row-today' : ''].filter(Boolean).join(' ');
     const dnoId = 'row-' + CSS.escape(r.dno.replace(/\s/g,'_'));
     return `<tr class="${rowClass}" id="${dnoId}" data-dno="${esc(r.dno)}" onclick="toggleDetail(this, this.dataset.dno)">
-      <td class="td-dno">${esc(r.dno)}${isToday ? '<span class="badge-ny">Ny</span>' : ''}</td>
+      <td class="td-dno">${esc(r.dno)}${isToday ? '<span class="badge-ny">Ny</span>' : ''}${beslutMap[r.dno] ? '<span title="Beslut finns" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c0392b;margin-left:6px;vertical-align:middle;flex-shrink:0"></span>' : (()=>{const s=statusHeuristic(r);return s?`<span title="${esc(s.title)}" style="display:inline-block;padding:1px 5px;border-radius:3px;font-size:0.62rem;font-weight:800;background:${s.bg};color:${s.color};margin-left:5px;vertical-align:middle;letter-spacing:.03em">${esc(s.label)}</span>`:'';})()}</td>
       <td class="td-date">${esc(r.date)}</td>
       <td class="td-typ"><span class="badge" title="${esc(r.typ)}">${esc(r.normTyp)}</span></td>
       <td class="td-kom">${esc(r.kommun)}</td>
@@ -1017,12 +1094,39 @@ function goPage(p) { currentPage=p; render(); document.getElementById('tableSect
 function resetFilters() {
   document.getElementById('f-search').value = '';
   ['f-kom','f-year','f-month'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-beslut').checked = false;
   selectedTyps.clear();
   renderTypChips();
   onFilter();
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Ärendestatus-heuristik ──
+// Returnerar { label, color, title } eller null (= ingen badge)
+function statusHeuristic(r) {
+  if (beslutMap[r.dno]) return null; // har publicerat beslut = avslutat, inget badge
+  const typ = (r.typ || '').toLowerCase();
+  const ageMonths = (Date.now() - new Date(r.date).getTime()) / (1000 * 60 * 60 * 24 * 30.5);
+
+  // Ärendetyper som sällan/aldrig får publicerade SIRIS-beslut
+  const ingenBeslut = ['uppgift','begäran','avtal','annons','makulerat','överklagande','återkallande'];
+  if (ingenBeslut.some(k => typ.includes(k))) return null;
+
+  // Handläggningstider per typ (månader)
+  let gräns = 18; // default
+  if (typ.includes('anmälan')) gräns = 6;
+  else if (typ.includes('uppföljning')) gräns = 9;
+  else if (typ.includes('ansökan')) gräns = 6;
+  else if (typ.includes('riktad tillsyn')) gräns = 18;
+  else if (typ.includes('planerad') || typ.includes('regelbunden') || typ.includes('tematisk')) gräns = 12;
+  else if (typ.includes('samlingsärende') || typ.includes('tillsyn utifrån')) gräns = 12;
+
+  if (ageMonths <= gräns) {
+    return { label: 'Pågående?', color: '#e07b00', bg: '#fff3e0', title: 'Troligen pågående – inget publicerat beslut ännu (uppskattning)' };
+  }
+  return null;
+}
 
 // ── Expanderbar ärendedetalj ──
 function toggleDetail(tr, dno) {
@@ -1040,6 +1144,22 @@ function toggleDetail(tr, dno) {
   detailRow.style.display = '';
 
   const rec = filtered.find(x => x.dno === dno) || allData.find(x => x.dno === dno);
+  const docID = beslutMap[dno];
+  const beslutLink = docID
+    ? `<a href="https://siris.skolverket.se/siris/ris.openfile?docID=${docID}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--si-blue);color:#fff;border-radius:6px;font-size:0.85rem;text-decoration:none;font-weight:600;">
+         📄 Öppna beslut (PDF)
+       </a>`
+    : '';
+  const skolinfoBtn = rec?.skolkod
+    ? `<div class="skolinfo-card" id="skolinfo-${esc(dno)}">
+        <div class="skolinfo-header" onclick="toggleSkolinfo(this,'${esc(rec.skolkod)}')">
+          🏫 Skolinfo <span style="font-weight:400;margin-left:4px;font-size:0.78rem;color:#5b8fa8">(Skolverket)</span>
+          <span class="skolinfo-arrow" style="margin-left:auto">▾</span>
+        </div>
+        <div class="skolinfo-body" id="skolinfo-body-${esc(dno)}"><span class="dp-loading">Laddar…</span></div>
+       </div>`
+    : '';
   panel.innerHTML = `
     <div class="dp-grid">
       <span class="dp-label">Ärendenummer</span><span class="dp-value">${esc(dno)}</span>
@@ -1048,7 +1168,400 @@ function toggleDetail(tr, dno) {
       <span class="dp-label">Kommun</span><span class="dp-value">${esc(rec?.kommun||'')}</span>
       <span class="dp-label">Ärendemening</span><span class="dp-value">${esc(rec?.subject||'')}</span>
       ${rec?.hauptman ? `<span class="dp-label">Huvudman</span><span class="dp-value">${esc(rec.hauptman)}</span>` : ''}
-    </div>`;
+      ${(()=>{const s=rec?statusHeuristic(rec):null;return s?`<span class="dp-label">Status</span><span class="dp-value"><span title="${esc(s.title)}" style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.82rem;font-weight:700;background:${s.bg};color:${s.color}">${esc(s.label)}</span> <span style="font-size:0.78rem;color:#999">(uppskattning)</span></span>`:''})()}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;margin-bottom:${skolinfoBtn?'12px':'0'}">
+      ${beslutLink}
+    </div>
+    ${skolinfoBtn}`;
+}
+
+// ── Skolöversikt ──
+const SKOLTYP_NAMES = {gr:'Grundskola',gy:'Gymnasium',fsk:'Förskola',gran:'Grundsärskola',gyan:'Gymnasiesärskola',sp:'Specialskola',sfi:'SFI',vuxgy:'Vuxenutbildning'};
+
+function numVal(s) { if (!s) return null; const n = parseFloat(s.replace(',', '.').replace(/[^\d.]/g, '')); return isNaN(n) ? null : n; }
+
+function barHtml(val, max10) {
+  if (!val) return '<span style="color:#aaa">–</span>';
+  const n = numVal(val);
+  if (n === null) return esc(val);
+  const pct = Math.min(100, Math.round((n / (max10||20)) * 100));
+  const col = max10 === 10
+    ? (n >= 7 ? '#27ae60' : n >= 5 ? '#e8a020' : '#c0392b')
+    : (n <= 12 ? '#27ae60' : n <= 18 ? '#e8a020' : '#c0392b');
+  return `<span class="bar-wrap"><span style="font-weight:700;color:${col}">${esc(val)}</span><span class="bar-bg"><span class="bar-fill" style="width:${pct}%;background:${col}"></span></span></span>`;
+}
+
+// Pick the most relevant stat block for a school given the active type filter.
+// Priority: first checked type that has data, then any type with data.
+function pickStat(school, checkedTypes) {
+  const stats = school.stats || {};
+  // Try checked types in order
+  for (const t of checkedTypes) {
+    if (stats[t] && (stats[t].elever_larare || stats[t].behoriga)) return stats[t];
+  }
+  // Fall back to any type with data
+  for (const t of Object.keys(stats)) {
+    if (stats[t] && (stats[t].elever_larare || stats[t].behoriga)) return stats[t];
+  }
+  // Legacy flat fields
+  return { elever_larare: school.elever_larare, behoriga: school.behoriga, elever_totalt: school.elever_totalt };
+}
+
+function renderSkolov() {
+  const container = document.getElementById('skolovTable');
+  if (!container || !skolorData.length) return;
+
+  const checkedTypes = ['stGr','stGy','stFsk'].filter(id => document.getElementById(id)?.checked).map(id => document.getElementById(id).value);
+  const typF = checkedTypes.length < 3 ? checkedTypes : [];
+  const hmF   = document.getElementById('skolHmF')?.value   || '';
+  const sortF = document.getElementById('skolSortF')?.value || 'name_asc';
+  const q     = (document.getElementById('skolSearch')?.value || '').toLowerCase().trim();
+
+  const visaSpecial = document.getElementById('skolVisaSpecial')?.checked || false;
+  const SPECIAL_TYPES = new Set(['gran','gyan','sp','sam','vuxgran','vuxgyan','sfi','vuxgr','vuxgy']);
+
+  let rows = skolorData.filter(s => {
+    if (typF.length && !typF.some(t => s.skoltyper?.includes(t))) return false;
+    if (hmF  && s.typ !== hmF)               return false;
+    if (q    && !s.name.toLowerCase().includes(q) && !s.org.toLowerCase().includes(q)) return false;
+    if (!visaSpecial) {
+      const nameL = s.name.toLowerCase();
+      if (nameL.includes('resurs')) return false;
+      if (s.skoltyper?.length && s.skoltyper.every(t => SPECIAL_TYPES.has(t))) return false;
+    }
+    return true;
+  });
+
+  rows.sort((a, b) => {
+    const stA = pickStat(a, checkedTypes), stB = pickStat(b, checkedTypes);
+    if (sortF === 'pupils_asc')    return (numVal(stA.elever_totalt)||0) - (numVal(stB.elever_totalt)||0);
+    if (sortF === 'pupils_desc')   return (numVal(stB.elever_totalt)||0) - (numVal(stA.elever_totalt)||0);
+    if (sortF === 'el_asc')    return (numVal(stA.elever_larare)||999) - (numVal(stB.elever_larare)||999);
+    if (sortF === 'el_desc')   return (numVal(stB.elever_larare)||0)   - (numVal(stA.elever_larare)||0);
+    if (sortF === 'beh_asc')   return (numVal(stA.behoriga)||999) - (numVal(stB.behoriga)||999);
+    if (sortF === 'beh_desc')  return (numVal(stB.behoriga)||0)   - (numVal(stA.behoriga)||0);
+    if (sortF === 'typ_asc')   return (a.skoltyper?.[0]||'').localeCompare(b.skoltyper?.[0]||'', 'sv');
+    if (sortF === 'typ_desc')  return (b.skoltyper?.[0]||'').localeCompare(a.skoltyper?.[0]||'', 'sv');
+    if (sortF === 'hm_asc')    return (a.typ||'').localeCompare(b.typ||'', 'sv');
+    if (sortF === 'hm_desc')   return (b.typ||'').localeCompare(a.typ||'', 'sv');
+    if (sortF === 'name_desc') return b.name.localeCompare(a.name, 'sv');
+    return a.name.localeCompare(b.name, 'sv');
+  });
+
+  const isFiltered = hmF || q;
+  const pageSize = skolovPageSize;
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  skolovPage = Math.min(skolovPage, totalPages);
+  const shown = rows.slice((skolovPage-1)*pageSize, skolovPage*pageSize);
+
+  const pageNav = totalPages > 1
+    ? `<div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.84rem">
+        <button onclick="goSkolov(${skolovPage-1})" ${skolovPage===1?'disabled':''} class="pbtn">‹</button>
+        <span>Sida <strong>${skolovPage}</strong> av <strong>${totalPages}</strong> (${rows.length.toLocaleString('sv')} skolor)</span>
+        <button onclick="goSkolov(${skolovPage+1})" ${skolovPage===totalPages?'disabled':''} class="pbtn">›</button>
+       </div>`
+    : `<div style="font-size:0.78rem;color:var(--text-soft);margin-bottom:6px">${rows.length.toLocaleString('sv')} skolor</div>`;
+
+  const pageSizeSelector = `<div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:0.82rem;color:var(--text-soft)">
+    Visa
+    ${[5,10,20,50,100].map(n=>`<button onclick="setSkolovPageSize(${n})" style="padding:2px 8px;border:1px solid ${skolovPageSize===n?'var(--si-blue)':'var(--border)'};border-radius:4px;background:${skolovPageSize===n?'var(--si-blue)':'#fff'};color:${skolovPageSize===n?'#fff':'inherit'};cursor:pointer;font-size:0.82rem">${n}</button>`).join('')}
+    per sida
+  </div>`;
+
+  container.innerHTML = `<div style="font-size:0.78rem;color:var(--text-soft);margin-bottom:6px">${rows.length.toLocaleString('sv')} skolor</div>
+  <table class="skol-table">
+    <thead><tr>
+      ${[['name_asc','name_desc','Skola'],['typ_asc','typ_desc','Typ'],['hm_asc','hm_desc','Huvudman'],['pupils_desc','pupils_asc','Elever'],['el_asc','el_desc','Elever/lärare'],['beh_asc','beh_desc','Behöriga lärare %']].map(([asc,desc,label])=>{
+        const isAsc=sortF===asc, isDesc=sortF===desc;
+        const arrow=isAsc?' ↑':isDesc?' ↓':'';
+        return `<th style="cursor:pointer;user-select:none;white-space:nowrap" onclick="setSkolovSort('${isAsc?desc:asc}')">${esc(label)}${arrow}</th>`;
+      }).join('')}
+    </tr></thead>
+    <tbody id="skolTbody">
+    ${shown.map(s => {
+      const typer = (s.skoltyper||[]).map(t => SKOLTYP_NAMES[t]||t).join(', ');
+      return `<tr class="skol-row" data-code="${esc(s.code)}" onclick="toggleSkolRow(this)">
+        <td><strong>${esc(s.name)}</strong>${s.org && s.org !== s.name ? `<br><span style="color:var(--text-soft);font-size:0.78rem">${esc(s.org)}</span>`:''}
+        </td>
+        <td style="white-space:nowrap">${esc(typer)}</td>
+        <td><span style="font-size:0.8rem;padding:2px 7px;border-radius:10px;background:${s.typ==='Kommunal'?'#e0eef3':'#fff8e6'};color:${s.typ==='Kommunal'?'#004b62':'#a06000'};font-weight:700">${esc(s.typ||'')}</span></td>
+        ${(()=>{ const st=pickStat(s,checkedTypes); const multiTyp=(s.skoltyper||[]).length>1; const typLabel=SKOLTYP_NAMES[checkedTypes[0]]||checkedTypes[0]||'första tillgängliga'; return (
+          `<td style="font-weight:600">${st.elever_totalt ? esc(st.elever_totalt) : '<span style="color:#bbb">—</span>'}${multiTyp ? ' <span title="Kombinationsskola – statistik gäller '+typLabel+'" style="font-size:0.7rem;color:#e8a020;cursor:help">★</span>' : ''}</td>`+
+          `<td>${barHtml(st.elever_larare, 20)}</td>`+
+          `<td>${barHtml(st.behoriga, 10)}</td>`
+        ); })()}
+      </tr>
+      <tr class="skol-badge-row" style="display:none">
+        <td colspan="6"><div class="skol-badge" id="skol-badge-${esc(s.code)}"></div></td>
+      </tr>`;
+    }).join('')}
+    </tbody>
+  </table>
+  ${pageNav}
+  ${pageSizeSelector}`;
+}
+
+function setSkolovPageSize(n) { skolovPageSize = n; skolovPage = 1; renderSkolov(); }
+function setSkolovSort(val) {
+  document.getElementById('skolSortF').value = val;
+  renderSkolov();
+}
+
+function goSkolov(p) {
+  skolovPage = p;
+  renderSkolov();
+  document.getElementById('skolovCard')?.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderSkolovFiltered() { skolovPage = 1; renderSkolov(); }
+
+function toggleSkolRow(tr) {
+  const badgeRow = tr.nextElementSibling;
+  const isOpen = badgeRow.style.display !== 'none';
+  document.querySelectorAll('.skol-row.expanded').forEach(r => {
+    r.classList.remove('expanded');
+    r.nextElementSibling.style.display = 'none';
+  });
+  if (isOpen) return;
+  tr.classList.add('expanded');
+  badgeRow.style.display = '';
+  const code = tr.dataset.code;
+  const badge = document.getElementById('skol-badge-' + code);
+  if (badge.innerHTML) return;
+  badge.innerHTML = '<span class="dp-loading">Hämtar från Skolverket…</span>';
+  fetchSkolinfoInto(badge, code);
+}
+
+async function fetchSkolinfoInto(badge, skolkod) {
+  if (skolinfoCache[skolkod]) { badge.innerHTML = skolinfoCache[skolkod]; return; }
+  try {
+    const [r1, r2, r3] = await Promise.all([
+      fetch(`${BASE_SV}/school-units/${skolkod}`,            {headers: HDR_SV}),
+      fetch(`${BASE_SV}/school-units/${skolkod}/statistics`, {headers: HDR_SV}),
+      fetch(`${BASE_SV}/school-units/${skolkod}/surveys`,    {headers: HDR_SV}),
+    ]);
+    const d1 = await r1.json();
+    const d2 = r2.ok ? await r2.json() : null;
+    const d3 = r3.ok ? await r3.json() : null;
+    const u = d1.body;
+    if (!u) throw new Error('Ingen data');
+    const ci = u.contactInfo || {};
+    const rows = [];
+    if (u.corporationName) rows.push(['Organisation', esc(u.corporationName)]);
+    if (u.companyForm && u.companyForm !== 'Ej relevant') rows.push(['Bolagsform', esc(u.companyForm)]);
+    if (u.organisationRegistryNumber) rows.push(['Org.nr', esc(u.organisationRegistryNumber)]);
+    if (ci.telephone) rows.push(['Telefon', `<a href="tel:${esc(ci.telephone)}">${esc(ci.telephone)}</a>`]);
+    if (ci.email)     rows.push(['E-post',  `<a href="mailto:${esc(ci.email)}">${esc(ci.email)}</a>`]);
+    if (ci.web)       rows.push(['Hemsida', `<a href="${esc(ci.web)}" target="_blank" rel="noopener">${esc(ci.web.replace(/^https?:\/\//,''))}</a>`]);
+    const addr = ci.addresses?.find(a => a.type === 'VISITING_ADDRESS');
+    if (addr) rows.push(['Adress', esc(`${addr.street}, ${addr.zipCode} ${addr.city}`)]);
+
+    let html = '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:0.84rem">'
+      + rows.map(([l,v]) => `<span style="font-weight:700;color:var(--text-soft)">${esc(l)}</span><span>${v}</span>`).join('')
+      + '</div>';
+
+    // Statistik
+    if (d2?.body?._links) {
+      const statLinks = Object.entries(d2.body._links).filter(([k]) => k !== 'self');
+      if (statLinks.length) {
+        const sd = await (await fetch(statLinks[0][1].href, {headers: HDR_SV})).json();
+        const sb = sd?.body;
+        if (sb) {
+          const getLatest = arr => arr?.find(x => x.valueType === 'EXISTS');
+          const stats = [
+            ['Elever/lärare', getLatest(sb.studentsPerTeacherQuota), ''],
+            ['Behöriga lärare', getLatest(sb.certifiedTeachersQuota), '%'],
+            ['Speciallärare', getLatest(sb.specialTeacherPositions), ''],
+            ['Specialpedagoger', getLatest(sb.specialEducatorsQuota), '%'],
+          ].filter(([,v]) => v);
+          if (stats.length) {
+            html += `<div style="margin-top:10px;border-top:1px solid #d0e8f0;padding-top:8px">
+              <div style="font-size:0.74rem;font-weight:700;color:var(--text-soft);margin-bottom:5px;text-transform:uppercase">Statistik ${stats[0][1]?.timePeriod||''}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px">`
+              + stats.map(([l,v,u2]) => `<span class="skolinfo-stat"><span class="lbl">${esc(l)}</span><span class="val">${esc(v.value)}${u2}</span></span>`).join('')
+              + '</div></div>';
+          }
+        }
+      }
+    }
+
+    // Skolenkäten
+    if (d3?.body?._links) {
+      const surveyLinks = Object.entries(d3.body._links).filter(([k]) => k !== 'self');
+      if (surveyLinks.length) {
+        const surveyResults = await Promise.all(surveyLinks.map(([key, lnk]) =>
+          fetch(lnk.href, {headers: HDR_SV}).then(r => r.json()).then(d => ({key, data: d})).catch(() => null)
+        ));
+        let enkätHtml = '';
+        for (const res of surveyResults) {
+          if (!res) continue;
+          const metrics = res.data?.body?.schoolYearMetrics;
+          if (!metrics?.length) continue;
+          const latest = metrics.reduce((a,b) => (a.semester||'') > (b.semester||'') ? a : b);
+          const label = SURVEY_LABELS[res.key] || res.key;
+          const rows2 = [
+            ['Nöjdhet', latest.satisfactionAverage, latest.satisfactionQuestionDescription],
+            ['Trygghet', latest.securityAverage, latest.securityQuestionDescription],
+            ['Arbetsro', latest.workingEnvironmentAverage, latest.workingEnvironmentQuestionDescription],
+            ['Rekommenderar', latest.recommendAverage, latest.recommendQuestionDescription],
+          ].filter(([,v]) => v && v !== '-' && v !== 'null' && v !== null);
+          if (!rows2.length) continue;
+          enkätHtml += `<div style="margin-top:8px">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--si-blue);margin-bottom:4px">${esc(label)} (${esc(latest.semester||'')})</div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:0.83rem">`
+            + rows2.map(([l,v,desc]) => `<span style="color:var(--text-soft);font-weight:700" title="${esc(desc||'')}">${esc(l)}</span><span>${scoreBar(v)}</span>`).join('')
+            + '</div></div>';
+        }
+        if (enkätHtml) html += `<div style="margin-top:10px;border-top:1px solid #d0e8f0;padding-top:8px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--text-soft);margin-bottom:6px;text-transform:uppercase">Skolenkäten</div>${enkätHtml}</div>`;
+      }
+    }
+
+    skolinfoCache[skolkod] = html;
+    badge.innerHTML = html;
+  } catch(e) {
+    badge.innerHTML = `<span class="dp-error">Fel: ${esc(e.message)}</span>`;
+  }
+}
+
+const skolinfoCache = {};
+const BASE_SV = 'https://api.skolverket.se/planned-educations/v4';
+const HDR_SV  = {'Accept':'application/vnd.skolverket.plannededucations.api.v4.hal+json'};
+
+const SURVEY_LABELS = {
+  pupilsgr:      'Elever (grundskola)',
+  pupilsgy:      'Elever (gymnasiet)',
+  custodiansfsk: 'Vårdnadshavare (förskola)',
+  custodiansgr:  'Vårdnadshavare (grundskola)',
+  custodiansgran:'Vårdnadshavare (grundsärskola)',
+};
+
+function scoreBar(val) {
+  if (!val || val === '-') return '';
+  const num = parseFloat(val.replace(',', '.'));
+  if (isNaN(num)) return '';
+  const pct = Math.round((num / 10) * 100);
+  const col = num >= 7 ? '#27ae60' : num >= 5 ? '#e8a020' : '#c0392b';
+  return `<span style="display:inline-flex;align-items:center;gap:6px">
+    <span style="font-weight:700;color:${col}">${val}</span>
+    <span style="display:inline-block;width:60px;height:7px;background:#e0e0e0;border-radius:4px;overflow:hidden">
+      <span style="display:block;width:${pct}%;height:100%;background:${col};border-radius:4px"></span>
+    </span>
+  </span>`;
+}
+
+async function toggleSkolinfo(header, skolkod) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.skolinfo-arrow');
+  const isOpen = body.classList.contains('open');
+  if (isOpen) { body.classList.remove('open'); arrow.textContent = '▾'; return; }
+  body.classList.add('open');
+  arrow.textContent = '▴';
+  if (skolinfoCache[skolkod]) { body.innerHTML = skolinfoCache[skolkod]; return; }
+  body.innerHTML = '<span class="dp-loading">Hämtar från Skolverket…</span>';
+  try {
+    const [r1, r2, r3] = await Promise.all([
+      fetch(`${BASE_SV}/school-units/${skolkod}`,            {headers: HDR_SV}),
+      fetch(`${BASE_SV}/school-units/${skolkod}/statistics`, {headers: HDR_SV}),
+      fetch(`${BASE_SV}/school-units/${skolkod}/surveys`,    {headers: HDR_SV}),
+    ]);
+    const d1 = await r1.json();
+    const d2 = r2.ok ? await r2.json() : null;
+    const d3 = r3.ok ? await r3.json() : null;
+    const u = d1.body;
+    if (!u) throw new Error('Ingen data');
+
+    // ── Kontaktinfo ──
+    const ci = u.contactInfo || {};
+    const rows = [];
+    if (u.corporationName)    rows.push(['Organisation', esc(u.corporationName)]);
+    if (u.companyForm && u.companyForm !== 'Ej relevant') rows.push(['Bolagsform', esc(u.companyForm)]);
+    if (u.organisationRegistryNumber) rows.push(['Org.nr', esc(u.organisationRegistryNumber)]);
+    const types = u.typeOfSchooling?.map(t => t.displayName).filter(Boolean).join(', ');
+    if (types) rows.push(['Skolform', esc(types)]);
+    if (ci.telephone) rows.push(['Telefon', `<a href="tel:${esc(ci.telephone)}">${esc(ci.telephone)}</a>`]);
+    if (ci.email)     rows.push(['E-post',  `<a href="mailto:${esc(ci.email)}">${esc(ci.email)}</a>`]);
+    if (ci.web)       rows.push(['Hemsida', `<a href="${esc(ci.web)}" target="_blank" rel="noopener">${esc(ci.web.replace(/^https?:\/\//,''))}</a>`]);
+    const addr = ci.addresses?.find(a => a.type === 'VISITING_ADDRESS');
+    if (addr) rows.push(['Adress', esc(`${addr.street}, ${addr.zipCode} ${addr.city}`)]);
+
+    let html = '<div class="skolinfo-grid">'
+      + rows.map(([l,v]) => `<span class="lbl">${esc(l)}</span><span>${v}</span>`).join('')
+      + '</div>';
+
+    // ── Statistik ──
+    if (d2?.body?._links) {
+      const statLinks = Object.entries(d2.body._links).filter(([k]) => k !== 'self');
+      if (statLinks.length) {
+        const sd = await (await fetch(statLinks[0][1].href, {headers: HDR_SV})).json();
+        const sb = sd?.body;
+        if (sb) {
+          const getLatest = arr => arr?.find(x => x.valueType === 'EXISTS');
+          const stats = [
+            ['Elever/lärare',    getLatest(sb.studentsPerTeacherQuota), ''],
+            ['Behöriga lärare',  getLatest(sb.certifiedTeachersQuota),  '%'],
+            ['Speciallärare',    getLatest(sb.specialTeacherPositions), ''],
+            ['Specialpedagoger', getLatest(sb.specialEducatorsQuota),   '%'],
+          ].filter(([,v]) => v);
+          if (stats.length) {
+            html += `<div style="margin-top:10px;border-top:1px solid #d0e8f0;padding-top:8px">
+              <div style="font-size:0.74rem;font-weight:700;color:var(--text-soft);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">Statistik ${stats[0][1]?.timePeriod||''}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px">`
+              + stats.map(([l,v,u2]) => `<span class="skolinfo-stat"><span class="lbl">${esc(l)}</span><span class="val">${esc(v.value)}${u2}</span></span>`).join('')
+              + '</div></div>';
+          }
+        }
+      }
+    }
+
+    // ── Skolenkäten ──
+    if (d3?.body?._links) {
+      const surveyLinks = Object.entries(d3.body._links).filter(([k]) => k !== 'self');
+      if (surveyLinks.length) {
+        const surveyResults = await Promise.all(
+          surveyLinks.map(([key, lnk]) =>
+            fetch(lnk.href, {headers: HDR_SV})
+              .then(r => r.json())
+              .then(d => ({key, data: d}))
+              .catch(() => null)
+          )
+        );
+
+        let enkätHtml = '';
+        for (const res of surveyResults) {
+          if (!res) continue;
+          const metrics = res.data?.body?.schoolYearMetrics;
+          if (!metrics?.length) continue;
+          // Pick latest semester
+          const latest = metrics.reduce((a,b) => (a.semester||'') > (b.semester||'') ? a : b);
+          const label = SURVEY_LABELS[res.key] || res.key;
+          const rows2 = [
+            ['Nöjdhet',         latest.satisfactionAverage,      latest.satisfactionQuestionDescription],
+            ['Trygghet',        latest.securityAverage,           latest.securityQuestionDescription],
+            ['Arbetsro',        latest.workingEnvironmentAverage, latest.workingEnvironmentQuestionDescription],
+            ['Rekommenderar',   latest.recommendAverage,          latest.recommendQuestionDescription],
+          ].filter(([,v]) => v && v !== '-' && v !== 'null' && v !== null);
+          if (!rows2.length) continue;
+          enkätHtml += `<div style="margin-top:8px">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--si-blue);margin-bottom:4px">${esc(label)} (${esc(latest.semester||'')})</div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:0.83rem">`
+            + rows2.map(([l,v,desc]) => `<span style="color:var(--text-soft);font-weight:700" title="${esc(desc||'')}">${esc(l)}</span><span>${scoreBar(v)}</span>`).join('')
+            + '</div></div>';
+        }
+        if (enkätHtml) {
+          html += `<div style="margin-top:10px;border-top:1px solid #d0e8f0;padding-top:8px">
+            <div style="font-size:0.74rem;font-weight:700;color:var(--text-soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Skolenkäten</div>`
+            + enkätHtml + '</div>';
+        }
+      }
+    }
+
+    skolinfoCache[skolkod] = html;
+    body.innerHTML = html;
+  } catch(e) {
+    body.innerHTML = `<span class="dp-error">Kunde inte hämta skolinfo: ${esc(e.message)}</span>`;
+  }
 }
 
 async function fetchNew() {
