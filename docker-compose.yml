@@ -1,0 +1,140 @@
+# PoC-stack: PostgreSQL + S3-kompatibel objektlagring.
+#
+# Hela systemet kan köras lokalt utan molnkonto. MinIO talar samma S3-API som
+# Cloudflare R2 och Cleura, så applikationen ser ingen skillnad — bara andra
+# värden i S3_ENDPOINT, S3_BUCKET och nycklarna.
+#
+#   cp .env.example .env
+#   docker compose up -d
+#   docker compose run --rm migrate
+#
+# Migrationerna körs mot databasen i den ordning modellen kräver. Index läggs
+# på efter laddningen, se docs/handover.md.
+
+name: skolinsyn
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-skolinsyn}
+      POSTGRES_USER: ${POSTGRES_USER:-skolinsyn}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?sätt POSTGRES_PASSWORD i .env}
+      # Svensk textsökkonfiguration finns i standardimagen.
+      LANG: sv_SE.utf8
+    command:
+      - postgres
+      # Databasen är ~0,3 GB utan dokumenttext och ~2 GB med fulltextsökning,
+      # så den ryms i sidcache. Värdena styrs av .env och är förvalda för en
+      # instans med 6 GB RAM (Ampere A1). För 1 GB: 256MB / 512MB / 8MB / 128MB.
+      - -c
+      - shared_buffers=${PG_SHARED_BUFFERS:-1536MB}
+      - -c
+      - effective_cache_size=${PG_EFFECTIVE_CACHE_SIZE:-4GB}
+      - -c
+      - work_mem=${PG_WORK_MEM:-16MB}
+      - -c
+      - maintenance_work_mem=${PG_MAINTENANCE_WORK_MEM:-512MB}
+      - -c
+      - max_connections=${PG_MAX_CONNECTIONS:-40}
+      - -c
+      - random_page_cost=1.1         # SSD, inte roterande disk
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-skolinsyn} -d ${POSTGRES_DB:-skolinsyn}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # S3-kompatibel lagring för dokumenten. Byts mot R2 eller Cleura i drift
+  # genom att peka om S3_ENDPOINT — applikationen ändras inte.
+  storage:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:?sätt S3_SECRET_ACCESS_KEY i .env}
+    ports:
+      - "${S3_PORT:-9000}:9000"
+      - "${S3_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - storage_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Engångsjobb: skapar bucketen. Kör om utan risk.
+  storage-init:
+    image: minio/mc:latest
+    depends_on:
+      storage:
+        condition: service_healthy
+    environment:
+      S3_BUCKET: ${S3_BUCKET:-skolinsyn-dokument}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-minioadmin}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://storage:9000 $$S3_ACCESS_KEY_ID $$S3_SECRET_ACCESS_KEY &&
+      mc mb --ignore-existing local/$$S3_BUCKET &&
+      echo 'bucket $$S3_BUCKET klar'
+      "
+
+  # Engångsjobb: kör migrationerna. Index och vyer läggs på efter laddningen,
+  # därför delas de upp här.
+  migrate:
+    image: postgres:16-alpine
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./migrations:/migrations:ro
+    entrypoint: >
+      /bin/sh -c "
+      set -e;
+      for f in /migrations/0001_core.sql /migrations/0002_documents.sql
+               /migrations/0003_beslut.sql /migrations/0004_skolenkaten.sql; do
+        echo \"-- $$f\";
+        psql -h db -U ${POSTGRES_USER:-skolinsyn} -d ${POSTGRES_DB:-skolinsyn} -v ON_ERROR_STOP=1 -f $$f;
+      done;
+      echo 'Migrationer 0001-0004 klara. Ladda exporten, kör sedan finalize.'
+      "
+
+  # Engångsjobb: laddar exporten och lägger på index och vyer.
+  # Montera exportkatalogen: EXPORT_DIR=D:/siris/export docker compose run --rm load
+  load:
+    image: postgres:16-alpine
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./migrations:/migrations:ro
+      - ${EXPORT_DIR:-./export}:/export:ro
+    entrypoint: >
+      /bin/sh -c "
+      set -e;
+      psql -h db -U ${POSTGRES_USER:-skolinsyn} -d ${POSTGRES_DB:-skolinsyn}
+           -v ON_ERROR_STOP=1 -v export_dir=/export -f /export/load.sql;
+      psql -h db -U ${POSTGRES_USER:-skolinsyn} -d ${POSTGRES_DB:-skolinsyn}
+           -v ON_ERROR_STOP=1 -f /migrations/0005_indexes.sql;
+      psql -h db -U ${POSTGRES_USER:-skolinsyn} -d ${POSTGRES_DB:-skolinsyn}
+           -v ON_ERROR_STOP=1 -f /migrations/0006_views.sql;
+      echo 'Laddning klar.'
+      "
+
+volumes:
+  db_data:
+  storage_data:

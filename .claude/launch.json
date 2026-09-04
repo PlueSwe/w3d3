@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "w3d3",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3000", "."],
+      "port": 3000
+    }
+  ]
+}

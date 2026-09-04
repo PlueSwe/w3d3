@@ -1,0 +1,25 @@
+# Dokumentarkivet (~1,8 GB PDF). Filerna hör hemma i objektlagring, inte i git.
+# Manifestet versionshanteras däremot – det är beviset för vad arkivet innehåller.
+archive/**
+!archive/manifest.jsonl
+!archive/manifest.csv
+
+# Körningsloggar
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Lokal konfiguration med hemligheter
+.env
+.env.*
+!.env.example
+
+# Maskinlokala Claude Code-inställningar
+.claude/settings.local.json
+
+# Verifieringsrapporter genereras av verktygen; committas när arkivet är komplett
+reports/
