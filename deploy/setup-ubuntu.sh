@@ -27,8 +27,11 @@ fi
 log "Uppdaterar paket"
 sudo apt-get update -qq
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq
+# Inte ufw: den deklarerar "Breaks: netfilter-persistent" och de två kan inte
+# samexistera. Oracles image styr brandväggen med iptables direkt och har
+# netfilter-persistent förinstallerad, så den behåller vi.
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
-    ca-certificates curl gnupg git ufw netfilter-persistent postgresql-client
+    ca-certificates curl gnupg git netfilter-persistent postgresql-client
 
 # ── Docker ────────────────────────────────────────────────────────────────
 # Ubuntus egen docker.io ligger efter. Officiella repot har arm64-byggen och
@@ -56,17 +59,46 @@ fi
 # enbart SSH. Att öppna porten i konsolens Security List räcker INTE — den
 # styr molnets nätverk, inte instansens egen brandvägg. Båda måste öppnas.
 log "Öppnar portar i instansens brandvägg"
+
+# Regelordningen är avgörande. Oracles kedja avslutas med en REJECT-regel som
+# stoppar allt som inte uttryckligen släppts igenom dessförinnan. En ACCEPT
+# efter den raden får ingen verkan — porten ser öppen ut i konfigurationen men
+# är stängd i praktiken. Regeln måste därför infogas FÖRE första REJECT/DROP.
+reject_line() {
+    sudo iptables -L INPUT -n --line-numbers \
+        | awk '$2 == "REJECT" || $2 == "DROP" { print $1; exit }'
+}
+
 open_port() {
-    local port="$1"
-    if sudo iptables -C INPUT -m state --state NEW -p tcp --dport "$port" -j ACCEPT 2>/dev/null; then
-        echo "  port $port redan öppen"
+    local port="$1" pos
+    # Ta bort en eventuell felplacerad regel innan den läggs tillbaka rätt.
+    while sudo iptables -C INPUT -m state --state NEW -p tcp --dport "$port" \
+            -j ACCEPT 2>/dev/null; do
+        sudo iptables -D INPUT -m state --state NEW -p tcp --dport "$port" -j ACCEPT
+    done
+    pos="$(reject_line)"
+    if [[ -n "$pos" ]]; then
+        sudo iptables -I INPUT "$pos" -m state --state NEW -p tcp --dport "$port" -j ACCEPT
+        echo "  port $port öppnad (infogad på plats $pos, före REJECT)"
     else
-        sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport "$port" -j ACCEPT
-        echo "  port $port öppnad"
+        sudo iptables -A INPUT -m state --state NEW -p tcp --dport "$port" -j ACCEPT
+        echo "  port $port öppnad (ingen REJECT-regel funnen, lades sist)"
     fi
 }
 open_port 80
 open_port 443
+
+# Verifiera att reglerna faktiskt hamnade före REJECT.
+REJ="$(reject_line)"
+if [[ -n "$REJ" ]]; then
+    for port in 80 443; do
+        line="$(sudo iptables -L INPUT -n --line-numbers \
+                | awk -v p="dpt:$port" '$0 ~ p { print $1; exit }')"
+        if [[ -z "$line" || "$line" -gt "$REJ" ]]; then
+            echo "  VARNING: port $port ligger inte före REJECT ($line vs $REJ)" >&2
+        fi
+    done
+fi
 sudo netfilter-persistent save >/dev/null
 echo "  regler sparade"
 
